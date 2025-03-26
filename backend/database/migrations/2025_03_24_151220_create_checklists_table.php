@@ -8,7 +8,7 @@ class CreateChecklistsTable extends Migration
 {
     public function up()
     {
-        Schema::create('lists', function (Blueprint $table) {
+        Schema::create('checklists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_id')->constrained('tasks')->onDelete('cascade');
             $table->string('list_name');
