@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
             $table->string('task_name');
             $table->text('description')->nullable();
+            $table->boolean('completed')->default(false);
             $table->timestamp('date_completed')->nullable();
-            $table->boolean('done')->default(false);
             $table->timestamps();
         });
     }

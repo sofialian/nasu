@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('profile_id')->constrained('profiles')->onDelete('cascade');
             $table->string('project_name');
             $table->text('description')->nullable();
-            $table->timestamp('date_completed')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
     }

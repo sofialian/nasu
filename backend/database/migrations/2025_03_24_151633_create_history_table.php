@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('profile_id')->constrained('profiles')->onDelete('cascade');
             $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null');
             $table->foreignId('task_id')->nullable()->constrained('tareas')->onDelete('set null');
-            $table->timestamp('date_completed')->useCurrent();
+            $table->timestamp('completed_at')->useCurrent();
             $table->integer('gained_exp')->default(0);
-            $table->integer('earned_beans')->default(0);
+            $table->integer('gained_beans')->default(0);
             $table->timestamps();
         });
     }
