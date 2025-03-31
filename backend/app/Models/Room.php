@@ -9,12 +9,7 @@ class Room extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'profile_id',
-        'furniture_id',
-        'pos_x',   
-        'pos_y',   
-    ];
+    protected $fillable = ['profile_id'];
 
     // Relaciones
     public function profile()
@@ -22,8 +17,8 @@ class Room extends Model
         return $this->belongsTo(Profile::class);
     }
 
-    public function furniture()
+    public function items()
     {
-        return $this->belongsTo(Furniture::class);
+        return $this->hasMany(RoomItem::class);
     }
 }

@@ -20,20 +20,20 @@ class Profile extends Model
     ];
 
     // Relaciones
-    /*
+    
     public function projects()
     {
         return $this->hasMany(Project::class);
     }
 
-    public function roomItems()
+    public function room()
     {
-        return $this->hasMany(RoomItem::class);
+        return $this->hasOne(Room::class); // 1:1 con Room
     }
 
     public function history()
     {
         return $this->hasMany(History::class);
     }
-        */
+        
 }

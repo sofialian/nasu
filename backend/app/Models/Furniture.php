@@ -9,16 +9,15 @@ class Furniture extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',           
-        'description',    
-        'price_beans',    
-        'image_url',
-    ];
+    protected $fillable = ['furniture_name',
+    'category', 
+    'description', 
+    'price_beans', 
+    'image_url'];
 
-    // Relación con la habitación
+    // Relación con room_items
     public function roomItems()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(RoomItem::class);
     }
 }

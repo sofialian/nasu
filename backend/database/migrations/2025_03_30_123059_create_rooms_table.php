@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('furnitures', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('furniture_name');
-            $table->string('category');
-            $table->text('description')->nullable();
-            $table->integer('price_beans');
-            $table->string('image_url')->nullable();
+            $table->foreignId('profile_id')->constrained('profiles')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('furnitures');
+        Schema::dropIfExists('room');
     }
 };
