@@ -15,7 +15,7 @@ export default {
             colors: {
                 'primary-dark': '#474350',
                 'primary-light': '#fcffeb',
-                'secondary': '#97d5ca',
+                'secondary-color': '#97d5ca',
                 'accent': '#ff4e4e',
             },
             fontFamily: {

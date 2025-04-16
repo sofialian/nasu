@@ -23,13 +23,13 @@
     @vite(['resources/css/app.css'])
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+<body class="font-body font-bold antialiased">
+    <div class="max-h-screen bg-gray-100">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
         @isset($header)
-        <header class="bg-white shadow">
+        <header class="bg-white">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 {{ $header }}
             </div>
@@ -39,6 +39,7 @@
         <!-- Page Content -->
         <main>
             <div class="contenido container-fluid d-flex flex-column flex-md-row md-p-5">
+            <!-- <div class="container mx-auto my-auto h-screen"> -->
                 @yield('content')
             </div>
             @include('layouts.footer')
