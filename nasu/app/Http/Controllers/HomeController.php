@@ -11,16 +11,20 @@ class HomeController extends Controller
     public function index()
     {
         $user = auth()->user();
-        
-        // Carga las relaciones directamente desde User
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
         $user->load([
-            'room.items.furniture',  // Ahora room está en User
+            'room.items.furniture',
             'projects.tasks' => fn($query) => $query->incomplete()
         ]);
 
-        return view('home', [
-            'room' => $user->room ?? null,
+        return view('dashboard', [
+            'room' => $user->room ?? new Room(),
             'projects' => $user->projects ?? collect(),
+            'user' => $user
         ]);
     }
 }

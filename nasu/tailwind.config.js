@@ -17,7 +17,14 @@ export default {
                 'primary-light': '#fcffeb',
                 'secondary-color': '#97d5ca',
                 'accent': '#ff4e4e',
-            },
+                
+                dark: {
+                  'primary': '#474350',
+                  'secondary': '#97d5ca',
+                  'accent': '#ff4e4e',
+                  'text': '#fcffeb'
+                }
+              },
             fontFamily: {
                 'title': ['"Major Mono Display"', ...defaultTheme.fontFamily.mono],
                 'logo': ['"Mali"', 'cursive'],

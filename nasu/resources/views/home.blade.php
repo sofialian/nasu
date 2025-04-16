@@ -1,27 +1,39 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto my-auto h-1/3">
-    <div class="bg-gray-200 p-4 rounded-lg" style="height: 400px; position: relative;">
-        @isset($room)
-        @forelse($room->items as $item)
-        @isset($item->furniture)
-        <div class="absolute bg-cover bg-center"
-            style="left: {{ $item->position_x }}px;
-                            top: {{ $item->position_y }}px;
-                            width: 80px;
-                            height: 80px;
-                            background-image: url('{{ $item->furniture->image_url }}');
-                            transform: rotate({{ $item->rotation }}deg);"
-            title="{{ $item->furniture->name }}">
+<div class="flex-grow flex items-center justify-center h-screen flex flex-col bg-primary-light">
+    <!-- Contenido principal centrado -->
+    <div class="w-full max-w-md px-4 py-8 text-center">
+        <!-- Animación del logo -->
+        <div class="mb-8 animate-bounce mx-auto" style="width: fit-content;">
+            <div class="h-20 w-20 border-3 border-secondary-color rounded-full flex items-center justify-center mx-auto text-secondary-color text-4xl font-logo">
+                n
+            </div>
         </div>
-        @endisset
-        @empty
-        <p class="text-gray-500 text-center mt-40">No tienes muebles en tu habitación. ¡Visita la tienda!</p>
-        @endforelse
+
+        <!-- Texto "nasu" -->
+        <h1 class="text-2xl font-logo text-primary-dark mb-8">nasu</h1>
+
+        <!-- Botones de acceso -->
+        @auth
+        <form method="GET" action="{{ route('dashboard') }}">
+            @csrf
+            <button type="submit" class="border-2 border-primary-dark shadow hover:border-accent text-primary-dark font-bold py-3 px-8 transition duration-300 mb-8 w-full sm:w-auto">
+                Enter (Continuar a Dashboard)
+            </button>
+        </form>
         @else
-        <p class="text-gray-500 text-center mt-40">No hay habitación configurada.</p>
-        @endisset
+        <div class="space-y-4">
+            <a href="{{ route('login') }}" class="block bg-accent hover:bg-accent-dark text-white font-bold py-3 px-6 transition duration-300 text-center w-full sm:w-auto">
+                Enter (Iniciar Sesión)
+            </a>
+            <p class="inline-block hover:text-accent-dark text-sm">
+                New to nasu?
+                <span class="text-accent hover:underline"><a href="{{ route('register') }}">Sign up</a></span>
+            </p>
+        </div>
+        @endauth
     </div>
+</div>
 </div>
 @endsection

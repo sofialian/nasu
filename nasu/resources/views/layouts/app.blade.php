@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'nasu') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -19,11 +19,11 @@
 
 
     <!-- Scripts -->
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     @vite(['resources/css/app.css'])
 </head>
 
-<body class="font-body font-bold antialiased">
+<body class="font-body font-bold antialiased h-screen bg-primary-light">
     <div class="max-h-screen bg-gray-100">
         @include('layouts.navigation')
 
@@ -38,14 +38,16 @@
 
         <!-- Page Content -->
         <main>
-            <div class="contenido container-fluid d-flex flex-column flex-md-row md-p-5">
-            <!-- <div class="container mx-auto my-auto h-screen"> -->
+            <div class="container-fluid d-flex flex-md-row flex flex-col max-h-screen bg-primary-light">
+                <!-- <div class="container mx-auto my-auto h-screen"> -->
                 @yield('content')
             </div>
             @include('layouts.footer')
     </div>
     </main>
     </div>
+
+    @vite(['resources/js/app.js'])
 </body>
 
 </html>
