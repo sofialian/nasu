@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('history', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('profile_id')->constrained('profiles')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('project_id')->nullable()->constrained('projects')->onDelete('set null');
             $table->foreignId('task_id')->nullable()->constrained('tasks')->onDelete('set null');
             $table->timestamp('completed_at')->useCurrent();

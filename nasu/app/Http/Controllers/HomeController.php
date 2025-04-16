@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Profile;
+use App\Models\User;
 use App\Models\Project;
 use App\Models\Room;
 
@@ -12,14 +12,15 @@ class HomeController extends Controller
     {
         $user = auth()->user();
         
+        // Carga las relaciones directamente desde User
         $user->load([
-            'profile.room.items.furniture', 
-            'profile.projects.tasks' => fn($query) => $query->incomplete()
+            'room.items.furniture',  // Ahora room está en User
+            'projects.tasks' => fn($query) => $query->incomplete()
         ]);
 
         return view('home', [
-            'room' => $user->profile->room ?? null,
-            'projects' => $user->profile->projects ?? collect(),
+            'room' => $user->room ?? null,
+            'projects' => $user->projects ?? collect(),
         ]);
     }
 }

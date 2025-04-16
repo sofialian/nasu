@@ -16,11 +16,11 @@ class User extends Authenticatable
      * @var array<string>
      */
     protected $fillable = [
-        'name',             
-        'email',             
+        'username',
+        'email',
         'password',
-        'exp',       
-        'beans',     
+        'exp',
+        'beans',
     ];
 
     /**
@@ -43,19 +43,19 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'exp' => 'integer',      
-            'beans' => 'integer', 
+            'exp' => 'integer',
+            'beans' => 'integer',
         ];
-    }
-
-    public function projects()
-    {
-        return $this->hasMany(Project::class);
     }
 
     public function room()
     {
         return $this->hasOne(Room::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
     }
 
     public function history()

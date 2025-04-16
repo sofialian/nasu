@@ -17,16 +17,13 @@ class Project extends Model
         'completed_at',  
     ];
 
-    // Relaciones
-    /*
-    public function profile()
+    public function user()
     {
-        return $this->belongsTo(Profile::class);
+        return $this->belongsTo(User::class);
     }
 
     public function tasks()
     {
         return $this->hasMany(Task::class);
     }
-        */
 }

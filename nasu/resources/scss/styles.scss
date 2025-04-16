@@ -1,0 +1,5 @@
+@use "variables.scss" as *;
+
+@forward "bootstrap/scss/bootstrap";
+@use "bootstrap/scss/bootstrap" as *;
+

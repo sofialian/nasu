@@ -12,9 +12,9 @@ class Room extends Model
     protected $fillable = ['profile_id'];
 
     // Relaciones
-    public function profile()
+    public function user()
     {
-        return $this->belongsTo(Profile::class);
+        return $this->belongsTo(User::class);
     }
 
     public function items()
