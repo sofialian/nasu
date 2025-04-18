@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Project;
 use App\Models\Room;
 
 class HomeController extends Controller
@@ -26,5 +24,18 @@ class HomeController extends Controller
             'projects' => $user->projects ?? collect(),
             'user' => $user
         ]);
+    }
+
+    public function dashboardTasks()
+    {
+        $tasks = auth()->user()->tasks()
+            ->with('project')
+            ->orderBy('completed')
+            ->orderByDesc('created_at')
+            ->get();
+            
+        $projects = auth()->user()->projects;
+        
+        return view('dashboard', compact('tasks', 'projects'));
     }
 }

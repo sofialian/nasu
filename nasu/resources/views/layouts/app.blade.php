@@ -39,7 +39,7 @@
         <!-- Page Content -->
         <main>
             <div class="container-fluid d-flex flex-md-row flex flex-col max-h-screen bg-primary-light">
-                {{ $slot }}
+                @yield('content')
             </div>
             @include('layouts.footer')
     </div>

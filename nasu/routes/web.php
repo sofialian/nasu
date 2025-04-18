@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ChecklistController;
+use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,6 +21,26 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+//Task
+// routes/web.php
+Route::middleware(['auth'])->group(function () {
+    // Tareas
+    Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
+    
+    // Proyectos
+    Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+    Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+    
+    // Checklists (si es necesario)
+    Route::post('/tasks/{task}/checklists', [ChecklistController::class, 'store'])->name('checklists.store');
+    Route::put('/checklists/{checklist}', [ChecklistController::class, 'update'])->name('checklists.update');
+    Route::delete('/checklists/{checklist}', [ChecklistController::class, 'destroy'])->name('checklists.destroy');
+});
+
 
 //Room
 Route::get('/room', [HomeController::class, 'room'])->name('room');
