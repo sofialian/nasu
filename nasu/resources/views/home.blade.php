@@ -1,5 +1,4 @@
-@extends('layouts.app')
-
+<x-app-layout>
 @section('content')
 <div class="flex-grow flex items-center justify-center h-screen flex flex-col bg-primary-light">
     <!-- Contenido principal centrado -->
@@ -37,3 +36,4 @@
 </div>
 </div>
 @endsection
+</x-app-layout>

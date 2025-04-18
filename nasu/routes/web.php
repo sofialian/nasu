@@ -18,4 +18,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//Room
+Route::get('/room', [HomeController::class, 'room'])->name('room');
+Route::post('/room', [HomeController::class, 'updateRoom'])->name('room.edit');
+//Project 
+Route::get('/projects', [HomeController::class, 'projects'])->name('projects');
+
+
 require __DIR__.'/auth.php';

@@ -29,7 +29,7 @@
 
         <!-- Page Heading -->
         @isset($header)
-        <header class="bg-white">
+        <header class="bg-primary-light">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 {{ $header }}
             </div>
@@ -39,8 +39,7 @@
         <!-- Page Content -->
         <main>
             <div class="container-fluid d-flex flex-md-row flex flex-col max-h-screen bg-primary-light">
-                <!-- <div class="container mx-auto my-auto h-screen"> -->
-                @yield('content')
+                {{ $slot }}
             </div>
             @include('layouts.footer')
     </div>
