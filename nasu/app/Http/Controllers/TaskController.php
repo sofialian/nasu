@@ -8,6 +8,22 @@ use App\Models\Project;
 
 class TaskController extends Controller
 {
+    public function index()
+    {
+        $tasks = auth()->user()->tasks()
+            ->with(['project', 'checklists'])
+            // ->orderBy('completed')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('tasks.index', compact('tasks'));
+    }
+    public function destroy(Task $task)
+    {
+        $this->authorize('delete', $task);
+        $task->delete();
+        return redirect()->route('tasks.index')->with('success', 'Tarea eliminada correctamente');
+    }
     public function create()
     {
         $projects = auth()->user()->projects;
@@ -15,25 +31,43 @@ class TaskController extends Controller
     }
 
     public function store(Request $request)
-{
-    // Validación de los datos
-    $validatedData = $request->validate([
-        'task_name' => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'project_id' => 'nullable|exists:projects,id'
-    ]);
-    
-    // Crear la tarea con el usuario autenticado
-    $task = new Task();
-    $task->task_name = $validatedData['task_name'];
-    $task->description = $validatedData['description'] ?? null;
-    $task->project_id = $validatedData['project_id'] ?? null;
-    $task->user_id = auth()->id(); // Asignar el usuario actual
-    $task->save();
-    
-    // Redireccionar con mensaje de éxito
-    return redirect()->route('tasks.index')->with('success', 'Tarea creada exitosamente');
-}
+    {
+        // Validación de datos
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',  
+            'description' => 'nullable|string',
+            'project_id' => 'nullable|exists:projects,id',
+            'new_project' => 'nullable|string|max:255',
+            'project_description' => 'nullable|string'
+        ]);
+
+        // Manejar la creación de nuevo proyecto si es necesario
+        $projectId = $validated['project_id'];
+
+        if ($request->project_option === 'new' && !empty($validated['new_project'])) {
+            $project = Project::create([
+                'user_id' => auth()->id(),
+                'project_title' => $validated['new_project'],
+                'description' => $validated['project_description'] ?? null,
+                'color' => $validated['color'] ?? null,
+                'completed' => false,
+                'date_completed' => null
+            ]);
+            $projectId = $project->id;
+        }
+
+        // Crear la tarea
+        $task = Task::create([
+            'user_id' => auth()->id(), // Asignar usuario actual
+            'project_id' => $projectId,
+            'task_title' => $validated['title'], 
+            'description' => $validated['description'],
+            'completed' => false
+        ]);
+
+        return redirect()->route('tasks.index')->with('success', 'Tarea creada correctamente');
+    }
+
     public function edit(Task $task)
     {
         $this->authorize('update', $task);

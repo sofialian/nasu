@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('project_title');
             $table->text('description')->nullable();
-            $table->timestamp('completed_at')->nullable();
+            $table->string('color')->default('#000000'); 
+            $table->boolean('completed')->default(false);
+            $table->timestamp('date_completed')->nullable();
             $table->timestamps();
         });
     }

@@ -7,26 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
+        'user_id',
         'project_id',
-        'task_name',           
-        'description',    
-        'completed',      
-        'completed_at',   
+        'task_title',
+        'description',
+        'completed',
+        'date_completed'
     ];
 
-    // Relaciones
-    /*
+    // Relación con el usuario
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // Relación con el proyecto (si ya no la tienes)
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
     public function checklists()
-    {
-        return $this->hasMany(Checklist::class); // Antes 'listas'
-    }
-        */
+{
+    return $this->hasMany(Checklist::class);
+}
 }

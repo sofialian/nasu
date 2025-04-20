@@ -11,10 +11,21 @@ class Project extends Model
 
     protected $fillable = [
         'profile_id',
-        'project_name',         
-        'description', 
+        'project_title',         
+        'description',
+        'color', 
         'completed',  
-        'completed_at',  
+        'date_completed',  
+    ];
+
+    public static $colors = [
+        'red' => 'Rojo',
+        'blue' => 'Azul',
+        'green' => 'Verde',
+        'yellow' => 'Amarillo',
+        'indigo' => 'Indigo',
+        'purple' => 'Morado',
+        'pink' => 'Rosa'
     ];
 
     public function user()
