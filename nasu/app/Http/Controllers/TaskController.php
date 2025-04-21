@@ -18,6 +18,7 @@ class TaskController extends Controller
 
         return view('tasks.index', compact('tasks'));
     }
+
     public function destroy(Task $task)
     {
         $this->authorize('delete', $task);
@@ -70,24 +71,27 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        $this->authorize('update', $task);
         $projects = auth()->user()->projects;
         return view('tasks.edit', compact('task', 'projects'));
     }
 
     public function update(Request $request, Task $task)
     {
-        $this->authorize('update', $task);
-
-        $request->validate([
+        // Verificación de autorización (opción manual)
+        if (auth()->id() !== $task->user_id) {
+            return back()->with('error', 'No autorizado');
+        }
+    
+        $validated = $request->validate([
             'task_title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'project_id' => 'nullable|exists:projects,id',
             'completed' => 'sometimes|boolean',
         ]);
-
-        $task->update($request->all());
-
-        return redirect()->route('tasks.index')->with('success', 'Tarea actualizada correctamente');
+    
+        $task->update($validated);
+    
+        return redirect()->route('tasks.index')
+               ->with('success', 'Tarea actualizada correctamente');
     }
 }

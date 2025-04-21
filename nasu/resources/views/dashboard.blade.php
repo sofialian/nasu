@@ -123,6 +123,14 @@
                                 <h3 class="font-medium text-gray-800 {{ $task->completed ? 'line-through' : '' }} truncate">
                                     {{ $task->task_title }}
                                 </h3>
+                                @if($task->project)
+                                <span class="px-2 py-1 text-xs font-bold text-{{ $task->project->color }}-500 bg-{{ $task->project->color }}-100 rounded-full">
+                                    {{ $task->project->project_title }}
+                                </span>
+                                <span class="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">
+                                    {{ $task->project->project_title }} (Color: {{ $task->project->color }})
+                                </span>
+                                @endif
                                 @if($task->description)
                                 <p class="text-sm text-gray-500 mt-1 truncate">{{ $task->description }}</p>
                                 @endif
@@ -231,7 +239,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <span class="w-3 h-3 rounded-full bg-{{ $project->color }}-500 mr-2"></span>
-                        <h3 class="font-medium">{{ $project->name }}</h3>
+                        <h3 class="font-medium">{{ $project->project_title }}</h3>
                     </div>
                     <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">
                         {{ $project->tasks_count }} tareas

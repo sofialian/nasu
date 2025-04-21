@@ -10,12 +10,11 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
-        'profile_id',
-        'project_title',         
+        'user_id',
+        'project_title', 
         'description',
-        'color', 
-        'completed',  
-        'date_completed',  
+        'color',
+        'completed'
     ];
 
     public static $colors = [
