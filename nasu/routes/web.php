@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
-    
+
     // Proyectos
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
-    
+
     // Checklists (si es necesario)
     Route::post('/tasks/{task}/checklists', [ChecklistController::class, 'store'])->name('checklists.store');
     Route::put('/checklists/{checklist}', [ChecklistController::class, 'update'])->name('checklists.update');
@@ -52,8 +52,6 @@ Route::middleware(['auth'])->group(function () {
 //Room
 Route::get('/room', [HomeController::class, 'room'])->name('room');
 Route::post('/room', [HomeController::class, 'updateRoom'])->name('room.edit');
-//Project 
-Route::get('/projects', [HomeController::class, 'projects'])->name('projects');
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

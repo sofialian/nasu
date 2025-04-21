@@ -228,7 +228,7 @@
     <div class="mt-6 bg-white rounded-lg shadow-md overflow-hidden">
         <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
             <h2 class="text-lg font-semibold text-gray-700">Mis Proyectos</h2>
-            <a href="{{ route('tasks.index') }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+            <a href="{{ route('projects.index') }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
                 Ver todos
             </a>
         </div>

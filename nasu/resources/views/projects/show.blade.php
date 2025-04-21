@@ -21,7 +21,25 @@
         <p>{{ $project->updated_at->format('d/m/Y H:i') }}</p>
     </div>
 
-    <div class="flex items-center justify-end mt-4">
-        <a href="{{ route('projects.edit', $project) }}" class="text-blue-500 hover:text-blue-700">Editar Proyecto</a>
+    <div class="flex items-center justify-end mt-4 space-x-4">
+        <a href="{{ route('projects.edit', $project) }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+            Editar Proyecto
+        </a>
+        
+        <form id="deleteForm" action="{{ route('projects.destroy', $project) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="confirmDelete()" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                Eliminar Proyecto
+            </button>
+        </form>
     </div>
+
+    <script>
+        function confirmDelete() {
+            if (confirm('¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.')) {
+                document.getElementById('deleteForm').submit();
+            }
+        }
+    </script>
 @endsection

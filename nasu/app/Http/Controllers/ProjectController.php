@@ -116,4 +116,34 @@ class ProjectController extends Controller
 
         return view('projects.show', compact('project'));
     }
+
+    public function destroy(Project $project)
+    {
+        // Verificación de autorización
+        if (auth()->id() !== $project->user_id) {
+            return back()->with('error', 'No autorizado');
+        }
+
+        // Eliminar el proyecto
+        $project->delete();
+
+        return redirect()->route('projects.index')
+            ->with('success', 'Proyecto eliminado correctamente');
+    }
+    public function complete(Project $project)
+    {
+        // Verificación de autorización
+        if (auth()->id() !== $project->user_id) {
+            return back()->with('error', 'No autorizado');
+        }
+
+        // Completar el proyecto
+        $project->update([
+            'completed' => true,
+            'date_completed' => now()
+        ]);
+
+        return redirect()->route('projects.index')
+            ->with('success', 'Proyecto completado correctamente');
+    }
 }
