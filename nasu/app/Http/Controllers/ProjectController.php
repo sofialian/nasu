@@ -49,8 +49,9 @@ class ProjectController extends Controller
             ]);
 
 
-            return redirect()->route('dashboard')
+            return redirect()->route('project.index')
                 ->with('success', "Proyecto {$project->project_title} creado correctamente");
+                
         } catch (\Exception $e) {
             \Log::error('Error al crear proyecto:', [
                 'error' => $e->getMessage(),

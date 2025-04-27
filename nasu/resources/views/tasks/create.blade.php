@@ -30,7 +30,7 @@
             <x-select-input id="project_id" name="project_id" class="block mt-1 w-full">
                 <option value="">Sin proyecto</option>
                 @foreach($projects as $project)
-                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                <option value="{{ $project->id }}">{{ $project->project_title }}</option>
                 @endforeach
             </x-select-input>
         </div>
@@ -41,9 +41,12 @@
                 <x-input-label for="new_project" :value="__('Crear nuevo proyecto')" class="ml-2" />
             </div>
 
-            <x-text-input id="new_project_name" class="block mt-2 w-full" type="text" name="new_project" placeholder="Nombre del nuevo proyecto" />
+            <x-text-input id="new_project" class="block mt-2 w-full" type="text" name="new_project" placeholder="Nombre del nuevo proyecto" />
             <x-textarea id="project_description" class="block mt-2 w-full" name="project_description" rows="2" placeholder="Descripción del proyecto" disabled />
         </div>
+
+        <!-- aqui poner los colores -->
+         
 
         <div class="flex items-center justify-end mt-4">
             <x-primary-button type="submit">

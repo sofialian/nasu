@@ -4,14 +4,7 @@
 
 @section('content')
 <div>HOLA</div>
-@if(session('success'))
-<div class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-opacity duration-300" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-    {{ session('success') }}
-    <button @click="show = false" class="ml-4 text-white hover:text-gray-200">
-        &times;
-    </button>
-</div>
-@endif
+
 @if(session('success'))
 <div class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center"
     x-data="{ show: true }"

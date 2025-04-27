@@ -32,35 +32,35 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        // Validación de datos
         $validated = $request->validate([
-            'title' => 'required|string|max:255',  
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'project_id' => 'nullable|exists:projects,id',
-            'new_project' => 'nullable|string|max:255',
-            'project_description' => 'nullable|string'
+            'project_option' => 'nullable|string', // Añade esta validación
+            'new_project' => 'required_if:project_option,new|string|max:255', // Cambiado de new_project a new_project_name
+            'project_description' => 'nullable|string',
+            'color' => 'nullable|string' // Asegúrate de tener este campo si lo usas
         ]);
 
-        // Manejar la creación de nuevo proyecto si es necesario
-        $projectId = $validated['project_id'];
+        $projectId = $validated['project_id'] ?? null;
 
-        if ($request->project_option === 'new' && !empty($validated['new_project'])) {
+        // Crear nuevo proyecto si se seleccionó esa opción
+        if ($request->project_option === 'new') {
             $project = Project::create([
                 'user_id' => auth()->id(),
                 'project_title' => $validated['new_project'],
                 'description' => $validated['project_description'] ?? null,
-                'color' => $validated['color'] ?? null,
-                'completed' => false,
-                'date_completed' => null
+                'color' => $validated['color'] ?? 'blue', // Color por defecto
+                'completed' => false
             ]);
             $projectId = $project->id;
         }
 
         // Crear la tarea
         $task = Task::create([
-            'user_id' => auth()->id(), // Asignar usuario actual
+            'user_id' => auth()->id(),
             'project_id' => $projectId,
-            'task_title' => $validated['title'], 
+            'task_title' => $validated['title'],
             'description' => $validated['description'],
             'completed' => false
         ]);
@@ -80,17 +80,17 @@ class TaskController extends Controller
         if (auth()->id() !== $task->user_id) {
             return back()->with('error', 'No autorizado');
         }
-    
+
         $validated = $request->validate([
             'task_title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'project_id' => 'nullable|exists:projects,id',
             'completed' => 'sometimes|boolean',
         ]);
-    
+
         $task->update($validated);
-    
+
         return redirect()->route('tasks.index')
-               ->with('success', 'Tarea actualizada correctamente');
+            ->with('success', 'Tarea actualizada correctamente');
     }
 }
