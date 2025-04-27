@@ -3,6 +3,15 @@
 @section('header', 'Todos mis Proyectos')
 
 @section('content')
+@if(session('success'))
+<div class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-opacity duration-300" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+    {{ session('success') }}
+    <button @click="show = false" class="ml-4 text-white hover:text-gray-200">
+        &times;
+    </button>
+</div>
+@endif
+
 <div class="container mx-auto px-4 py-6">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Mis Proyectos</h1>
