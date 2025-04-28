@@ -57,6 +57,7 @@
 
     @push('scripts')
     <script>
+        alert('Hola desde el script!');
         document.addEventListener('DOMContentLoaded', function() {
             const existingProjectRadio = document.getElementById('existing_project');
             const newProjectRadio = document.getElementById('new_project');

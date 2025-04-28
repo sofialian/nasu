@@ -40,6 +40,7 @@
         <main>
             <div class="container-fluid d-flex flex-md-row flex flex-col max-h-screen bg-primary-light">
                 @yield('content')
+                @stack('scripts')
             </div>
             @include('layouts.footer')
     </div>

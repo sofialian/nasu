@@ -30,27 +30,25 @@ class TaskController extends Controller
         return view('tasks.create', compact('projects'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'project_id' => 'nullable|exists:projects,id',
-            'project_option' => 'nullable|string', // Añade esta validación
-            'new_project' => 'required_if:project_option,new|string|max:255', // Cambiado de new_project a new_project_name
+            'project_option' => 'sometimes|string', // Cambiado a "sometimes"
+            'new_project' => 'required_if:project_option,new|string|max:255',
             'project_description' => 'nullable|string',
-            'color' => 'nullable|string' // Asegúrate de tener este campo si lo usas
         ]);
-
+    
         $projectId = $validated['project_id'] ?? null;
-
-        // Crear nuevo proyecto si se seleccionó esa opción
-        if ($request->project_option === 'new') {
+    
+        // Verifica explícitamente si el radio está seleccionado
+        if ($request->filled('project_option') && $request->project_option === 'new') {
             $project = Project::create([
                 'user_id' => auth()->id(),
                 'project_title' => $validated['new_project'],
                 'description' => $validated['project_description'] ?? null,
-                'color' => $validated['color'] ?? 'blue', // Color por defecto
+                'color' => 'blue', // Valor por defecto
                 'completed' => false
             ]);
             $projectId = $project->id;
@@ -65,7 +63,7 @@ class TaskController extends Controller
             'completed' => false
         ]);
 
-        return redirect()->route('tasks.index')->with('success', 'Tarea creada correctamente');
+        return redirect()->route('tasks.index')->with('success', 'Tarea'. $projectId .'creada correctamente');
     }
 
     public function edit(Task $task)
