@@ -32,6 +32,12 @@ export default {
             },
         },
     },
+    safelist: [
+        {
+          pattern: /bg-(red|blue|green|yellow|indigo|purple|pink)-(400|500|600)/,
+          variants: ['hover', 'focus']
+        }
+      ],
     plugins: [
         forms,
         require('@tailwindcss/typography'),

@@ -103,18 +103,25 @@
                     <div class="flex items-start justify-between">
                         <div class="flex items-start space-x-3 flex-1">
                             <!-- Checkbox completado -->
-                            <form action="{{ route('tasks.update', $task) }}" method="POST">
+                            <form action="{{ route('tasks.toggle', $task) }}" method="POST" class="inline" x-data="{ completed: {{ $task->completed ? 'true' : 'false' }} }">
                                 @csrf
                                 @method('PATCH')
-                                <input type="hidden" name="completed" value="{{ $task->completed ? '0' : '1' }}">
-                                <button type="submit" class="mt-1 focus:outline-none">
-                                    <div class="w-5 h-5 border-2 border-gray-300 rounded-sm flex items-center justify-center {{ $task->completed ? 'bg-green-500 border-green-500' : '' }}">
-                                        @if($task->completed)
-                                        <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        @endif
-                                    </div>
+                                <button
+                                    type="submit"
+                                    class="flex items-center justify-center w-5 h-5 rounded border-2 transition-all duration-200"
+                                    :class="{
+            'bg-green-500 border-green-500': completed,
+            'border-gray-300 hover:border-gray-400': !completed
+        }"
+                                    @click="completed = !completed">
+                                    <svg
+                                        x-show="completed"
+                                        class="w-3 h-3 text-white"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
                                 </button>
                             </form>
 

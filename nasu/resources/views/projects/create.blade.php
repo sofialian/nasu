@@ -23,7 +23,7 @@
             <x-input-label for="color" :value="__('Color')" />
             <select id="color" name="color" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm">
                 @foreach($colors as $value => $label)
-                    <option value="{{ $value }}" class="text-{{ $value }}-600">
+                    <option value="{{ $value }}" class="text-{{ $value }}-500">
                         {{ $label }}
                     </option>
                 @endforeach
