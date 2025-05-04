@@ -33,17 +33,23 @@
             <div class="flex justify-between items-start">
                 <div class="flex items-start space-x-4 flex-1">
                     <!-- Checkbox completado -->
-                    <form action="{{ route('tasks.update', $task) }}" method="POST">
+                    <!-- Reemplaza el formulario completo del checkbox con este código -->
+                    <form action="{{ route('tasks.toggle', $task) }}" method="POST" class="inline">
                         @csrf
                         @method('PATCH')
-                        <input type="hidden" name="completed" value="{{ $task->completed ? '0' : '1' }}">
-                        <button type="submit" class="mt-1 focus:outline-none">
-                            <div class="w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center {{ $task->completed ? 'bg-green-500 border-green-500' : '' }}">
-                                @if($task->completed)
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button type="submit" class="focus:outline-none" x-data="{ completed: {{ $task->completed ? 'true' : 'false' }} }"
+                            @click.prevent="
+            completed = !completed;
+            $el.closest('form').submit();
+        ">
+                            <div class="w-6 h-6 border-2 rounded-full flex items-center justify-center transition-colors duration-200"
+                                :class="{
+                'bg-green-500 border-green-500': completed,
+                'border-gray-300 hover:border-gray-400': !completed
+            }">
+                                <svg x-show="completed" class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
-                                @endif
                             </div>
                         </button>
                     </form>
@@ -136,10 +142,10 @@
     @endif
 </div>
 <script>
-        function confirmDelete() {
-            if (confirm('¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.')) {
-                document.getElementById('deleteTask').submit();
-            }
+    function confirmDelete() {
+        if (confirm('¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.')) {
+            document.getElementById('deleteTask').submit();
         }
-    </script>
+    }
+</script>
 @endsection

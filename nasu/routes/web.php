@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/tasks/{task}/toggle', [TaskController::class, 'toggle'])
     ->name('tasks.toggle')
     ->middleware('auth');
+    
 
 
     // Proyectos
