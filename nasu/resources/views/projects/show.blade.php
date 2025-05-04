@@ -12,6 +12,11 @@
     </div>
 
     <div class="mb-4">
+        <h2 class="text-lg font-semibold">Color</h2>
+        <p>{{ $project->color }}</p>
+    </div>
+
+    <div class="mb-4">
         <h2 class="text-lg font-semibold">Fecha de Creación</h2>
         <p>{{ $project->created_at->format('d/m/Y H:i') }}</p>
     </div>

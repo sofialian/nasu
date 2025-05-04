@@ -29,6 +29,7 @@
             @foreach($projects as $project)
             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div class="p-4 border-b flex items-center justify-between bg-{{ $project->color }}-50">
+                <span class="w-3 h-3 rounded-full bg-{{ $project->color }}-500 mr-2"></span>
                     <h3 class="font-semibold text-lg text-{{ $project->color }}-800">{{ $project->project_title }}</h3>
                     <span class="bg-white text-{{ $project->color }}-800 px-2 py-1 rounded-full text-xs">
                         {{ $project->tasks_count }} tareas
