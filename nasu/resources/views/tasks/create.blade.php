@@ -41,12 +41,9 @@
                 <x-input-label for="new_project" :value="__('Crear nuevo proyecto')" class="ml-2" />
             </div>
 
-            <x-text-input id="new_project" class="block mt-2 w-full" type="text" name="new_project" placeholder="Nombre del nuevo proyecto" />
+            <x-text-input id="new_project_name" class="block mt-2 w-full" type="text" name="new_project_name" placeholder="Nombre del nuevo proyecto" disabled />
             <x-textarea id="project_description" class="block mt-2 w-full" name="project_description" rows="2" placeholder="Descripción del proyecto" disabled />
         </div>
-
-        <!-- aqui poner los colores -->
-         
 
         <div class="flex items-center justify-end mt-4">
             <x-primary-button type="submit">
@@ -57,7 +54,7 @@
 
     @push('scripts')
     <script>
-        alert('Hola desde el script!');
+        alert('¡Bienvenido a la creación de tareas!.');
         document.addEventListener('DOMContentLoaded', function() {
             const existingProjectRadio = document.getElementById('existing_project');
             const newProjectRadio = document.getElementById('new_project');
@@ -80,7 +77,8 @@
             existingProjectRadio.addEventListener('change', toggleFields);
             newProjectRadio.addEventListener('change', toggleFields);
 
-            toggleFields(); // Initialize
+            // Initialize
+            toggleFields();
         });
     </script>
     @endpush
