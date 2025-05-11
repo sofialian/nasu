@@ -5,68 +5,6 @@
     <!-- Sección superior con título y botón -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Mi Espacio</h1>
-
-        <div class="grid grid-cols-2 gap-2 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            <div class="bg-slate-500 text-white h-16 flex items-center justify-center rounded">slate</div>
-            <div class="bg-gray-500 text-white h-16 flex items-center justify-center rounded">gray</div>
-            <div class="bg-zinc-500 text-white h-16 flex items-center justify-center rounded">zinc</div>
-            <div class="bg-neutral-500 text-white h-16 flex items-center justify-center rounded">neutral</div>
-            <div class="bg-stone-500 text-white h-16 flex items-center justify-center rounded">stone</div>
-            <div class="bg-red-500 text-white h-16 flex items-center justify-center rounded">red</div>
-            <div class="bg-orange-500 text-white h-16 flex items-center justify-center rounded">orange</div>
-            <div class="bg-amber-500 text-white h-16 flex items-center justify-center rounded">amber</div>
-            <div class="bg-yellow-500 text-black h-16 flex items-center justify-center rounded">yellow</div>
-            <div class="bg-lime-500 text-black h-16 flex items-center justify-center rounded">lime</div>
-            <div class="bg-green-500 text-white h-16 flex items-center justify-center rounded">green</div>
-            <div class="bg-emerald-500 text-white h-16 flex items-center justify-center rounded">emerald</div>
-            <div class="bg-teal-500 text-white h-16 flex items-center justify-center rounded">teal</div>
-            <div class="bg-cyan-500 text-white h-16 flex items-center justify-center rounded">cyan</div>
-            <div class="bg-sky-500 text-white h-16 flex items-center justify-center rounded">sky</div>
-            <div class="bg-blue-500 text-white h-16 flex items-center justify-center rounded">blue</div>
-            <div class="bg-indigo-500 text-white h-16 flex items-center justify-center rounded">indigo</div>
-            <div class="bg-violet-500 text-white h-16 flex items-center justify-center rounded">violet</div>
-            <div class="bg-purple-500 text-white h-16 flex items-center justify-center rounded">purple</div>
-            <div class="bg-fuchsia-500 text-white h-16 flex items-center justify-center rounded">fuchsia</div>
-            <div class="bg-pink-500 text-white h-16 flex items-center justify-center rounded">pink</div>
-            <div class="bg-rose-500 text-white h-16 flex items-center justify-center rounded">rose</div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            <!-- Grises -->
-            <div class="border-2 border-slate-500 bg-slate-100 text-slate-500 h-16 flex items-center justify-center rounded-lg font-medium">slate</div>
-            <div class="border-2 border-gray-500 bg-gray-100 text-gray-500 h-16 flex items-center justify-center rounded-lg font-medium">gray</div>
-            <div class="border-2 border-zinc-500 bg-zinc-100 text-zinc-500 h-16 flex items-center justify-center rounded-lg font-medium">zinc</div>
-            <div class="border-2 border-neutral-500 bg-neutral-100 text-neutral-500 h-16 flex items-center justify-center rounded-lg font-medium">neutral</div>
-            <div class="border-2 border-stone-500 bg-stone-100 text-stone-500 h-16 flex items-center justify-center rounded-lg font-medium">stone</div>
-
-            <!-- Colores cálidos -->
-            <div class="border-2 border-red-500 bg-red-100 text-red-500 h-16 flex items-center justify-center rounded-lg font-medium">red</div>
-            <div class="border-2 border-orange-500 bg-orange-100 text-orange-500 h-16 flex items-center justify-center rounded-lg font-medium">orange</div>
-            <div class="border-2 border-amber-500 bg-amber-100 text-amber-500 h-16 flex items-center justify-center rounded-lg font-medium">amber</div>
-            <div class="border-2 border-yellow-500 bg-yellow-100 text-yellow-500 h-16 flex items-center justify-center rounded-lg font-medium">yellow</div>
-
-            <!-- Verdes -->
-            <div class="border-2 border-lime-500 bg-lime-100 text-lime-500 h-16 flex items-center justify-center rounded-lg font-medium">lime</div>
-            <div class="border-2 border-green-500 bg-green-100 text-green-500 h-16 flex items-center justify-center rounded-lg font-medium">green</div>
-            <div class="border-2 border-emerald-500 bg-emerald-100 text-emerald-500 h-16 flex items-center justify-center rounded-lg font-medium">emerald</div>
-
-            <!-- Azules -->
-            <div class="border-2 border-teal-500 bg-teal-100 text-teal-500 h-16 flex items-center justify-center rounded-lg font-medium">teal</div>
-            <div class="border-2 border-cyan-500 bg-cyan-100 text-cyan-500 h-16 flex items-center justify-center rounded-lg font-medium">cyan</div>
-            <div class="border-2 border-sky-500 bg-sky-100 text-sky-500 h-16 flex items-center justify-center rounded-lg font-medium">sky</div>
-            <div class="border-2 border-blue-500 bg-blue-100 text-blue-500 h-16 flex items-center justify-center rounded-lg font-medium">blue</div>
-
-            <!-- Púrpuras -->
-            <div class="border-2 border-indigo-500 bg-indigo-100 text-indigo-500 h-16 flex items-center justify-center rounded-lg font-medium">indigo</div>
-            <div class="border-2 border-violet-500 bg-violet-100 text-violet-500 h-16 flex items-center justify-center rounded-lg font-medium">violet</div>
-            <div class="border-2 border-purple-500 bg-purple-100 text-purple-500 h-16 flex items-center justify-center rounded-lg font-medium">purple</div>
-            <div class="border-2 border-fuchsia-500 bg-fuchsia-100 text-fuchsia-500 h-16 flex items-center justify-center rounded-lg font-medium">fuchsia</div>
-
-            <!-- Rosas -->
-            <div class="border-2 border-pink-500 bg-pink-100 text-pink-500 h-16 flex items-center justify-center rounded-lg font-medium">pink</div>
-            <div class="border-2 border-rose-500 bg-rose-100 text-rose-500 h-16 flex items-center justify-center rounded-lg font-medium">rose</div>
-        </div>
-
         <div class="flex space-x-3">
             <a href="{{ route('tasks.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center">
                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
