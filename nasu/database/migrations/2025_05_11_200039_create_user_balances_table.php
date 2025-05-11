@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('room_items', function (Blueprint $table) {
+        Schema::create('user_balances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('room_id')->constrained('rooms')->onDelete('cascade');
-            $table->foreignId('furniture_id')->constrained('furnitures')->onDelete('cascade');
-            $table->integer('posx');
-            $table->integer('posy');
-            $table->integer('rotation')->default(0);
+            $table->foreignId('user_id')->constrained()->unique(); // 1 user = 1 balance
+            $table->integer('beans')->default(0); // Currency
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('room_items');
+        Schema::dropIfExists('user_balances');
     }
 };

@@ -59,4 +59,5 @@ Route::get('/room', [HomeController::class, 'room'])->name('room');
 Route::post('/room', [HomeController::class, 'updateRoom'])->name('room.edit');
 
 
+
 require __DIR__ . '/auth.php';

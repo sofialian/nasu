@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rooms', function (Blueprint $table) {
+        Schema::create('user_furniture', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->unique();
-            $table->string('theme')->default('default');
-            $table->json('layout')->nullable(); // Stores placed furniture: { "items": [] }
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('furniture_id')->constrained();
+            $table->boolean('is_placed')->default(false); // True if placed in room
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('room');
+        Schema::dropIfExists('room_items');
     }
 };

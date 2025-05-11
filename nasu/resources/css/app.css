@@ -2,3 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom drag-and-drop feedback */
+.furniture-item:active {
+    opacity: 0.6;
+}
+
+#room-canvas {
+    background-image: radial-gradient(circle, #ddd 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+

@@ -38,20 +38,6 @@
             </div>
 
             <div class="bg-gray-200 p-4 rounded-b-lg" style="min-height: 400px; position: relative;">
-                @isset($room)
-                @forelse($room->items as $item)
-                @isset($item->furniture)
-                <div class="absolute bg-cover bg-center cursor-move hover:shadow-lg hover:z-10 transition-all"
-                    style="left: {{ $item->position_x }}px;
-                                    top: {{ $item->position_y }}px;
-                                    width: 80px;
-                                    height: 80px;
-                                    background-image: url('{{ $item->furniture->image_url }}');
-                                    transform: rotate({{ $item->rotation }}deg);"
-                    title="{{ $item->furniture->name }}">
-                </div>
-                @endisset
-                @empty
                 <div class="flex items-center justify-center h-full">
                     <div class="text-center p-6 bg-white rounded-lg shadow-sm max-w-md">
                         <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,23 +52,6 @@
                         </div>
                     </div>
                 </div>
-                @endforelse
-                @else
-                <div class="flex items-center justify-center h-full">
-                    <div class="text-center p-6 bg-white rounded-lg shadow-sm max-w-md">
-                        <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path>
-                        </svg>
-                        <h3 class="mt-2 text-lg font-medium text-gray-900">Habitación no configurada</h3>
-                        <p class="mt-1 text-gray-500">Configura tu habitación para personalizar tu espacio de trabajo</p>
-                        <div class="mt-4">
-                            <a href="{{ route('room.edit') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
-                                Configurar habitación
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                @endisset
             </div>
         </div>
 
