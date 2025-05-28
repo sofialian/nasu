@@ -2,22 +2,39 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Furniture extends Model
 {
-    use HasFactory;
+    protected $casts = [
+        'metadata' => 'array',
+        'is_purchasable' => 'boolean',
+        'is_default' => 'boolean'
+    ];
 
-    protected $fillable = ['furniture_name',
-    'category', 
-    'description', 
-    'price_beans', 
-    'image_url'];
+    protected $fillable = [
+        'name',
+        'image_path',
+        'metadata',
+        'price',
+        'is_purchasable',
+        'is_default'
+    ];
 
-    // Relación con room_items
-    public function roomItems()
+    // Relationship to user-owned items
+    public function ownedByUsers()
     {
-        return $this->hasMany(RoomItem::class);
+        return $this->hasMany(UserFurniture::class);
+    }
+
+    // Helper to get dimensions
+    public function getWidth()
+    {
+        return $this->metadata['width'] ?? 50; // Default if not set
+    }
+
+    public function getHeight()
+    {
+        return $this->metadata['height'] ?? 50;
     }
 }

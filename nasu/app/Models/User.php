@@ -81,4 +81,14 @@ class User extends Authenticatable
             ->withPivot('is_placed')
             ->withTimestamps();
     }
+    // In app/Models/User.php
+    public function ownedFurniture()
+    {
+        return $this->hasMany(UserFurniture::class);
+    }
+
+    public function hasFurniture($furnitureId)
+    {
+        return $this->ownedFurniture()->where('furniture_id', $furnitureId)->exists();
+    }
 }

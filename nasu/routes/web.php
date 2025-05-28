@@ -33,9 +33,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::patch('/tasks/{task}/toggle', [TaskController::class, 'toggle'])
-    ->name('tasks.toggle')
-    ->middleware('auth');
-    
+        ->name('tasks.toggle')
+        ->middleware('auth');
+
 
 
     // Proyectos
@@ -57,6 +57,31 @@ Route::middleware(['auth'])->group(function () {
 //Room
 Route::get('/room', [HomeController::class, 'room'])->name('room');
 Route::post('/room', [HomeController::class, 'updateRoom'])->name('room.edit');
+
+// Add these if they don't exist
+Route::middleware(['auth'])->group(function () {
+    // Room routes
+    Route::get('/room', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
+    Route::get('/room/edit', [App\Http\Controllers\RoomController::class, 'edit'])->name('room.edit');
+    Route::post('/room/update', [App\Http\Controllers\RoomController::class, 'update'])->name('room.update');
+
+    // For adding furniture (if needed)
+    Route::post('/room/add-item', [App\Http\Controllers\RoomController::class, 'addItem'])->name('room.add-item');
+});
+
+// In routes/web.php
+Route::middleware(['auth'])->group(function () {
+    // Furniture store
+    Route::get('/furniture-store', [RoomController::class, 'showStore'])->name('furniture.store');
+    Route::post('/room/add-furniture', [RoomController::class, 'addFurniture'])->name('room.add-furniture');
+    Route::delete('/room/remove-furniture/{index}', [RoomController::class, 'removeFurniture'])->name('room.remove-furniture');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('room.show');
+    Route::post('/rooms/{room}/items', [RoomController::class, 'placeItem'])->name('rooms.items.store');
+    Route::delete('/items/{item}', [RoomController::class, 'removeItem'])->name('rooms.items.destroy');
+});
 
 
 

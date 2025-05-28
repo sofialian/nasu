@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -38,42 +39,53 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        DB::beginTransaction();
 
-        // Give them 100 beans
-        UserBalance::create([
-            'user_id' => $user->id,
-            'beans' => 100,
-        ]);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        // Create their room with default items
-        $defaultFurniture = Furniture::where('is_default', true)->get(); // Add this column to furniture table
-        $room = Room::create([
-            'user_id' => $user->id,
-            'layout' => [
-                'items' => $defaultFurniture->map(function ($item) {
-                    return [
-                        'id' => $item->id,
-                        'x' => 0, // Default position
-                        'y' => 0,
-                    ];
-                })->toArray()
-            ],
-        ]);
+            UserBalance::create([
+                'user_id' => $user->id,
+                'beans' => 100,
+            ]);
 
-        // Add default items to their inventory
-        $user->furniture()->attach($defaultFurniture->pluck('id'), [
-            'is_placed' => true
-        ]);
+            // Crear muebles por defecto si no existen
+            $defaultFurniture = Furniture::where('is_default', true)->get();
 
-        event(new Registered($user));
+            if ($defaultFurniture->isEmpty()) {
+                throw new \Exception("No hay muebles por defecto configurados");
+            }
 
-        Auth::login($user);
+            $room = Room::create([
+                'user_id' => $user->id,
+                'layout' => [
+                    'items' => $defaultFurniture->map(function ($item) {
+                        return [
+                            'id' => $item->id,
+                            'x' => 0,
+                            'y' => 0,
+                        ];
+                    })->toArray()
+                ],
+            ]);
 
-        return redirect(route('dashboard', absolute: false));
+            $user->furniture()->attach($defaultFurniture->pluck('id'), [
+                'is_placed' => true
+            ]);
+
+            DB::commit();
+
+            event(new Registered($user));
+            Auth::login($user);
+
+            return redirect(route('dashboard', absolute: false));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 }

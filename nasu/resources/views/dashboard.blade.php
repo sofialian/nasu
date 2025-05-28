@@ -38,20 +38,56 @@
             </div>
 
             <div class="bg-gray-200 p-4 rounded-b-lg" style="min-height: 400px; position: relative;">
-                <div class="flex items-center justify-center h-full">
-                    <div class="text-center p-6 bg-white rounded-lg shadow-sm max-w-md">
-                        <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z"></path>
-                        </svg>
-                        <h3 class="mt-2 text-lg font-medium text-gray-900">Habitación vacía</h3>
-                        <p class="mt-1 text-gray-500">Añade muebles desde la tienda para personalizar tu espacio</p>
-                        <div class="mt-4">
-                            <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700">
-                                Visitar tienda
+                <div class="room-preview p-4">
+                    <h3 class="text-lg font-semibold mb-4">Tus Muebles:</h3>
+                    <!-- Replace the items loop with this: -->
+                    <div class="furniture-grid">
+                        <!-- @if(isset($room) && count($room->items ?? []))
+        @foreach($room->items as $item)
+            @php
+                // Handle both array and object cases
+                $furniture = is_array($item) 
+                    ? ($item['furniture'] ?? App\Models\Furniture::find($item['furniture_id'] ?? null))
+                    : ($item->furniture ?? $item->userFurniture->furniture ?? null);
+                
+                $x = is_array($item) ? ($item['x'] ?? 0) : ($item->position_x ?? 0);
+                $y = is_array($item) ? ($item['y'] ?? 0) : ($item->position_y ?? 0);
+            @endphp
+
+            @if($furniture)
+            <div class="furniture-item bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                @if(file_exists(public_path($furniture->image_path)))
+                <img src="{{ asset($furniture->image_path) }}" alt="{{ $furniture->name }}" class="w-full h-24 object-contain mb-2">
+                @else
+                <div class="text-placeholder h-24 flex items-center justify-center mb-2 bg-gray-100 rounded">
+                    {{ $furniture->name }}
+                </div>
+                @endif
+                <span class="furniture-name block text-center text-sm font-medium">{{ $furniture->name }}</span>
+                <span class="block text-center text-xs text-gray-500 mt-1">Posición: {{ $x }}, {{ $y }}</span>
+            </div>
+            @endif
+        @endforeach
+    @else
+        <p class="text-gray-500 p-4">No hay muebles en tu habitación</p>
+    @endif -->
+                        <div class="mt-4 flex justify-between text-sm text-gray-600">
+                            <span>
+                                @if(isset($room))
+                                {{ is_array($room->items) ? count($room->items) : $room->items->count() }} muebles colocados
+                                @else
+                                0 muebles colocados
+                                @endif
+                            </span>
+                            @if(isset($room))
+                            <a href="{{ route('room.show', $room->id) }}" class="text-indigo-600 hover:underline">
+                                Ver detalles
                             </a>
+                            @endif
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 

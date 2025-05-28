@@ -2,27 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class RoomItem extends Model
 {
-    use HasFactory;
+    protected $fillable = ['room_id', 'user_furniture_id', 'position_x', 'position_y'];
 
-    protected $fillable = ['room_id', 
-    'furniture_id', 
-    'posx', 
-    'posy', 
-    'rotation'];
-
-    // Relaciones
     public function room()
     {
         return $this->belongsTo(Room::class);
     }
 
-    public function furniture()
+    public function userFurniture()
     {
-        return $this->belongsTo(Furniture::class);
+        return $this->belongsTo(UserFurniture::class);
     }
 }
