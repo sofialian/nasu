@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('room_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('room_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_furniture_id')->constrained('user_furniture')->onDelete('cascade');
-            $table->integer('position_x');
-            $table->integer('position_y');
+            $table->foreignId('room_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_furniture_id')->constrained('user_furniture')->cascadeOnDelete();
+            $table->integer('x_position');
+            $table->integer('y_position');
+            $table->integer('rotation')->default(0);
             $table->timestamps();
         });
     }

@@ -12,14 +12,31 @@ class Furniture extends Model
         'is_default' => 'boolean'
     ];
 
+    // app/Models/Furniture.php
     protected $fillable = [
         'name',
-        'image_path',
-        'metadata',
+        'description',
         'price',
+        'image_path',
+        'width',
+        'height',
         'is_purchasable',
         'is_default'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($furniture) {
+            $required = ['name', 'description', 'price', 'image_path'];
+            foreach ($required as $field) {
+                if (empty($furniture->{$field})) {
+                    throw new \Exception("Furniture {$field} is required");
+                }
+            }
+        });
+    }
 
     // Relationship to user-owned items
     public function ownedByUsers()

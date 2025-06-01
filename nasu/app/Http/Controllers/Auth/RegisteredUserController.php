@@ -31,58 +31,57 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+    // app/Http/Controllers/Auth/RegisteredUserController.php
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
         DB::beginTransaction();
 
         try {
+            // 1. Create user
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
 
+            // 2. Give starting beans
             UserBalance::create([
                 'user_id' => $user->id,
-                'beans' => 100,
+                'beans' => 1000,
             ]);
 
-            // Crear muebles por defecto si no existen
+            // 3. Get DEFAULT (free) furniture (not purchasable shop items)
             $defaultFurniture = Furniture::where('is_default', true)->get();
 
-            if ($defaultFurniture->isEmpty()) {
-                throw new \Exception("No hay muebles por defecto configurados");
-            }
-
+            // 4. Create empty room
             $room = Room::create([
                 'user_id' => $user->id,
-                'layout' => [
-                    'items' => $defaultFurniture->map(function ($item) {
-                        return [
-                            'id' => $item->id,
-                            'x' => 0,
-                            'y' => 0,
-                        ];
-                    })->toArray()
-                ],
+                'name' => 'Mi Primera Habitación'
             ]);
 
-            $user->furniture()->attach($defaultFurniture->pluck('id'), [
-                'is_placed' => true
-            ]);
+            // 5. Add default furniture to user's collection and room
+            foreach ($defaultFurniture as $furniture) {
+                // Add to user's owned furniture
+                $userFurniture = $user->furniture()->create([
+                    'furniture_id' => $furniture->id,
+                    'purchased_at' => now(),
+                    'is_placed' => true
+                ]);
+
+                // Add to room
+                $room->items()->create([
+                    'user_furniture_id' => $userFurniture->id,
+                    'x_position' => 0,
+                    'y_position' => 0,
+                    'rotation' => 0
+                ]);
+            }
 
             DB::commit();
 
             event(new Registered($user));
             Auth::login($user);
-
-            return redirect(route('dashboard', absolute: false));
+            return redirect(route('dashboard'));
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;

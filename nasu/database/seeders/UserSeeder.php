@@ -69,7 +69,7 @@ class UserSeeder extends Seeder
     protected function createDefaultFurnitureIfMissing()
     {
         if (Furniture::where('is_default', true)->doesntExist()) {
-            $this->call(DefaultFurnitureSeeder::class);
+            $this->call(FurnitureCatalogSeeder::class);
             $this->command->info('Default furniture created');
         }
     }
