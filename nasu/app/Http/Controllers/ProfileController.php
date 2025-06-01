@@ -14,6 +14,15 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
+
+    public function profile()
+    {
+        $user = auth()->user();
+        $user->load(['ownedFurniture.furniture', 'room.items.furniture']);
+
+        return view('users.profile', compact('user'));
+    }
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [

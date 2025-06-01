@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('room_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('room_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_furniture_id')->constrained('user_furniture')->cascadeOnDelete();
+            $table->foreignId('room_id')->constrained();
+            $table->foreignId('user_furniture_id')->constrained('user_furniture');
             $table->integer('x_position');
             $table->integer('y_position');
             $table->integer('rotation')->default(0);

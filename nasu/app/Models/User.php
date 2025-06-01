@@ -75,13 +75,13 @@ class User extends Authenticatable
         return $this->hasOne(Room::class); // 1:1
     }
 
-    public function furniture()
-    {
-        return $this->belongsToMany(Furniture::class, 'user_furniture')
-            ->withPivot('is_placed')
-            ->withTimestamps();
-    }
-    // In app/Models/User.php
+    // public function furniture()
+    // {
+    //     return $this->belongsToMany(Furniture::class, 'user_furniture')
+    //         ->withPivot('is_placed')
+    //         ->withTimestamps();
+    // }
+
     public function ownedFurniture()
     {
         return $this->hasMany(UserFurniture::class);

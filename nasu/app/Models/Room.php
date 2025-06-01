@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     protected $fillable = ['user_id', 'theme', 'layout'];
-
-    protected $casts = [
-        'layout' => 'array'
-    ];
+    protected $casts = ['layout' => 'array'];
 
     // Relationship to user
     public function user()
@@ -18,55 +15,14 @@ class Room extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getItemsAttribute()
-    {
-        return $this->layout['items'] ?? [];
-    }
-
-    public function addItem($furnitureId, $x = 0, $y = 0)
-    {
-        $furniture = Furniture::findOrFail($furnitureId);
-
-        $items = $this->items;
-        $items[] = [
-            'id' => $furniture->id,
-            'name' => $furniture->name,
-            'image' => $furniture->image_path,
-            'x' => $x,
-            'y' => $y,
-            'placed_at' => now()->toDateTimeString()
-        ];
-
-        $this->layout = ['items' => $items];
-        $this->save();
-
-        return $this;
-    }
-
-    public function removeItem($index)
-    {
-        $items = $this->items;
-        if (isset($items[$index])) {
-            unset($items[$index]);
-            $this->layout = ['items' => array_values($items)]; // Reindex array
-            $this->save();
-        }
-        return $this;
-    }
-
+    // Relationship to room items
     public function items()
     {
         return $this->hasMany(RoomItem::class);
     }
 
-    // Other relationships you might have
-    public function furniture()
-    {
-        return $this->hasMany(Furniture::class);
-    }
-
-
-    public function deployedFurniture()
+    // Get all placed furniture through room items
+    public function placedFurniture()
     {
         return $this->hasManyThrough(
             UserFurniture::class,
@@ -76,5 +32,23 @@ class Room extends Model
             'id',         // Local key on rooms table
             'user_furniture_id' // Local key on room_items table
         )->with('furniture');
+    }
+
+    // Helper to get all furniture items with their positions
+    public function getFurnitureWithPositions()
+    {
+        return $this->placedFurniture->map(function ($userFurniture) {
+            $roomItem = $userFurniture->roomItems->firstWhere('room_id', $this->id);
+
+            return [
+                'id' => $userFurniture->id,
+                'furniture_id' => $userFurniture->furniture_id,
+                'name' => $userFurniture->furniture->name,
+                'image' => $userFurniture->furniture->image_path,
+                'x' => $roomItem->x_position,
+                'y' => $roomItem->y_position,
+                'rotation' => $roomItem->rotation
+            ];
+        });
     }
 }

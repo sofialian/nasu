@@ -1,51 +1,142 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">My Room</h1>
-        <a href="{{ route('room.edit', $room) }}" 
-           class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-            Edit Room
-        </a>
-    </div>
-
-    <!-- Room Display Area -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div class="room-container relative bg-gray-100 rounded-lg" 
-             style="min-height: 500px; background-color: #f3f4f6;">
-            
-            @foreach($room->items as $item)
-            <div class="furniture-item absolute cursor-move" 
-                 style="left: {{ $item->position_x }}px; top: {{ $item->position_y }}px;"
-                 data-item-id="{{ $item->id }}">
-                <img src="{{ asset($item->userFurniture->furniture->image_path) }}" 
-                     alt="{{ $item->userFurniture->furniture->name }}"
-                     class="w-16 h-16 object-contain">
+<div class="container">
+    <div class="row">
+        <!-- Room Display -->
+        <div class="col-md-8">
+            <div class="room-display"
+                style="position: relative; 
+                        height: 500px; 
+                        border: 1px solid #ccc;
+                        background-color: #f5f5f5;">
+                @foreach($furnitureItems as $item)
+                <div class="furniture-item"
+                    style="position: absolute;
+                                left: {{ $item['x'] }}px;
+                                top: {{ $item['y'] }}px;
+                                transform: rotate({{ $item['rotation'] }}deg);
+                                transition: all 0.3s ease;">
+                    <img src="{{ asset($item['image']) }}"
+                        alt="{{ $item['name'] }}"
+                        style="width: 100px; height: auto;">
+                    <div class="item-name">{{ $item['name'] }}</div>
+                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
-    </div>
 
-    <!-- Available Furniture -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-semibold mb-4">Available Furniture</h2>
-        
-        @if($availableFurniture->count() > 0)
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            @foreach($availableFurniture as $item)
-            <div class="furniture-item bg-gray-50 p-3 rounded-lg cursor-pointer"
-                 data-furniture-id="{{ $item->id }}">
-                <img src="{{ asset($item->furniture->image_path) }}" 
-                     alt="{{ $item->furniture->name }}"
-                     class="w-full h-24 object-contain mb-2">
-                <p class="text-center text-sm">{{ $item->furniture->name }}</p>
+        <!-- Available Furniture -->
+        <div class="col-md-4">
+            <h3>Available Furniture</h3>
+            <div class="available-furniture" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                @forelse($availableFurniture as $furniture)
+                <div class="furniture-item draggable"
+                    data-furniture-id="{{ $furniture->id }}"
+                    style="padding: 10px; 
+                                border: 1px solid #ddd;
+                                border-radius: 5px;
+                                cursor: grab;">
+                    <img src="{{ asset($furniture->image_path) }}"
+                        alt="{{ $furniture->name }}"
+                        style="width: 80px; height: auto;">
+                    <p style="margin-top: 5px; text-align: center;">{{ $furniture->name }}</p>
+                </div>
+                @empty
+                <p>No available furniture to add.</p>
+                @endforelse
             </div>
-            @endforeach
         </div>
-        @else
-        <p class="text-gray-500">You don't have any furniture available to place.</p>
-        @endif
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const room = document.querySelector('.room-display');
+        const draggables = document.querySelectorAll('.draggable');
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => {
+                draggable.classList.add('dragging');
+            });
+
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging');
+            });
+        });
+
+        room.addEventListener('dragover', e => {
+            e.preventDefault();
+            room.style.backgroundColor = '#e9e9e9';
+        });
+
+        room.addEventListener('dragleave', () => {
+            room.style.backgroundColor = '#f5f5f5';
+        });
+
+        room.addEventListener('drop', e => {
+            e.preventDefault();
+            room.style.backgroundColor = '#f5f5f5';
+
+            const draggingElement = document.querySelector('.dragging');
+            if (!draggingElement) return;
+
+            const furnitureId = draggingElement.dataset.furnitureId;
+            const rect = room.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Use Laravel's route helper
+            fetch("{{ route('rooms.place', $room->id) }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        furniture_id: furnitureId,
+                        x_position: x,
+                        y_position: y,
+                        rotation: 0
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to place item');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to place furniture: ' + error.message);
+                });
+        });
+    });
+</script>
+@push('styles')
+<style>
+    .draggable {
+        transition: transform 0.1s ease;
+    }
+
+    .draggable:hover {
+        transform: scale(1.05);
+    }
+
+    .dragging {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+
+    .room-display {
+        transition: background-color 0.3s ease;
+    }
+</style>
+@endpush
+@endpush
 @endsection

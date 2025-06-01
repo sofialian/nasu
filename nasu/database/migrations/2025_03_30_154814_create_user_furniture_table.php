@@ -11,21 +11,9 @@ return new class extends Migration
     {
         Schema::create('user_furniture', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('furniture_id')->constrained()->cascadeOnDelete();
-            $table->timestamp('purchased_at');
-            $table->boolean('is_placed')->default(false);
-
-            // These columns should be in the furniture table, not user_furniture
-            // $table->integer('width')->default(50);
-            // $table->integer('height')->default(50);
-            // $table->boolean('is_purchasable')->default(true);
-            // $table->boolean('is_default')->default(false);
-
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('furniture_id')->constrained();
             $table->timestamps();
-
-            // Optional: Add index for better performance
-            $table->index(['user_id', 'furniture_id']);
         });
     }
 

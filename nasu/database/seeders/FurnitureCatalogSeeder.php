@@ -4,16 +4,19 @@ namespace Database\Seeders;
 
 use App\Models\Furniture;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class FurnitureCatalogSeeder extends Seeder
 {
+    // database/seeders/FurnitureCatalogSeeder.php
     public function run()
     {
         $shopItems = [
+            // Shop items (purchasable)
             [
                 'name' => 'Silla Básica',
                 'description' => 'Una silla básica para tu habitación',
-                'price' => 100,
+                'price' => 100, // Price in beans
                 'image_path' => 'furniture/chair.png',
                 'width' => 50,
                 'height' => 50,
@@ -34,36 +37,43 @@ class FurnitureCatalogSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now()
             ],
-            // Add more shop items...
 
-            // Default free items (not purchasable, given on registration)
+            // Default free items (given on registration)
             [
                 'name' => 'Silla Inicial',
-                'price' => 0,
+                'description' => 'Tu primera silla',
+                'price' => 0, // Must include price even if 0
                 'image_path' => 'furniture/basic-chair.png',
                 'width' => 50,
                 'height' => 50,
-                'description' => 'Tu primera silla',
                 'is_purchasable' => false,
-                'is_default' => true
+                'is_default' => true,
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'name' => 'Mesa Inicial',
-                'price' => 0,
+                'description' => 'Tu primera mesa',
+                'price' => 0, // Must include price even if 0
                 'image_path' => 'furniture/basic-table.png',
                 'width' => 80,
                 'height' => 60,
-                'description' => 'Tu primera mesa',
                 'is_purchasable' => false,
-                'is_default' => true
+                'is_default' => true,
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ];
 
         foreach ($shopItems as $item) {
-            Furniture::firstOrCreate(
-                ['name' => $item['name']],
-                $item
-            );
+            try {
+                Furniture::firstOrCreate(
+                    ['name' => $item['name']],
+                    $item
+                );
+            } catch (\Exception $e) {
+                Log::error("Failed to create furniture: {$e->getMessage()}", $item);
+            }
         }
     }
 }
