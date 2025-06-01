@@ -79,15 +79,15 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('room.show');
-    Route::post('/rooms/{room}/items', [RoomController::class, 'placeItem'])->name('rooms.items.store');
-    Route::delete('/items/{item}', [RoomController::class, 'removeItem'])->name('rooms.items.destroy');
+    Route::post('/rooms/{room}/items', [RoomController::class, 'placeItem'])->name('room.items.store');
+    Route::delete('/items/{item}', [RoomController::class, 'removeItem'])->name('room.items.destroy');
 });
 
 Route::middleware('auth')->group(function () {
     // Room routes
-    Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
-    Route::post('/rooms/{room}/place-item', [RoomController::class, 'placeItem'])->name('rooms.place');
-    Route::delete('/rooms/remove-item/{item}', [RoomController::class, 'removeItem'])->name('rooms.remove');
+    Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('room.show');
+    Route::post('/rooms/{room}/place-item', [RoomController::class, 'placeItem'])->name('room.place');
+    Route::delete('/rooms/remove-item/{item}', [RoomController::class, 'removeItem'])->name('room.remove');
 });
 
 

@@ -88,7 +88,7 @@
             const y = e.clientY - rect.top;
 
             // Use Laravel's route helper
-            fetch("{{ route('rooms.place', $room->id) }}", {
+            fetch("{{ route('room.place', $room->id) }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
