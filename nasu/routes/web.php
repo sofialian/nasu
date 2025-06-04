@@ -90,6 +90,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/rooms/remove-item/{item}', [RoomController::class, 'removeItem'])->name('room.remove');
 });
 
+// routes/web.php
+Route::get('/room/{room}/edit', [RoomController::class, 'edit'])->name('rooms.edit');
+Route::put('/room/{room}/items', [RoomController::class, 'updateItems'])->name('rooms.update-items');
 
 
 require __DIR__ . '/auth.php';

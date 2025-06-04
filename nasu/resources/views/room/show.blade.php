@@ -2,6 +2,10 @@
 
 @section('content')
 <div class="container">
+    <div class="d-flex justify-content-between mb-4">
+        <h1>{{ $room->name }}</h1>
+        <a href="{{ route('rooms.edit', $room) }}" class="btn btn-primary">Edit Room</a>
+    </div>
     <div class="row">
         <!-- Room Display -->
         <div class="col-md-8">
@@ -87,7 +91,7 @@
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
-            // Use Laravel's route helper
+
             fetch("{{ route('room.place', $room->id) }}", {
                     method: 'POST',
                     headers: {

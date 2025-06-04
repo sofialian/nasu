@@ -7,6 +7,8 @@ use App\Models\Furniture;
 use App\Models\RoomItem;
 use App\Models\UserFurniture;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator; // Add this import
+use Illuminate\Support\Facades\DB; // Add this import
 
 class RoomController extends Controller
 {
@@ -78,4 +80,104 @@ class RoomController extends Controller
 
         return redirect()->back()->with('success', 'Item removed successfully');
     }
+
+    // app/Http/Controllers/RoomController.php
+    public function edit(Room $room)
+    {
+        $room->load([
+            'placedFurniture.furniture',
+            'placedFurniture.roomItems' => function ($query) use ($room) {
+                $query->where('room_id', $room->id);
+            }
+        ]);
+
+        $availableFurniture = Furniture::whereDoesntHave('userFurniture', function ($query) use ($room) {
+            $query->where('user_id', $room->user_id);
+        })->get();
+
+        return view('room.edit', [
+            'room' => $room,
+            'furnitureItems' => $room->placedFurniture->map(function ($userFurniture) {
+                $roomItem = $userFurniture->roomItems->first();
+                return [
+                    'id' => $roomItem->id,
+                    'furniture_id' => $userFurniture->furniture_id,
+                    'name' => $userFurniture->furniture->name,
+                    'image' => $userFurniture->furniture->image_path,
+                    'x' => $roomItem->x_position,
+                    'y' => $roomItem->y_position,
+                    'rotation' => $roomItem->rotation
+                ];
+            }),
+            'availableFurniture' => $availableFurniture
+        ]);
+    }
+
+    // app/Http/Controllers/RoomController.php
+public function updateItems(Request $request, Room $room)
+{
+    \Log::debug('Update Request:', $request->all());
+    
+    $validated = $request->validate([
+        'items' => 'required|json',
+        'removed_items' => 'sometimes|json'
+    ]);
+
+    // Decode the JSON data
+    $items = json_decode($request->items, true);
+    $removedItems = json_decode($request->removed_items ?? '[]', true);
+
+    // Additional validation
+    $validator = Validator::make(['items' => $items, 'removed_items' => $removedItems], [
+        'items.*.id' => 'required|exists:room_items,id',
+        'items.*.x' => 'required|integer|min:0',
+        'items.*.y' => 'required|integer|min:0',
+        'items.*.rotation' => 'required|integer|in:0,90,180,270',
+        'removed_items.*' => 'exists:room_items,id'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    DB::beginTransaction();
+    try {
+        // Update positions and rotations
+        foreach ($items as $item) {
+            RoomItem::where('id', $item['id'])
+                   ->where('room_id', $room->id)
+                   ->update([
+                       'x_position' => $item['x'],
+                       'y_position' => $item['y'],
+                       'rotation' => $item['rotation']
+                   ]);
+        }
+
+        // Remove deleted items
+        if (!empty($removedItems)) {
+            RoomItem::whereIn('id', $removedItems)
+                   ->where('room_id', $room->id)
+                   ->delete();
+        }
+
+        DB::commit();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Room updated successfully!',
+            'redirect' => route('room.show', $room)
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        \Log::error("Update failed: " . $e->getMessage());
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to save changes: ' . $e->getMessage()
+        ], 500);
+    }
+}
 }
