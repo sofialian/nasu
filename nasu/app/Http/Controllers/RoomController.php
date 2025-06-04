@@ -82,36 +82,31 @@ class RoomController extends Controller
     }
 
     // app/Http/Controllers/RoomController.php
-    public function edit(Room $room)
-    {
-        $room->load([
-            'placedFurniture.furniture',
-            'placedFurniture.roomItems' => function ($query) use ($room) {
-                $query->where('room_id', $room->id);
-            }
-        ]);
+public function edit(Room $room)
+{
+    $room->load(['placedFurniture.furniture', 'placedFurniture.roomItems']);
 
-        $availableFurniture = Furniture::whereDoesntHave('userFurniture', function ($query) use ($room) {
-            $query->where('user_id', $room->user_id);
-        })->get();
+    // Get user's furniture NOT currently in this room
+    $availableFurniture = UserFurniture::with('furniture')
+        ->where('user_id', auth()->id())
+        ->whereDoesntHave('roomItems', function($query) use ($room) {
+            $query->where('room_id', $room->id);
+        })
+        ->get();
 
-        return view('room.edit', [
-            'room' => $room,
-            'furnitureItems' => $room->placedFurniture->map(function ($userFurniture) {
-                $roomItem = $userFurniture->roomItems->first();
-                return [
-                    'id' => $roomItem->id,
-                    'furniture_id' => $userFurniture->furniture_id,
-                    'name' => $userFurniture->furniture->name,
-                    'image' => $userFurniture->furniture->image_path,
-                    'x' => $roomItem->x_position,
-                    'y' => $roomItem->y_position,
-                    'rotation' => $roomItem->rotation
-                ];
-            }),
-            'availableFurniture' => $availableFurniture
-        ]);
-    }
+    return view('room.edit', [
+        'room' => $room,
+        'furnitureItems' => $room->getFurnitureWithPositions(),
+        'availableFurniture' => $availableFurniture->map(function($userFurniture) {
+            return [
+                'id' => $userFurniture->id,
+                'furniture_id' => $userFurniture->furniture_id,
+                'name' => $userFurniture->furniture->name,
+                'image' => $userFurniture->furniture->image_path
+            ];
+        })
+    ]);
+}
 
     // app/Http/Controllers/RoomController.php
 public function updateItems(Request $request, Room $room)
