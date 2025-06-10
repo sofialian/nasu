@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,7 @@ class HomeController extends Controller
             ->get();
 
         return view('dashboard', [
-            'room' => $user->room ?? new Room(),
+            'room' => $user->room()->with(['items.furniture'])->first(),
             'projects' => $projects,
             'tasks' => $tasks,
             'user' => $user

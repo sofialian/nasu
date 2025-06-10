@@ -123,89 +123,102 @@ class RoomController extends Controller
         ]);
     }
 
-    public function updateItems(Request $request, Room $room)
-    {
-        \Log::info('Update items request:', $request->all());
+  public function updateItems(Request $request, Room $room)
+{
+    \Log::info('Update items request:', $request->all());
 
-        $validator = Validator::make($request->all(), [
-            'items' => 'sometimes|array',
-            'items.*.id' => 'required_with:items|exists:room_items,id',
-            'items.*.x' => 'required_with:items|integer',
-            'items.*.y' => 'required_with:items|integer',
-            'items.*.rotation' => 'required_with:items|integer|in:0,90,180,270',
-            'new_items' => 'sometimes|array',
-            'new_items.*.furniture_id' => 'required_with:new_items|exists:furniture,id',
-            'new_items.*.user_furniture_id' => 'required_with:new_items|exists:user_furniture,id',
-            'new_items.*.x' => 'required_with:new_items|integer',
-            'new_items.*.y' => 'required_with:new_items|integer',
-            'new_items.*.rotation' => 'required_with:new_items|integer|in:0,90,180,270',
-            'removed_items' => 'sometimes|array',
-            'removed_items.*' => 'required_with:removed_items|exists:room_items,id'
+    $validator = Validator::make($request->all(), [
+        'items' => 'sometimes|array',
+        'items.*.id' => 'required_with:items|exists:room_items,id',
+        'items.*.x' => 'required_with:items|integer',
+        'items.*.y' => 'required_with:items|integer',
+        'items.*.rotation' => 'required_with:items|integer|in:0,90,180,270',
+        'new_items' => 'sometimes|array',
+        'new_items.*.furniture_id' => 'required_with:new_items|exists:furniture,id',
+        'new_items.*.user_furniture_id' => 'required_with:new_items|exists:user_furniture,id',
+        'new_items.*.x' => 'required_with:new_items|integer',
+        'new_items.*.y' => 'required_with:new_items|integer',
+        'new_items.*.rotation' => 'required_with:new_items|integer|in:0,90,180,270',
+        'removed_items' => 'sometimes|array',
+        'removed_items.*' => 'required_with:removed_items|exists:room_items,id',
+        'return_dashboard' => 'sometimes|boolean' // New parameter
+    ]);
+
+    if ($validator->fails()) {
+        \Log::error('Validation failed', $validator->errors()->toArray());
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    DB::beginTransaction();
+    try {
+        // Update existing items
+        if ($request->has('items')) {
+            foreach ($request->items as $item) {
+                $roomItem = RoomItem::find($item['id']);
+
+                if (!$roomItem) {
+                    throw new \Exception("Item not found: " . $item['id']);
+                }
+
+                $roomItem->update([
+                    'x_position' => $item['x'],
+                    'y_position' => $item['y'],
+                    'rotation' => $item['rotation']
+                ]);
+            }
+        }
+
+        // Add new items
+        if ($request->has('new_items')) {
+            foreach ($request->new_items as $item) {
+                $newItem = RoomItem::create([
+                    'room_id' => $room->id,
+                    'user_furniture_id' => $item['user_furniture_id'],
+                    'x_position' => $item['x'],
+                    'y_position' => $item['y'],
+                    'rotation' => $item['rotation']
+                ]);
+                \Log::info("Created new item", $newItem->toArray());
+            }
+        }
+
+        // Remove deleted items
+        if ($request->has('removed_items')) {
+            $deleted = RoomItem::whereIn('id', $request->removed_items)->delete();
+            \Log::info("Deleted items count: " . $deleted);
+        }
+
+        DB::commit();
+
+        // Check if we should return the dashboard view
+        if ($request->input('return_dashboard', false)) {
+            return redirect()->route('dashboard')->with('success', 'Room updated successfully!');
+        }
+
+        // Default JSON response for AJAX calls
+        return response()->json([
+            'success' => true,
+            'message' => 'Room updated successfully!',
+            'redirect' => route('dashboard') // Updated to redirect to dashboard
         ]);
 
-        if ($validator->fails()) {
-            \Log::error('Validation failed', $validator->errors()->toArray());
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        \Log::error("Update failed: " . $e->getMessage());
+        \Log::error("Stack trace: " . $e->getTraceAsString());
+        
+        if ($request->input('return_dashboard', false)) {
+            return redirect()->route('dashboard')->with('error', 'Failed to save changes: ' . $e->getMessage());
         }
 
-        DB::beginTransaction();
-        try {
-            // Update existing items
-            if ($request->has('items')) {
-                foreach ($request->items as $item) {
-                    $roomItem = RoomItem::find($item['id']);
-
-                    if (!$roomItem) {
-                        throw new \Exception("Item not found: " . $item['id']);
-                    }
-
-                    $roomItem->update([
-                        'x_position' => $item['x'],
-                        'y_position' => $item['y'],
-                        'rotation' => $item['rotation']
-                    ]);
-                }
-            }
-
-            // Add new items
-            if ($request->has('new_items')) {
-                foreach ($request->new_items as $item) {
-                    $newItem = RoomItem::create([
-                        'room_id' => $room->id,
-                        'user_furniture_id' => $item['user_furniture_id'],
-                        'x_position' => $item['x'],
-                        'y_position' => $item['y'],
-                        'rotation' => $item['rotation']
-                    ]);
-                    \Log::info("Created new item", $newItem->toArray());
-                }
-            }
-
-            // Remove deleted items
-            if ($request->has('removed_items')) {
-                $deleted = RoomItem::whereIn('id', $request->removed_items)->delete();
-                \Log::info("Deleted items count: " . $deleted);
-            }
-
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Room updated successfully!',
-                'redirect' => route('room.show', $room)
-            ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            \Log::error("Update failed: " . $e->getMessage());
-            \Log::error("Stack trace: " . $e->getTraceAsString());
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to save changes: ' . $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to save changes: ' . $e->getMessage()
+        ], 500);
     }
+}
 }
