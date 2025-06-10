@@ -55,7 +55,8 @@
                     <img src="{{ asset($item['image']) }}" style="width: 80px; height: auto;">
                     <p style="text-align: center;">{{ $item['name'] }}</p>
                     <button class="btn btn-sm btn-primary mt-2 add-item"
-                        data-furniture-id="{{ $item['id'] }}">
+                        data-furniture-id="{{ $item['furniture_id'] }}"
+                        data-user-furniture-id="{{ $item['user_furniture_id'] }}">
                         Add to Room
                     </button>
                 </div>
@@ -65,135 +66,188 @@
             </div>
         </div>
     </div>
-
-    <form id="room-edit-form" action="{{ route('rooms.update-items', $room) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <input type="hidden" name="items" id="items-data">
-        <input type="hidden" name="removed_items" id="removed-items-data">
-    </form>
 </div>
 @endsection
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('room-edit-form');
-    const itemsInput = document.getElementById('items-data');
-    const removedItemsInput = document.getElementById('removed-items-data');
     const saveButton = document.getElementById('save-changes');
     const roomEditor = document.getElementById('room-editor');
 
+    // State management arrays
     let items = @json($furnitureItems);
     let removedItems = [];
+
+    // Drag and drop state
     let draggedItem = null;
     let offsetX, offsetY;
 
-    // Snap to grid function (20px grid)
-    function snapToGrid(value) {
-        const gridSize = 20;
-        return Math.round(value / gridSize) * gridSize;
-    }
+    // --- UTILITY ---
+    const snapToGrid = (value) => Math.round(value / 20) * 20;
 
-    // Add to Room functionality
-    document.querySelectorAll('.add-item').forEach(button => {
-        button.addEventListener('click', function() {
-            const furnitureId = this.dataset.furnitureId;
-            const furnitureItem = this.closest('.furniture-item');
-            const imageSrc = furnitureItem.querySelector('img').src;
-            const itemName = furnitureItem.querySelector('p').textContent;
+    // --- EVENT LISTENERS ---
 
-            // Create new item in the center of the room
-            const roomRect = roomEditor.getBoundingClientRect();
-            const centerX = Math.round(roomRect.width / 2 / 20) * 20 - 50; // Centered and snapped to grid
-            const centerY = Math.round(roomRect.height / 2 / 20) * 20 - 50;
+    // Save changes button
+    saveButton.addEventListener('click', function() {
+        saveButton.disabled = true;
+        saveButton.textContent = 'Saving...';
 
-            const newItem = document.createElement('div');
-            newItem.className = 'furniture-item';
-            newItem.dataset.itemId = 'new-' + Date.now();
-            newItem.style.position = 'absolute';
-            newItem.style.left = centerX + 'px';
-            newItem.style.top = centerY + 'px';
-            newItem.style.transform = 'rotate(0deg)';
-            newItem.style.cursor = 'move';
-            newItem.style.width = '100px';
-            
-            newItem.innerHTML = `
-                <img src="${imageSrc}" style="width: 100%; height: auto;">
-                <button class="btn btn-sm btn-danger remove-item"
-                    style="position: absolute; top: -10px; right: -10px;">×</button>
-                <button class="btn btn-sm btn-outline-secondary rotate-btn"
-                    style="position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);">
-                    ↻ Rotate
-                </button>
-            `;
+        // Prepare the data payload for the server
+        const data = {
+            _token: '{{ csrf_token() }}',
+            _method: 'PUT',
+            items: items.filter(item => !item.is_new).map(item => ({
+                id: item.id,
+                x: item.x,
+                y: item.y,
+                rotation: item.rotation
+            })),
+            new_items: items.filter(item => item.is_new).map(item => ({
+                furniture_id: item.furniture_id,
+                user_furniture_id: item.user_furniture_id,
+                x: item.x,
+                y: item.y,
+                rotation: item.rotation
+            })),
+            removed_items: removedItems
+        };
 
-            roomEditor.appendChild(newItem);
+        console.log("Data being sent:", JSON.stringify(data, null, 2));
 
-            // Add to items array
-            items.push({
-                id: newItem.dataset.itemId,
-                furniture_id: furnitureId,
-                name: itemName,
-                image: imageSrc.replace(window.location.origin, ''),
-                x: centerX,
-                y: centerY,
-                rotation: 0,
-                is_new: true
-            });
-
-            // Initialize event listeners for the new item
-            initFurnitureItem(newItem);
+        fetch("{{ route('room.update-items', $room) }}", {
+            method: 'POST', // Method is POST to tunnel PUT
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                window.location.href = result.redirect;
+            } else {
+                alert('Failed to save changes: ' + (result.message || 'Please check the data.'));
+                console.error('Server errors:', result.errors);
+                saveButton.disabled = false;
+                saveButton.textContent = 'Save Changes';
+            }
+        })
+        .catch(error => {
+            console.error('Fetch Error:', error);
+            alert('An unexpected network error occurred. Please try again.');
+            saveButton.disabled = false;
+            saveButton.textContent = 'Save Changes';
         });
     });
 
+    // "Add to Room" buttons for available furniture
+    document.querySelectorAll('.add-item').forEach(button => {
+        button.addEventListener('click', function() {
+            const furnitureData = this.closest('.furniture-item');
+            const imageSrc = furnitureData.querySelector('img').src;
+            const itemName = furnitureData.querySelector('p').textContent;
+            
+            // Create the new item element in the editor
+            const roomRect = roomEditor.getBoundingClientRect();
+            const centerX = snapToGrid(roomRect.width / 2 - 50);
+            const centerY = snapToGrid(roomRect.height / 2 - 50);
+
+            const newItemEl = document.createElement('div');
+            newItemEl.className = 'furniture-item';
+            newItemEl.dataset.itemId = 'new-' + Date.now(); // Unique temporary ID
+            newItemEl.style.position = 'absolute';
+            newItemEl.style.left = centerX + 'px';
+            newItemEl.style.top = centerY + 'px';
+            newItemEl.style.transform = 'rotate(0deg)';
+            newItemEl.style.cursor = 'move';
+            newItemEl.style.width = '100px';
+            newItemEl.innerHTML = `
+                <img src="${imageSrc}" alt="${itemName}" style="width: 100%; height: auto;">
+                <button class="btn btn-sm btn-danger remove-item" style="position: absolute; top: -10px; right: -10px;">×</button>
+                <button class="btn btn-sm btn-outline-secondary rotate-btn" style="position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);">↻ Rotate</button>
+            `;
+            roomEditor.appendChild(newItemEl);
+            
+            // Add the new item's data to our state array
+            items.push({
+                id: newItemEl.dataset.itemId,
+                furniture_id: this.dataset.furnitureId,
+                user_furniture_id: this.dataset.userFurnitureId,
+                x: centerX,
+                y: centerY,
+                rotation: 0,
+                is_new: true // Flag to identify it as a new item
+            });
+
+            // Make the new item interactive
+            initFurnitureItem(newItemEl);
+            
+            // Hide the button in the "Available Furniture" list to prevent duplicates
+            furnitureData.style.display = 'none';
+        });
+    });
+
+    // --- INITIALIZATION ---
+
+    // Main function to make an item interactive (drag, rotate, remove)
     function initFurnitureItem(item) {
         const itemId = item.dataset.itemId;
 
-        // Setup drag
+        // Drag start
         item.addEventListener('mousedown', function(e) {
-            if (e.target.classList.contains('remove-item') ||
-                e.target.classList.contains('rotate-btn')) return;
-
+            if (e.target.classList.contains('remove-item') || e.target.classList.contains('rotate-btn')) return;
+            
             draggedItem = this;
-            offsetX = e.clientX - this.getBoundingClientRect().left;
-            offsetY = e.clientY - this.getBoundingClientRect().top;
-
+            const rect = this.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            
             this.style.transition = 'none';
             this.style.zIndex = '1000';
 
             document.addEventListener('mousemove', moveItem);
             document.addEventListener('mouseup', stopDrag);
+            e.preventDefault();
         });
 
-        // Setup rotation
-        item.querySelector('.rotate-btn').addEventListener('click', function(e) {
+        // Rotation
+        item.querySelector('.rotate-btn')?.addEventListener('click', function(e) {
             e.stopPropagation();
-            const currentRotation = parseInt(item.style.transform.match(/rotate\((\d+)deg\)/)[1]) || 0;
+            const currentRotation = parseInt(item.style.transform.match(/rotate\((\d+)deg\)/)?.[1] || 0);
             const newRotation = (currentRotation + 90) % 360;
             item.style.transform = `rotate(${newRotation}deg)`;
 
-            // Update in items array
-            const itemIndex = items.findIndex(i => i.id === itemId);
-            if (itemIndex !== -1) {
-                items[itemIndex].rotation = newRotation;
-            }
+            const itemIndex = items.findIndex(i => i.id == itemId);
+            if (itemIndex !== -1) items[itemIndex].rotation = newRotation;
         });
 
-        // Setup remove button
-        item.querySelector('.remove-item').addEventListener('click', function(e) {
+        // Removal
+        item.querySelector('.remove-item')?.addEventListener('click', function(e) {
             e.stopPropagation();
-            removedItems.push(itemId);
-            item.remove();
+            const itemIndex = items.findIndex(i => i.id == itemId);
 
-            // Remove from items array
-            items = items.filter(i => i.id !== itemId);
+            if (itemIndex !== -1) {
+                const itemData = items[itemIndex];
+                if (!itemData.is_new) {
+                    // If it's an existing item, add its ID to the removed list
+                    removedItems.push(itemData.id);
+                } else {
+                    // If it was a new item, re-display it in the "Available" list
+                    const addButton = document.querySelector(`.add-item[data-user-furniture-id='${itemData.user_furniture_id}']`);
+                    if (addButton) addButton.closest('.furniture-item').style.display = 'block';
+                }
+                // Remove from the main state array
+                items.splice(itemIndex, 1);
+            }
+            // Remove from the DOM
+            item.remove();
         });
     }
 
-    // Initialize existing items
-    document.querySelectorAll('#room-editor .furniture-item').forEach(initFurnitureItem);
-
+    // Drag move handler
     function moveItem(e) {
         if (!draggedItem) return;
 
@@ -201,11 +255,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let x = e.clientX - roomRect.left - offsetX;
         let y = e.clientY - roomRect.top - offsetY;
 
-        // Snap to grid
         x = snapToGrid(x);
         y = snapToGrid(y);
 
-        // Keep within bounds
+        // Constrain to bounds
         x = Math.max(0, Math.min(x, roomRect.width - draggedItem.offsetWidth));
         y = Math.max(0, Math.min(y, roomRect.height - draggedItem.offsetHeight));
 
@@ -213,14 +266,11 @@ document.addEventListener('DOMContentLoaded', function() {
         draggedItem.style.top = `${y}px`;
     }
 
+    // Drag stop handler
     function stopDrag() {
-        document.removeEventListener('mousemove', moveItem);
-        document.removeEventListener('mouseup', stopDrag);
-
         if (draggedItem) {
             const itemId = draggedItem.dataset.itemId;
-            const itemIndex = items.findIndex(i => i.id === itemId);
-
+            const itemIndex = items.findIndex(i => i.id == itemId);
             if (itemIndex !== -1) {
                 items[itemIndex].x = parseInt(draggedItem.style.left);
                 items[itemIndex].y = parseInt(draggedItem.style.top);
@@ -231,44 +281,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         draggedItem = null;
+        document.removeEventListener('mousemove', moveItem);
+        document.removeEventListener('mouseup', stopDrag);
     }
 
-    // Save changes
-    saveButton.addEventListener('click', function() {
-        // Disable button during save
-        saveButton.disabled = true;
-        saveButton.textContent = 'Saving...';
-
-        // Prepare form data
-        const formData = new FormData(form);
-        formData.set('items', JSON.stringify(items));
-        formData.set('removed_items', JSON.stringify(removedItems));
-
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                window.location.href = data.redirect || "{{ route('room.show', $room) }}";
-            } else {
-                alert(data.message || 'Changes saved successfully!');
-                window.location.reload();
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error saving changes: ' + (error.message || 'Please try again'));
-            saveButton.disabled = false;
-            saveButton.textContent = 'Save Changes';
-        });
-    });
+    // Initialize all furniture items already present in the room on page load
+    document.querySelectorAll('#room-editor .furniture-item').forEach(initFurnitureItem);
 });
 </script>
 @endpush

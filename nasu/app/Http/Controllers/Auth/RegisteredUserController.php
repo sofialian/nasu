@@ -34,7 +34,6 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -74,41 +73,53 @@ class RegisteredUserController extends Controller
                 'layout' => ['items' => []]
             ]);
 
-            // 5. Process each default furniture item
+            // 5. Split default furniture into items for room and inventory
+            $itemsForRoom = $defaultFurniture->take(2); // First 2 items go in room
+            $itemsForInventory = $defaultFurniture->slice(2); // Rest go to inventory
+
             $layoutItems = [];
 
-            foreach ($defaultFurniture as $furniture) {
-                // Add to user's inventory
+            // 6. Add items to be placed in the room
+            foreach ($itemsForRoom as $furniture) {
                 $userFurniture = UserFurniture::create([
                     'user_id' => $user->id,
                     'furniture_id' => $furniture->id,
-                    'purchased_at' => now(),
-                    'is_placed' => true
+                    'purchased_at' => now()
                 ]);
 
                 // Add to room with default positions
                 $roomItem = RoomItem::create([
                     'room_id' => $room->id,
                     'user_furniture_id' => $userFurniture->id,
-                    'x_position' => 0,
-                    'y_position' => 0,
+                    'x_position' => $furniture->default_x ?? 100,
+                    'y_position' => $furniture->default_y ?? 100,
                     'rotation' => 0
                 ]);
 
                 // Prepare layout data
                 $layoutItems[] = [
-                    'id' => $furniture->id,
+                    'id' => $roomItem->id,
+                    'furniture_id' => $furniture->id,
                     'user_furniture_id' => $userFurniture->id,
                     'name' => $furniture->name,
                     'image' => $furniture->image_path,
-                    'x' => 0,
-                    'y' => 0,
-                    'rotation' => 0,
+                    'x' => $roomItem->x_position,
+                    'y' => $roomItem->y_position,
+                    'rotation' => $roomItem->rotation,
                     'placed_at' => now()->toDateTimeString()
                 ];
             }
 
-            // 6. Update the room layout
+            // 7. Add remaining items to inventory (not placed in room)
+            foreach ($itemsForInventory as $furniture) {
+                UserFurniture::create([
+                    'user_id' => $user->id,
+                    'furniture_id' => $furniture->id,
+                    'purchased_at' => now()
+                ]);
+            }
+
+            // 8. Update the room layout with only the placed items
             $room->update([
                 'layout' => ['items' => $layoutItems]
             ]);

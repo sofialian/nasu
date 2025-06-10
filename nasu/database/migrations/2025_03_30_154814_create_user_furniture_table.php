@@ -13,6 +13,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('furniture_id')->constrained();
+            $table->timestamp('purchased_at')->nullable();
             $table->timestamps();
         });
     }

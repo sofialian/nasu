@@ -4,7 +4,7 @@
 <div class="container">
     <div class="d-flex justify-content-between mb-4">
         <h1>{{ $room->name }}</h1>
-        <a href="{{ route('rooms.edit', $room) }}" class="btn btn-primary">Edit Room</a>
+        <a href="{{ route('room.edit', $room) }}" class="btn btn-primary">Edit Room</a>
     </div>
     <div class="row">
         <!-- Room Display -->
