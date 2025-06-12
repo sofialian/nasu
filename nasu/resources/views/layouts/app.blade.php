@@ -23,8 +23,8 @@
     @vite(['resources/css/app.css'])
 </head>
 
-<body class="font-body font-bold antialiased h-screen bg-primary-light">
-    <div class="max-h-screen bg-gray-100">
+<body class="font-body font-bold antialiased max-h-screen bg-primary-light p-8">
+    <div class=" flex flex-col">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
@@ -37,14 +37,15 @@
         @endisset
 
         <!-- Page Content -->
-        <main>
-            <div class="container-fluid d-flex flex-md-row flex flex-col max-h-screen bg-primary-light">
+        <main class="flex-grow">
+            <div class="container-fluid flex-md-row flex flex-col bg-primary-light min-h-[calc(100vh-200px)]">
                 @yield('content')
                 @stack('scripts')
             </div>
-            @include('layouts.footer')
-    </div>
-    </main>
+        </main>
+
+        <!-- Footer -->
+        @include('layouts.footer')
     </div>
 
     @vite(['resources/js/app.js'])
