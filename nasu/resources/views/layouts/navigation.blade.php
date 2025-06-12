@@ -1,20 +1,20 @@
-<nav x-data="{ open: false, dropdownOpen: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false, dropdownOpen: false }" class="bg-primary-light">
     <!-- Navbar para la página de inicio (sin auth) -->
     @if(request()->is('/'))
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <!-- Logo -->
-            <div class="flex items-center">
+            <!-- <div class="flex items-center">
                 <a href="{{ url('/') }}">
                     <x-application-logo class="h-8 w-auto" />
-                </a>
-            </div>
-            <!-- Botones de acceso -->
-            <div class="flex items-center space-x-4">
+                </a> -->
+        </div>
+        <!-- Botones de acceso -->
+        <!-- <div class="flex items-center space-x-4">
                 <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-900">Login</a>
                 <a href="{{ route('register') }}" class="bg-blue-500 text-white px-4 py-2 rounded-md">Register</a>
-            </div>
-        </div>
+            </div> -->
+    </div>
     </div>
     @else
     <!-- Navbar normal (con auth) -->
@@ -32,6 +32,7 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+ -->
                 </div>
                 @endauth
             </div>

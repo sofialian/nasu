@@ -41,9 +41,9 @@
                 </div>
             </div>
 
-            <div class="bg-gray-200 p-4 rounded-b-lg" style="min-height: 400px; position: relative; overflow: hidden;">
+            <div class="bg-gray-200 p-4 rounded-b-lg border-2 border-red-500" style="min-height: 400px; position: relative; overflow: hidden;">
                 @isset($room)
-                <div class="room-display" style="position: relative; height: 100%; width: 100%;">
+                <div class="room-display aspect-square w-full max-w-xs mx-auto">
                     @foreach($room->items as $item)
                     <div class="furniture-item absolute"
                         style="left: {{ $item->x_position }}px;

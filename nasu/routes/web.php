@@ -85,7 +85,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     // Room routes
-    // Route::get('/room/{room}', [RoomController::class, 'show'])->name('room.show');
+    Route::get('/room/{room}', [RoomController::class, 'show'])->name('room.show');
     Route::post('/room/{room}/place-item', [RoomController::class, 'placeItem'])->name('room.place');
     Route::delete('/room/remove-item/{item}', [RoomController::class, 'removeItem'])->name('room.remove');
 });

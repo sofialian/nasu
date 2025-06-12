@@ -3,7 +3,7 @@
 <div class="flex-grow flex items-center justify-center h-screen flex flex-col bg-primary-light">
 
     <!-- Colores tailwind -->
-    <div class="flex items-center justify-center w-full mx-auto border-2 border-primary-dark rounded-lg text-xs">
+    <!-- <div class="flex items-center justify-center w-full mx-auto border-2 border-primary-dark rounded-lg text-xs">
         <div class="grid grid-cols-2 gap-2 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             <div class="bg-slate-500 text-white h-10 w-10 flex items-center justify-center rounded">slate</div>
             <div class="bg-gray-500 text-white h-10 w-10 flex items-center justify-center rounded">gray</div>
@@ -27,9 +27,9 @@
             <div class="bg-fuchsia-500 text-white h-10 w-10 flex items-center justify-center rounded">fuchsia</div>
             <div class="bg-pink-500 text-white h-10 w-10 flex items-center justify-center rounded">pink</div>
             <div class="bg-rose-500 text-white h-10 w-10 flex items-center justify-center rounded">rose</div>
-        </div>
+        </div> -->
 
-        <div class="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        <div class="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 hidden">
             <!-- Grises -->
             <div class="border-2 border-slate-500 bg-slate-100 text-slate-500 h-10 w-10 flex items-center justify-center rounded-lg">slate</div>
             <div class="border-2 border-gray-500 bg-gray-100 text-gray-500 h-10 w-10 flex items-center justify-center rounded-lg">gray</div>
@@ -66,46 +66,46 @@
         </div>
 
         <!-- Colores del proyecto -->
-         <div class="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        <div class="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 hidden">
             <div class="border-2 bg-[#474350] text-primary-light h-10 w-14 flex items-center justify-center rounded-lg">primary-dark</div>
             <div class="border-2 border-primary-dark bg-[#FCFFEB] text-primary-dark h-10 w-14 flex items-center justify-center rounded-lg">primary-light</div>
             <div class="border-2 border-accent bg-[#FF4E4E] text-primary-light h-10 w-14 flex items-center justify-center rounded-lg">accent</div>
             <div class="border-2 border-accent-dark bg-[#97D5CA] text-primary-dark h-10 w-14 flex items-center justify-center rounded-lg">sec-accent</div>
 
-    </div>
+        </div>
 
-    <!-- Contenido principal centrado -->
-    <div class="w-full max-w-md px-4 py-8 text-center">
-        <!-- Animación del logo -->
-        <div class="mb-8 animate-bounce mx-auto" style="width: fit-content;">
-            <div class="h-10 w-10 w-10 w-10 border-3 border-secondary-color rounded-full flex items-center justify-center mx-auto text-secondary-color text-4xl font-logo">
-                n
+        <!-- Contenido principal centrado -->
+        <div class="w-full max-w-md px-4 py-8 text-center">
+            <!-- Animación del logo -->
+            <div class="mb-8 animate-bounce mx-auto" style="width: fit-content;">
+                <div class="h-10 w-10 w-10 w-10 border-3 border-secondary-color rounded-full flex items-center justify-center mx-auto text-secondary-color text-4xl font-logo">
+                    n
+                </div>
             </div>
-        </div>
 
-        <!-- Texto "nasu" -->
-        <h1 class="text-2xl font-logo text-primary-dark mb-8">nasu</h1>
+            <!-- Texto "nasu" -->
+            <h1 class="text-2xl font-logo text-primary-dark mb-8">nasu</h1>
 
-        <!-- Botones de acceso -->
-        @auth
-        <form method="GET" action="{{ route('dashboard') }}">
-            @csrf
-            <button type="submit" class="border-2 border-primary-dark shadow hover:border-accent text-primary-dark font-bold py-3 px-8 transition duration-300 mb-8 w-full sm:w-auto">
-                Enter (Continuar a Dashboard)
-            </button>
-        </form>
-        @else
-        <div class="space-y-4">
-            <a href="{{ route('login') }}" class="block bg-accent hover:bg-accent-dark text-white font-bold py-3 px-6 transition duration-300 text-center w-full sm:w-auto">
-                Enter (Iniciar Sesión)
-            </a>
-            <p class="inline-block hover:text-accent-dark text-sm">
-                New to nasu?
-                <span class="text-accent hover:underline"><a href="{{ route('register') }}">Sign up</a></span>
-            </p>
+            <!-- Botones de acceso -->
+            @auth
+            <form method="GET" action="{{ route('dashboard') }}">
+                @csrf
+                <button type="submit" class="border-2 border-primary-dark shadow hover:border-accent text-primary-dark font-bold py-3 px-8 transition duration-300 mb-8 w-full sm:w-auto">
+                    Enter (Continuar a Dashboard)
+                </button>
+            </form>
+            @else
+            <div class="space-y-4">
+                <a href="{{ route('login') }}" class="block bg-accent hover:bg-accent-dark text-white font-bold py-3 px-6 transition duration-300 text-center w-full sm:w-auto">
+                    Enter (Iniciar Sesión)
+                </a>
+                <p class="inline-block hover:text-accent-dark text-sm">
+                    New to nasu?
+                    <span class="text-accent hover:underline"><a href="{{ route('register') }}">Sign up</a></span>
+                </p>
+            </div>
+            @endauth
         </div>
-        @endauth
     </div>
-</div>
 </div>
 @endsection
