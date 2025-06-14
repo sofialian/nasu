@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'nasu') }}</title>
+    <link rel="shortcut icon" href="{{ asset('logo.ico') }}" type="image/x-icon">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -23,7 +24,7 @@
     @vite(['resources/css/app.css'])
 </head>
 
-<body class="font-body font-bold antialiased max-h-screen bg-primary-light p-8">
+<body class="font-code font-bold antialiased max-h-screen bg-primary-light p-8">
     <div class=" flex flex-col">
         @include('layouts.navigation')
 

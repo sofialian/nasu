@@ -6,14 +6,12 @@
     <!-- Contenido principal centrado -->
     <div class="w-full max-w-md px-4 py-8 text-center">
         <!-- Animación del logo -->
-        <div class="mb-8 animate-bounce mx-auto" style="width: fit-content;">
-            <div class="h-10 w-10 w-10 w-10 border-3 border-secondary-color rounded-full flex items-center justify-center mx-auto text-secondary-color text-4xl font-logo">
-                n
-            </div>
+        <div class="mb-6 animate-bounce mx-auto" style="width: fit-content;">
+            <x-application-logo class="w-14 h-14" />
         </div>
 
         <!-- Texto "nasu" -->
-        <h1 class="text-2xl font-logo text-primary-dark mb-8">nasu</h1>
+        <h1 class="text-3xl font-logo text-primary-dark mb-8">nasu</h1>
 
         <!-- Botones de acceso -->
         @auth
@@ -27,10 +25,10 @@
         </div>
         @else
         <div class="space-y-4 flex flex-col items-center">
-            <a href="{{ route('login') }}" class="block bg-accent hover:opacity-70 text-white font-bold py-3 px-6 transition duration-300 text-center w-2/3 text-base md:text-lg">
+            <a href="{{ route('login') }}" class="block bg-accent hover:opacity-70 text-primary-light font-bold py-3 px-5 transition duration-200 text-center w-2/3 text-base md:text-lg">
                 Iniciar sesión
             </a>
-            <p class="inline-block hover:text-accent-dark text-sm">
+            <p class="inline-block hover:text-primary-dark text-sm">
                 ¿Eres nuevo?
                 <span class="text-accent hover:underline"><a href="{{ route('register') }}">Regístrate</a></span>
             </p>
