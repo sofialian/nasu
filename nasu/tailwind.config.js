@@ -27,8 +27,8 @@ export default {
               },
             fontFamily: {
                 'title': ['"Major Mono Display"', ...defaultTheme.fontFamily.mono],
-                'logo': ['"Mali"', 'cursive'],
-                'body': ['"Anonymous Pro"', ...defaultTheme.fontFamily.mono],
+                'body': ['"Mali"', 'cursive'],
+                'code': ['"Anonymous Pro"', ...defaultTheme.fontFamily.mono],
             },
         },
     },
