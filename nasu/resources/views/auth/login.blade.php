@@ -46,7 +46,7 @@
             <!-- Remember Me & Forgot Password -->
             <div class="flex items-center justify-between mt-6">
                 <label for="remember_me" class="inline-flex items-center">
-                    <x-checkbox-input id="remember_me" name="remember"/>
+                    <x-checkbox-input id="remember_me" name="remember" />
                     <span class="ms-2 text-sm text-gray-600 mr-4">{{ __('Remember me') }}</span>
                 </label>
             </div>
@@ -58,25 +58,16 @@
                 </x-primary-button>
             </div>
 
-             @if (Route::has('password.request'))
-                <a class="text-sm hover:underline" href="{{ route('password.request') }}">
-                    {{ __('Olvidaste tu contraseña?') }}
-                </a>
-                @endif
+            @if (Route::has('password.request'))
+            <a class="text-base font-medium font-body hover:underline" href="{{ route('password.request') }}">
+                {{ __('¿Olvidaste tu contraseña?') }}
+            </a>
+            @endif
         </form>
+
+        <p class="inline-block hover:text-primary-dark text-sm">
+            O si no tienes cuenta, 
+            <span class="text-accent hover:underline"><a href="{{ route('register') }}">regístrate</a></span>
+        </p>
     </div>
-
-    <style>
-        /* Additional styling for the floating labels */
-        .peer:focus~.peer-focus\:translate-y-\[-18px\] {
-            transform: translateY(-18px);
-        }
-
-        .peer:not(:placeholder-shown)~.peer-placeholder-shown\:top-2 {
-            top: -0.5rem;
-            font-size: 0.875rem;
-            color: #97D5CA;
-            padding: 0 0.25rem;
-        }
-    </style>
 </x-guest-layout>

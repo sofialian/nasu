@@ -15,6 +15,7 @@
     font-family: "Anonymous Pro", monospace;
 }
 
+
 /* Custom drag-and-drop feedback */
 .furniture-item:active {
     opacity: 0.6;

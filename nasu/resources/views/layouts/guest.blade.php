@@ -15,7 +15,7 @@
 
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css',  'resources/css/styles.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-code antialiased bg-primary-light min-h-screen flex flex-col">
@@ -34,7 +34,6 @@
             </div>
         </div>
     </div>
-
     <!-- Footer positioned at bottom -->
     @include('layouts.footer')
 </body>
