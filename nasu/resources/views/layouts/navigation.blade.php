@@ -83,7 +83,7 @@
         </div>
 
         <!-- Menu Content -->
-        <div class="pt-16 px-6">
+        <div class="pt-16 px-6 font-title">
             @auth
             <!-- Dashboard Link -->
             <div class="pb-3 space-y-1">

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-2 sm:px-4 py-4 sm:py-6">
-     <!-- Header Section -->
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Mi Espacio</h1>
+<div class="container mx-auto px-2 sm:px-4 py-8 sm:py-6 mt-8">
+    <!-- Header Section -->
+ <div class="flex justify-between items-center mb-6">
+        <h1 class="text-lg md:text-2xl font-bold font-body text-primary-dark px-2">Perfil</h1>
         <div class="flex space-x-3">
             <a href="{{ route('tasks.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center">
                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@
         <!-- Room Column -->
         <div class="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden w-full">
             <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-                <h2 class="text-lg font-semibold text-gray-700">Mi Habitación</h2>
+                <h2 class="text-lg font-semibold font-body text-primary-dark">Mi Habitación</h2>
                 <div class="flex space-x-2">
                     @isset($room)
                     <a href="{{ route('room.edit', $room) }}" class="text-blue-500 hover:text-blue-700 text-sm font-medium">
