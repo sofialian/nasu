@@ -12,7 +12,7 @@
     </div>
     @else
     <!-- Main Navbar (with auth) -->
-    <div class="w-full absolute inset-0 px-6 lg:px-16">
+    <div class="w-full absolute inset-0 px-6 lg:px-16 h-16">
         <div class="flex justify-between h-14 my-2">
             <!-- Logo and Links -->
             <div class="flex">
