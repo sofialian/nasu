@@ -4,22 +4,23 @@
 
 @section('content')
 <div class="flex-grow flex items-center justify-center h-screen flex flex-col container">
+    <div class="uppercase font-title">Crear Tarea</div>
     <form action="{{ route('tasks.store') }}" method="POST">
         @csrf
 
-        <div class="mb-4">
+        <div class="mb-4 relative">
             <x-input-label for="title" :value="__('Título de la tarea')" />
             <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" required />
             <x-input-error :messages="$errors->get('title')" class="mt-2" />
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4 relative">
             <x-input-label for="description" :value="__('Descripción')" />
             <x-textarea id="description" class="block mt-1 w-full" name="description" rows="3"></x-textarea>
             <x-input-error :messages="$errors->get('description')" class="mt-2" />
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4 relative">
             <x-input-label :value="__('Opciones de proyecto:')" />
             
             <div class="flex items-center mb-2">
@@ -39,7 +40,7 @@
                 @endforeach
             </x-select-input>
 
-            <div class="flex items-center mb-2 mt-4">
+            <div class="flex items-center mb-2 mt-4 relative">
                 <input type="radio" id="new_project" name="project_option" value="new" class="mr-2">
                 <x-input-label for="new_project" :value="__('Crear nuevo proyecto')" class="ml-2" />
             </div>
@@ -48,7 +49,7 @@
             <x-textarea id="project_description" class="block mt-2 w-full" name="project_description" rows="2" placeholder="Descripción del proyecto" disabled></x-textarea>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="flex items-center justify-end mt-4 relative">
             <x-primary-button type="submit">
                 {{ __('Crear tarea') }}
             </x-primary-button>

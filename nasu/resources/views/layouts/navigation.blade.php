@@ -19,7 +19,7 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}">
                         <x-application-logo class="h-7 w-auto hidden md:block" />
-                        <span class="font-body text-secondary-color text-xl md:hidden">nasu</span>
+                        <span class="font-body font-bold text-secondary-color text-2xl md:hidden">nasu</span>
                     </a>
                 </div>
                 @auth
