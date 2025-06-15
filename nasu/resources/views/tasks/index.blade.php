@@ -14,7 +14,10 @@
 @endif
 
 <div class="container mx-auto px-4 md:px-40 py-6">
-    <h1 class="font-title text-2xl md:text-3xl">Mis tareas</h1>
+    <div class="flex justify-center items-start mb-6">
+        <x-back-button class="" />
+        <h1 class="flex-1 font-title">@yield('header')</h1>
+    </div>
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <a href="{{ route('tasks.create') }}"
             class="bg-indigo-600 text-white px-4 py-2 hover:bg-indigo-700 transition-colors text-center w-full md:w-auto">

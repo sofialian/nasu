@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('header', 'Todos mis Proyectos')
+@section('header', 'Mis Proyectos')
 
 @section('content')
 @if(session('success'))
@@ -13,7 +13,12 @@
 @endif
 
 <div class="container mx-auto px-4 py-6 md:px-20">
-    <h1 class="text-2xl font-title text-primary-dark">Mis Proyectos</h1>
+
+    <div class="flex justify-center items-start mb-6">
+        <x-back-button class="" />
+        <h1 class="font-title flex-1">@yield('header')</h1>
+    </div>
+
     <div class="flex justify-between items-center mb-6">
         <a href="{{ route('projects.create') }}" class="bg-green-600 text-white px-4 py-2 hover:bg-green-700 transition-colors">
             + Nuevo Proyecto

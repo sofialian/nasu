@@ -1,11 +1,17 @@
 @extends('layouts.app')
 
-@section('header', 'Detalles del Proyecto')
+@section('header', 'Detalles')
 
 @section('content')
 <div class="flex-grow flex items-center justify-center mt-8 flex flex-col container">
+
     <div class="w-full max-w-4xl p-4 rounded-lg shadow page">
-        <h1 class="font-title text-center mb-4">Detalles</h1>
+
+        <div class="flex justify-center items-start mb-6">
+            <x-back-button class="" />
+            <h1 class="flex-1 font-title">@yield('header')</h1>
+        </div>
+
 
         <div class="space-y-4 md:px-20">
             <!-- Project Title -->
