@@ -11,7 +11,7 @@
         </div>
 
         <!-- Texto "nasu" -->
-        <h1 class="text-3xl font-body font-bold text-primary-dark mb-8">nasu</h1>
+        <div class="text-3xl font-body font-bold text-primary-dark mb-8">nasu</div>
 
         <!-- Botones de acceso -->
         @auth

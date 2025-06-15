@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="flex-grow flex items-center justify-center mt-8 flex flex-col container">
-    <div class="w-full max-w-4xl pt-0 text-primary-dark text-base">
+    <div class="w-full max-w-4xl pt-0 text-primary-dark text-base page mb-8">
         <div class="uppercase font-title text-xl text-center mb-6">Crear Tarea</div>
         <form action="{{ route('tasks.store') }}" method="POST">
             @csrf

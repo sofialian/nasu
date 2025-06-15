@@ -1,3 +1,10 @@
+:root {
+    --primary-dark: #474350;
+    --primary-light: #fcffeb;
+    --secondary-color: #97d5ca;
+    --accent: #ff4e4e;
+}
+
 .peer:focus ~ .peer-focus\:translate-y-\[-12px\] {
     transform: translateY(-12px);
 }
@@ -10,10 +17,17 @@
 }
 
 h1 {
-    text-transform: uppercase; 
-    font-size: 1.25rem; 
-    text-align: center; 
+    text-transform: uppercase;
+    font-size: 1.25rem;
+    text-align: center;
     margin-bottom: 1.5rem;
+}
+
+.page {
+    border: var(--primary-dark) 1px solid;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 /*# sourceMappingURL=styles.css.map */
