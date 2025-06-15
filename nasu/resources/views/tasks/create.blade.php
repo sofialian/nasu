@@ -23,10 +23,10 @@
                         <x-input-error :messages="$errors->get('title')" class="mt-2" />
                     </div>
 
-                    <div class="mb-4 relative py-8">
+                    <div class="mb-4 relative py-2">
                         <x-textarea
                             id="description"
-                            class="block mt-5 w-full"
+                            class="block mt-5 w-full peer"
                             name="description"
                             rows="3"
                             placeholder=" "></x-textarea>
@@ -96,11 +96,17 @@
                 </div>
             </div>
 
-            <div class="flex justify-center mt-6">
-                <x-primary-button type="submit" class="w-1/2 md:w-auto px-8">
-                    {{ __('Crear tarea') }}
-                </x-primary-button>
-            </div>
+            <div class="flex justify-center items-center mt-4 space-x-2">
+            <x-secondary-button
+                type="button"
+                onclick="history.back()"
+                class="w-1/2 md:w-auto">
+                {{ __('Cancelar') }}
+            </x-secondary-button>
+            <x-primary-button type="submit" class="w-1/2 md:w-auto">
+                {{ __('Crear tarea') }}
+            </x-primary-button>
+        </div>
         </form>
     </div>
 </div>
