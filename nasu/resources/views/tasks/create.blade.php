@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="flex-grow flex items-center justify-center mt-8 flex flex-col container">
-    <div class="w-full max-w-4xl pt-0 text-primary-dark text-base page mb-8">
+    <div class="w-full max-w-4xl pt-0 text-primary-dark text-base page">
         <div class="uppercase font-title text-xl text-center mb-6">Crear Tarea</div>
         <form action="{{ route('tasks.store') }}" method="POST">
             @csrf
@@ -97,18 +97,19 @@
             </div>
 
             <div class="flex justify-center items-center mt-4 space-x-2">
-            <x-secondary-button
-                type="button"
-                onclick="history.back()"
-                class="w-1/2 md:w-auto">
-                {{ __('Cancelar') }}
-            </x-secondary-button>
-            <x-primary-button type="submit" class="w-1/2 md:w-auto">
-                {{ __('Crear tarea') }}
-            </x-primary-button>
-        </div>
-        </form>
+                <x-secondary-button
+                    type="button"
+                    onclick="history.back()"
+                    class="w-1/2 md:w-auto">
+                    {{ __('Cancelar') }}
+                </x-secondary-button>
+                <x-primary-button type="submit" class="w-1/2 md:w-auto">
+                    {{ __('Crear tarea') }}
+                </x-primary-button>
+            </div>
     </div>
+    </form>
+</div>
 </div>
 
 @push('scripts')

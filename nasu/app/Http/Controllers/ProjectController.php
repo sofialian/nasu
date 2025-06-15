@@ -51,7 +51,6 @@ class ProjectController extends Controller
 
             return redirect()->route('projects.index')
                 ->with('success', "Proyecto {$project->project_title} creado correctamente");
-                
         } catch (\Exception $e) {
             \Log::error('Error al crear proyecto:', [
                 'error' => $e->getMessage(),
@@ -68,7 +67,9 @@ class ProjectController extends Controller
         if (auth()->id() !== $project->user_id) {
             abort(403, 'No autorizado');
         }
-        return view('projects.edit', compact('project'));
+
+        $colors = Project::$colors;
+        return view('projects.edit', compact('project', 'colors'));
     }
 
     public function update(Request $request, Project $project)
@@ -131,6 +132,8 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')
             ->with('success', 'Proyecto eliminado correctamente');
     }
+
+
     public function complete(Project $project)
     {
         // Verificación de autorización

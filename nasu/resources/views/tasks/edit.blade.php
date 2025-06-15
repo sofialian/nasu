@@ -23,7 +23,7 @@
         </div>
 
         <!-- Description Textarea with Floating Label -->
-        <div class="mb-6 relative py-2">
+        <div class="mb-6 relative pt-2">
             <x-textarea
                 id="description"
                 name="description"
