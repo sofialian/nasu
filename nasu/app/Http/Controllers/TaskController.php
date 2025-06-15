@@ -27,7 +27,8 @@ class TaskController extends Controller
     public function create()
     {
         $projects = auth()->user()->projects;
-        return view('tasks.create', compact('projects'));
+        $colors = Project::$colors;
+        return view('tasks.create', compact('projects', 'colors'));
     }
 
     public function store(Request $request)

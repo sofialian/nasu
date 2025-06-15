@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between mb-4">
         <h1>Edit Room Layout</h1>
         <div>
-            <a href="{{ route('dashboard', $room) }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('room.show', $room) }}" class="btn btn-secondary">Cancel</a>
             <button id="save-changes" class="btn btn-primary">Save Changes</button>
         </div>
     </div>
