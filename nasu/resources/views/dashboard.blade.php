@@ -3,28 +3,29 @@
 @section('content')
 <div class="container mx-auto px-2 sm:px-4 py-8 sm:py-6 mt-8">
     <!-- Header Section -->
- <div class="flex justify-between items-center mb-6">
+    <div class="flex justify-between items-center mb-6">
         <h1 class="text-lg md:text-2xl font-bold font-body text-primary-dark px-2">Perfil</h1>
         <div class="flex space-x-3">
             <a href="{{ route('tasks.create') }}" class="bg-indigo-600 text-primary-light px-3 py-2 hover:bg-indigo-700 transition-colors flex items-center">
                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Nueva Tarea
+                Tarea
             </a>
             <a href="{{ route('projects.create') }}" class="bg-green-600 text-primary-light px-3 py-2  hover:bg-green-700 transition-colors flex items-center">
                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Nuevo Proyecto
+                Proyecto
             </a>
         </div>
     </div>
 
     <!-- Main Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+        <div class="lg:col-span-1 overflow-hidden w-full border-4 border-lime-500"></div>
         <!-- Room Column -->
-        <div class="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden w-full">
+        <div class="lg:col-span-1 bg-white rounded-lg shadow-md overflow-hidden w-full">
             <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
                 <h2 class="text-lg font-semibold font-body text-primary-dark">Mi Habitación</h2>
                 <div class="flex space-x-2">
@@ -68,6 +69,8 @@
                 @endisset
             </div>
         </div>
+        <div class="lg:col-span-1 overflow-hidden w-full border-4 border-lime-500"></div>
+
 
         <!-- Tasks Column -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden w-full">
