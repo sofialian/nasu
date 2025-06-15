@@ -13,7 +13,7 @@
     @else
     <!-- Main Navbar (with auth) -->
     <div class="w-full absolute inset-0 px-6 lg:px-16 h-16">
-        <div class="flex justify-between h-14 my-2">
+        <div class="flex justify-between my-2">
             <!-- Logo and Links -->
             <div class="flex">
                 <div class="shrink-0 flex items-center">
@@ -25,7 +25,17 @@
                 @auth
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Home') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="#" :active="request()->routeIs('')">
+                        {{ __('Habitación') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="#" :active="request()->routeIs('')">
+                        {{ __('Contacto') }}
                     </x-nav-link>
                 </div>
                 @endauth
@@ -47,13 +57,13 @@
             @auth
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <div class="ml-3 relative" x-data="{ dropdownOpen: false }" @click.away="dropdownOpen = false">
-                    <button @click="dropdownOpen = !dropdownOpen" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
+                    <button @click="dropdownOpen = !dropdownOpen" class="inline-flex items-center px-3 py-2 text-base font-body leading-4 font-bold rounded-md text-gray-500 hover:text-gray-700 focus:outline-none transition">
                         {{ Auth::user()->name }}
                         <svg class="ml-1 h-4 w-4" :class="{ 'transform rotate-180': dropdownOpen }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </button>
-                    <div x-show="dropdownOpen" x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                    <div x-show="dropdownOpen" x-transition class="absolute right-0 mt-2 w-48 bg-primary-light border border-primary-dark shadow-lg z-50">
                         <x-dropdown-link href="{{ route('profile.edit') }}">
                             {{ __('Profile') }}
                         </x-dropdown-link>
@@ -87,9 +97,9 @@
             @auth
             <!-- Dashboard Link -->
             <div class="pb-3 space-y-1">
-                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="block px-3 py-2 rounded-md text-base font-medium">
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="block px-3 py-2 text-base font-medium">
                     <div class="flex items-center">
-                        <span>{{ __('Dashboard') }}</span>
+                        <span>{{ __('Home') }}</span>
                         <div x-show="request()->routeIs('dashboard')" class="ml-2 w-2 h-2 bg-primary-dark rounded-full"></div>
                     </div>
                 </x-responsive-nav-link>
@@ -103,7 +113,7 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link href="{{ route('profile.edit') }}" :active="request()->routeIs('profile.edit')" class="block px-3 py-2 rounded-md text-base font-medium">
+                    <x-responsive-nav-link href="{{ route('profile.edit') }}" :active="request()->routeIs('profile.edit')" class="block px-3 py-2 text-base font-medium">
                         <div class="flex items-center">
                             <span>{{ __('Profile') }}</span>
                             <div x-show="request()->routeIs('profile.edit')" class="ml-2 w-2 h-2 bg-primary-dark rounded-full"></div>
@@ -112,7 +122,7 @@
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:text-gray-800">
+                        <button type="submit" class="w-full text-left px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-800">
                             {{ __('Log Out') }}
                         </button>
                     </form>
