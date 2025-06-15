@@ -9,12 +9,8 @@ class Checklist extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'task_id',
-        'list_name',         
-        'description',  
-        'completed',     
-    ];
+    protected $fillable = ['item_name', 'completed', 'task_id'];
+
 
     // Relaciones
     public function task()

@@ -11,7 +11,7 @@ class CreateChecklistsTable extends Migration
         Schema::create('checklists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_id')->constrained('tasks')->onDelete('cascade');
-            $table->string('list_name');
+            $table->string('item_name');
             $table->boolean('completed')->default(false);
             $table->timestamps();
         });
