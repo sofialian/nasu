@@ -20,7 +20,7 @@ class ProfileController extends Controller
         $user = auth()->user();
         $user->load(['ownedFurniture.furniture', 'room.items.furniture']);
 
-        return view('users.profile', compact('user'));
+        return view('profile.profile', compact('user'));
     }
 
     public function edit(Request $request): View
