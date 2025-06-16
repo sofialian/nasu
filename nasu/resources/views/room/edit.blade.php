@@ -1,67 +1,77 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="d-flex justify-content-between mb-4">
-        <h1>Edit Room Layout</h1>
-        <div>
-            <a href="{{ route('room.show', $room) }}" class="btn btn-secondary">Cancel</a>
-            <button id="save-changes" class="btn btn-primary">Save Changes</button>
+<div class="bg-white p-6 rounded-lg shadow max-w-7xl mx-auto">
+    <!-- Header with Actions -->
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="uppercase font-title text-xl text-primary-dark">
+            Editar Habitación
+        </h1>
+        <div class="flex gap-3">
+            <a href="{{ route('room.show', $room) }}">
+                Cancelar
+</a>
+            <x-primary-button id="save-changes">
+                Guardar Cambios
+            </x-primary-button>
         </div>
     </div>
 
-    <div class="row">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Room Editor -->
-        <div class="col-md-8">
-            <div class="room-editor" id="room-editor"
-                style="position: relative; 
-                       height: 500px; 
-                       border: 1px solid #ccc; 
-                       background-color: #f5f5f5;
-                       background-image: linear-gradient(#ccc 1px, transparent 1px),
-                                       linear-gradient(90deg, #ccc 1px, transparent 1px);
-                       background-size: 20px 20px;">
+        <div class="lg:col-span-2">
+            <div class="room-editor bg-gray-50 rounded-lg border border-gray-200 relative overflow-hidden" 
+                 id="room-editor"
+                 style="height: 500px;
+                        background-image: linear-gradient(#e5e7eb 1px, transparent 1px),
+                                        linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
+                        background-size: 20px 20px;">
                 @foreach($furnitureItems as $item)
-                <div class="furniture-item"
+                <div class="furniture-item absolute cursor-move transition-transform duration-100"
                     data-item-id="{{ $item['id'] }}"
-                    style="position: absolute;
-                           left: {{ $item['x'] }}px;
+                    style="left: {{ $item['x'] }}px;
                            top: {{ $item['y'] }}px;
                            transform: rotate({{ $item['rotation'] }}deg);
-                           cursor: move;
-                           width: 100px;">
-                    <img src="{{ asset($item['image']) }}"
-                        alt="{{ $item['name'] }}"
-                        style="width: 100%; height: auto;">
-                    <button class="btn btn-sm btn-danger remove-item"
-                        style="position: absolute; top: -10px; right: -10px;">
-                        ×
-                    </button>
-                    <button class="btn btn-sm btn-outline-secondary rotate-btn"
-                        style="position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);">
-                        ↻ Rotate
-                    </button>
+                           width: 100px;
+                           z-index: 1;">
+                    <div class="relative">
+                        <img src="{{ asset($item['image']) }}"
+                            alt="{{ $item['name'] }}"
+                            class="w-full h-auto object-contain shadow-sm rounded"
+                            style="border: 2px solid white;">
+                        <button class="remove-item absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
+                            ×
+                        </button>
+                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 text-gray-700 rounded px-2 py-1 text-xs hover:bg-gray-50 transition-colors">
+                            ↻ Rotar
+                        </button>
+                    </div>
                 </div>
                 @endforeach
             </div>
         </div>
 
         <!-- Available Furniture -->
-        <div class="col-md-4">
-            <h3>Available Furniture</h3>
-            <div class="available-furniture" style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <div class="lg:col-span-1">
+            <h3 class="font-body font-medium text-gray-700 mb-3">Muebles Disponibles</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3">
                 @forelse($availableFurniture as $item)
-                <div class="furniture-item" style="padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-                    <img src="{{ asset($item['image']) }}" style="width: 80px; height: auto;">
-                    <p style="text-align: center;">{{ $item['name'] }}</p>
-                    <button class="btn btn-sm btn-primary mt-2 add-item"
+                <div class="bg-gray-50 rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow">
+                    <img src="{{ asset($item['image']) }}" 
+                         class="w-full h-16 object-contain mx-auto mb-2">
+                    <p class="text-center text-sm font-medium text-gray-800 truncate">{{ $item['name'] }}</p>
+                    <x-primary-button class="w-full mt-2 py-1 text-sm add-item"
                         data-furniture-id="{{ $item['furniture_id'] }}"
-                        data-user-furniture-id="{{ $item['user_furniture_id'] }}">
-                        Add to Room
-                    </button>
+                        data-user-furniture-id="{{ $item['user_furniture_id'] }}"
+                        data-image="{{ asset($item['image']) }}"
+                        data-name="{{ $item['name'] }}">
+                        Añadir
+                    </x-primary-button>
                 </div>
                 @empty
-                <p>No available furniture</p>
+                <div class="col-span-full bg-gray-50 rounded-lg border border-gray-200 p-4 text-center">
+                    <p class="text-gray-500">No hay muebles disponibles</p>
+                </div>
                 @endforelse
             </div>
         </div>
@@ -82,16 +92,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Drag and drop state
     let draggedItem = null;
     let offsetX, offsetY;
+    let isDragging = false;
 
-    // --- UTILITY ---
+    // --- UTILITY FUNCTIONS ---
     const snapToGrid = (value) => Math.round(value / 20) * 20;
 
     // --- EVENT LISTENERS ---
 
     // Save changes button
     saveButton.addEventListener('click', function() {
+        if (isDragging) return; // Prevent saving while dragging
+        
         saveButton.disabled = true;
-        saveButton.textContent = 'Saving...';
+        saveButton.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            Guardando...
+        `;
 
         // Prepare the data payload for the server
         const data = {
@@ -113,10 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
             removed_items: removedItems
         };
 
-        console.log("Data being sent:", JSON.stringify(data, null, 2));
-
         fetch("{{ route('room.update-items', $room) }}", {
-            method: 'POST', // Method is POST to tunnel PUT
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -124,31 +138,54 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(result => {
             if (result.success) {
                 window.location.href = result.redirect;
             } else {
-                alert('Failed to save changes: ' + (result.message || 'Please check the data.'));
-                console.error('Server errors:', result.errors);
-                saveButton.disabled = false;
-                saveButton.textContent = 'Save Changes';
+                showError(result.message || 'Error al guardar los cambios. Por favor, inténtelo de nuevo.');
             }
         })
         .catch(error => {
-            console.error('Fetch Error:', error);
-            alert('An unexpected network error occurred. Please try again.');
-            saveButton.disabled = false;
-            saveButton.textContent = 'Save Changes';
+            console.error('Error:', error);
+            showError('Ocurrió un error inesperado. Por favor, inténtelo de nuevo.');
         });
+
+        function showError(message) {
+            // Create a Bootstrap alert
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3';
+            alertDiv.style.zIndex = '1100';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            // Remove alert after 5 seconds
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+                setTimeout(() => alertDiv.remove(), 150);
+            }, 5000);
+
+            // Reset save button
+            saveButton.disabled = false;
+            saveButton.innerHTML = `Guardar Cambios`;
+        }
     });
 
     // "Add to Room" buttons for available furniture
     document.querySelectorAll('.add-item').forEach(button => {
         button.addEventListener('click', function() {
-            const furnitureData = this.closest('.furniture-item');
-            const imageSrc = furnitureData.querySelector('img').src;
-            const itemName = furnitureData.querySelector('p').textContent;
+            const furnitureId = this.dataset.furnitureId;
+            const userFurnitureId = this.dataset.userFurnitureId;
+            const imageSrc = this.dataset.image;
+            const itemName = this.dataset.name;
             
             // Create the new item element in the editor
             const roomRect = roomEditor.getBoundingClientRect();
@@ -156,50 +193,67 @@ document.addEventListener('DOMContentLoaded', function() {
             const centerY = snapToGrid(roomRect.height / 2 - 50);
 
             const newItemEl = document.createElement('div');
-            newItemEl.className = 'furniture-item';
-            newItemEl.dataset.itemId = 'new-' + Date.now(); // Unique temporary ID
-            newItemEl.style.position = 'absolute';
+            newItemEl.className = 'furniture-item absolute cursor-move transition-transform duration-100';
+            newItemEl.dataset.itemId = 'new-' + Date.now();
             newItemEl.style.left = centerX + 'px';
             newItemEl.style.top = centerY + 'px';
             newItemEl.style.transform = 'rotate(0deg)';
-            newItemEl.style.cursor = 'move';
             newItemEl.style.width = '100px';
+            newItemEl.style.zIndex = '1';
             newItemEl.innerHTML = `
-                <img src="${imageSrc}" alt="${itemName}" style="width: 100%; height: auto;">
-                <button class="btn btn-sm btn-danger remove-item" style="position: absolute; top: -10px; right: -10px;">×</button>
-                <button class="btn btn-sm btn-outline-secondary rotate-btn" style="position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);">↻ Rotate</button>
+                <div class="relative">
+                    <img src="${imageSrc}" alt="${itemName}" class="w-full h-auto object-contain shadow-sm rounded" style="border: 2px solid white;">
+                    <button class="remove-item absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
+                        ×
+                    </button>
+                    <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 text-gray-700 rounded px-2 py-1 text-xs hover:bg-gray-50 transition-colors">
+                        ↻ Rotar
+                    </button>
+                </div>
             `;
             roomEditor.appendChild(newItemEl);
             
             // Add the new item's data to our state array
             items.push({
                 id: newItemEl.dataset.itemId,
-                furniture_id: this.dataset.furnitureId,
-                user_furniture_id: this.dataset.userFurnitureId,
+                furniture_id: furnitureId,
+                user_furniture_id: userFurnitureId,
                 x: centerX,
                 y: centerY,
                 rotation: 0,
-                is_new: true // Flag to identify it as a new item
+                is_new: true,
+                name: itemName,
+                image: imageSrc
             });
 
             // Make the new item interactive
             initFurnitureItem(newItemEl);
             
-            // Hide the button in the "Available Furniture" list to prevent duplicates
-            furnitureData.style.display = 'none';
+            // Update the button state
+            this.disabled = true;
+            this.textContent = 'Añadido';
+            this.classList.remove('bg-primary-600', 'hover:bg-primary-700');
+            this.classList.add('bg-gray-400', 'cursor-not-allowed');
         });
     });
 
-    // --- INITIALIZATION ---
+    // --- CORE FUNCTIONALITY ---
 
-    // Main function to make an item interactive (drag, rotate, remove)
+    // Initialize furniture item with drag, rotate, and remove functionality
     function initFurnitureItem(item) {
         const itemId = item.dataset.itemId;
 
-        // Drag start
+        // Drag start handler
         item.addEventListener('mousedown', function(e) {
-            if (e.target.classList.contains('remove-item') || e.target.classList.contains('rotate-btn')) return;
+            // Ignore if clicking on buttons
+            if (e.target.classList.contains('remove-item') || 
+                e.target.classList.contains('rotate-btn') ||
+                e.target.tagName === 'svg' || 
+                e.target.tagName === 'path') {
+                return;
+            }
             
+            isDragging = true;
             draggedItem = this;
             const rect = this.getBoundingClientRect();
             offsetX = e.clientX - rect.left;
@@ -207,86 +261,113 @@ document.addEventListener('DOMContentLoaded', function() {
             
             this.style.transition = 'none';
             this.style.zIndex = '1000';
+            this.querySelector('img').style.boxShadow = '0 0 10px rgba(0,0,0,0.3)';
 
             document.addEventListener('mousemove', moveItem);
             document.addEventListener('mouseup', stopDrag);
             e.preventDefault();
         });
 
-        // Rotation
+        // Rotation handler
         item.querySelector('.rotate-btn')?.addEventListener('click', function(e) {
             e.stopPropagation();
             const currentRotation = parseInt(item.style.transform.match(/rotate\((\d+)deg\)/)?.[1] || 0);
             const newRotation = (currentRotation + 90) % 360;
             item.style.transform = `rotate(${newRotation}deg)`;
 
+            // Update state
             const itemIndex = items.findIndex(i => i.id == itemId);
-            if (itemIndex !== -1) items[itemIndex].rotation = newRotation;
+            if (itemIndex !== -1) {
+                items[itemIndex].rotation = newRotation;
+            }
         });
 
-        // Removal
+        // Removal handler
         item.querySelector('.remove-item')?.addEventListener('click', function(e) {
             e.stopPropagation();
             const itemIndex = items.findIndex(i => i.id == itemId);
 
             if (itemIndex !== -1) {
                 const itemData = items[itemIndex];
+                
                 if (!itemData.is_new) {
-                    // If it's an existing item, add its ID to the removed list
+                    // For existing items, mark for removal
                     removedItems.push(itemData.id);
                 } else {
-                    // If it was a new item, re-display it in the "Available" list
-                    const addButton = document.querySelector(`.add-item[data-user-furniture-id='${itemData.user_furniture_id}']`);
-                    if (addButton) addButton.closest('.furniture-item').style.display = 'block';
+                    // For new items, re-enable the add button
+                    const addButtons = document.querySelectorAll(`.add-item[data-user-furniture-id='${itemData.user_furniture_id}']`);
+                    addButtons.forEach(button => {
+                        button.disabled = false;
+                        button.textContent = 'Añadir';
+                        button.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                        button.classList.add('bg-primary-600', 'hover:bg-primary-700');
+                    });
                 }
-                // Remove from the main state array
+                
+                // Remove from items array
                 items.splice(itemIndex, 1);
             }
-            // Remove from the DOM
+            
+            // Remove from DOM
             item.remove();
         });
     }
 
-    // Drag move handler
+    // Item dragging handler
     function moveItem(e) {
         if (!draggedItem) return;
-
+        
         const roomRect = roomEditor.getBoundingClientRect();
         let x = e.clientX - roomRect.left - offsetX;
         let y = e.clientY - roomRect.top - offsetY;
 
-        x = snapToGrid(x);
-        y = snapToGrid(y);
+        // Snap to grid and constrain to room bounds
+        x = snapToGrid(Math.max(0, Math.min(x, roomRect.width - draggedItem.offsetWidth)));
+        y = snapToGrid(Math.max(0, Math.min(y, roomRect.height - draggedItem.offsetHeight)));
 
-        // Constrain to bounds
-        x = Math.max(0, Math.min(x, roomRect.width - draggedItem.offsetWidth));
-        y = Math.max(0, Math.min(y, roomRect.height - draggedItem.offsetHeight));
-
+        // Update position
         draggedItem.style.left = `${x}px`;
         draggedItem.style.top = `${y}px`;
     }
 
-    // Drag stop handler
+    // Drag end handler
     function stopDrag() {
         if (draggedItem) {
             const itemId = draggedItem.dataset.itemId;
             const itemIndex = items.findIndex(i => i.id == itemId);
+            
             if (itemIndex !== -1) {
+                // Update state with new position
                 items[itemIndex].x = parseInt(draggedItem.style.left);
                 items[itemIndex].y = parseInt(draggedItem.style.top);
             }
 
+            // Reset styles
             draggedItem.style.transition = 'all 0.3s ease';
-            draggedItem.style.zIndex = '';
+            draggedItem.style.zIndex = '1';
+            draggedItem.querySelector('img').style.boxShadow = '';
         }
 
+        // Reset drag state
         draggedItem = null;
+        isDragging = false;
         document.removeEventListener('mousemove', moveItem);
         document.removeEventListener('mouseup', stopDrag);
     }
 
-    // Initialize all furniture items already present in the room on page load
+    // Initialize all existing furniture items
     document.querySelectorAll('#room-editor .furniture-item').forEach(initFurnitureItem);
+
+    // Prevent save while dragging
+    document.addEventListener('mousemove', function() {
+        if (isDragging) {
+            saveButton.disabled = true;
+            saveButton.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+            saveButton.disabled = false;
+            saveButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    });
 });
 </script>
 @endpush
