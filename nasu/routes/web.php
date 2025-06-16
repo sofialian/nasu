@@ -58,18 +58,8 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/room', [HomeController::class, 'room'])->name('room');
 Route::post('/room', [HomeController::class, 'updateRoom'])->name('room.edit');
 
-// Add these if they don't exist
-Route::middleware(['auth'])->group(function () {
-    // Room routes
-    Route::get('/room', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
-    Route::get('/room/edit', [App\Http\Controllers\RoomController::class, 'edit'])->name('room.edit');
-    Route::post('/room/update', [App\Http\Controllers\RoomController::class, 'update'])->name('room.update');
 
-    // For adding furniture (if needed)
-    Route::post('/room/add-item', [App\Http\Controllers\RoomController::class, 'addItem'])->name('room.add-item');
-});
 
-// In routes/web.php
 Route::middleware(['auth'])->group(function () {
     // Furniture store
     Route::get('/furniture-store', [RoomController::class, 'showStore'])->name('furniture.store');
