@@ -155,7 +155,7 @@
                                     <input type="checkbox" onchange="this.form.submit()" {{ $item->completed ? 'checked' : '' }}
                                         class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 mr-2">
                                     <span class="text-sm {{ $item->completed ? 'line-through text-gray-400' : 'text-gray-600' }}">
-                                        {{ $item->item }}
+                                        {{ $item->item_name }}
                                     </span>
                                 </form>
                                 <form action="{{ route('checklists.destroy', $item) }}" method="POST">

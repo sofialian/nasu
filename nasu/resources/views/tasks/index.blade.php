@@ -110,20 +110,20 @@
                 @if($task->checklists->isNotEmpty())
                 <ul class="space-y-3">
                     @foreach($task->checklists as $item)
-                    <li class="flex items-center justify-between group">
+                    <li class="flex items-center justify-between group md:pr-24">
                         <form action="{{ route('checklists.update', $item) }}" method="POST" class="flex items-center flex-1 min-w-0">
                             @csrf
                             @method('PUT')
                             <input type="checkbox" onchange="this.form.submit()" {{ $item->completed ? 'checked' : '' }}
                                 class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 mr-2 h-4 w-4">
                             <span class="{{ $item->completed ? 'line-through text-gray-400' : 'text-gray-600' }} break-words flex-1">
-                                {{ $item->item }}
+                                {{ $item->item_name }}
                             </span>
                         </form>
                         <form action="{{ route('checklists.destroy', $item) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity ml-2"
+                            <button type="submit" class="text-accent opacity-60 group-hover:opacity-100 transition-opacity ml-2"
                                 onclick="return confirm('¿Eliminar este item?')">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
