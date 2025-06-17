@@ -100,7 +100,6 @@
                 <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="block px-3 py-2 text-base font-medium">
                     <div class="flex items-center">
                         <span>{{ __('Home') }}</span>
-                        <div x-show="request()->routeIs('dashboard')" class="ml-2 w-2 h-2 bg-primary-dark rounded-full"></div>
                     </div>
                 </x-responsive-nav-link>
             </div>
@@ -113,10 +112,9 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link href="{{ route('profile.edit') }}" :active="request()->routeIs('profile.edit')" class="block px-3 py-2 text-base font-medium">
+                    <x-responsive-nav-link href="{{ route('profile') }}" :active="request()->routeIs('profile')" class="block px-3 py-2 text-base font-medium">
                         <div class="flex items-center">
-                            <span>{{ __('Profile') }}</span>
-                            <div x-show="request()->routeIs('profile.edit')" class="ml-2 w-2 h-2 bg-primary-dark rounded-full"></div>
+                            <span>{{ __('Perfil') }}</span>
                         </div>
                     </x-responsive-nav-link>
 
@@ -126,6 +124,22 @@
                             {{ __('Log Out') }}
                         </button>
                     </form>
+                </div>
+
+                <div class="mt-3 space-y-1">
+                    <x-responsive-nav-link href="#" :active="request()->routeIs('room.show')" class="block px-3 py-2 text-base font-medium">
+                        <div class="flex items-center">
+                            <span>{{ __('Room') }}</span>
+                        </div>
+                    </x-responsive-nav-link>
+                </div>
+
+                <div class="mt-3 space-y-1">
+                    Sobre nasu
+                </div>
+
+                <div class="mt-3 space-y-1">
+                    Contacto
                 </div>
             </div>
             @else
