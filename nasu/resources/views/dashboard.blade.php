@@ -5,8 +5,8 @@
     <!-- Header Section -->
     <div class="flex justify-between items-center mb-6">
         <a href="{{ route('profile') }}" class="text-lg md:text-2xl font-bold font-body text-primary-dark px-2 hover:text-primary-darker transition-colors">
-    Perfil
-</a>
+            Perfil
+        </a>
         <div class="flex space-x-3">
             <a href="{{ route('tasks.create') }}" class="bg-indigo-600 text-primary-light px-3 py-2 hover:bg-indigo-700 transition-colors flex items-center">
                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -267,6 +267,7 @@
     </div>
 </div>
 @endsection
+
 
 @push('styles')
 <style>
