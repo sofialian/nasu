@@ -8,7 +8,7 @@
             Editar Habitación
         </h1>
         <div class="flex gap-3">
-            <a href="{{ route('room.show', $room) }}">
+            <a href="{{ route('dashboard', $room) }}">
                 Cancelar
             </a>
             <x-primary-button id="save-changes">
