@@ -7,80 +7,109 @@
         <x-back-button class="" />
         <h1 class="flex-1 font-title">@yield('header')</h1>
     </div>
-    <div class="flex justify-between items-center mb-6">
-        <div class="flex gap-3">
-            <!-- <a href="{{ route('dashboard', $room) }}">
-                Cancelar
-            </a> -->
-            <x-primary-button id="save-changes">
-                Guardar Cambios
-            </x-primary-button>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Room Editor -->
-        <div class="lg:col-span-2">
-            <div class="room-editor bg-gray-50 rounded-lg border border-gray-200 relative overflow-hidden"
-                id="room-editor"
-                style="height: 60vh;
+    <div class="flex flex-col justify-center items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 w-2/3">
+            <!-- Room Editor -->
+            <div class="lg:col-span-2">
+                <div class="room-editor bg-gray-50 rounded-lg border border-gray-200 relative overflow-hidden"
+                    id="room-editor"
+                    style="height: 60vh;
            width: 100%;      
            max-width: 60vh; 
            aspect-ratio: 1;  
                         background-image: linear-gradient(#e5e7eb 1px, transparent 1px),
                                         linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
                         background-size: 20px 20px;">
-                @foreach($furnitureItems as $item)
-                <div class="furniture-item absolute cursor-move transition-transform duration-100"
-                    data-item-id="{{ $item['id'] }}"
-                    style="left: {{ $item['x'] }}px;
+                    @foreach($furnitureItems as $item)
+                    <div class="furniture-item absolute cursor-move transition-transform duration-100"
+                        data-item-id="{{ $item['id'] }}"
+                        style="left: {{ $item['x'] }}px;
                            top: {{ $item['y'] }}px;
                            transform: rotate({{ $item['rotation'] }}deg);
                            width: 100px;
                            z-index: 1;">
-                    <div class="relative">
-                        <img src="{{ asset($item['image']) }}"
-                            alt="{{ $item['name'] }}"
-                            class="w-full h-auto object-contain shadow-sm rounded"
-                            style="border: 2px solid white;">
-                        <button class="remove-item absolute -top-2 -right-2 bg-accent text-primary-light rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
-                            ×
+                        <div class="relative">
+                            <img src="{{ asset($item['image']) }}"
+                                alt="{{ $item['name'] }}"
+                                class="w-full h-auto object-contain shadow-sm rounded"
+                                style="border: 2px solid white;">
+                            <button class="remove-item absolute -top-2 -right-2 bg-accent text-primary-light rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
+                                ×
+                            </button>
+                            <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-secondary-color/70 text-primary-dark rounded px-2 py-1 text-xs hover:bg-secondary-color transition-colors">
+                                ↻
+                            </button>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Available Furniture -->
+            <div class="lg:col-span-1">
+                <h3 class="font-body font-medium text-gray-700 mb-3">Muebles Disponibles</h3>
+                <div class="available-furniture-container">
+                    <div class="available-furniture-container mb-6 flex items-center gap-4">
+                        <!-- Previous button (left side) -->
+                        <button class="carousel-nav carousel-prev bg-white rounded-full p-2 shadow-md z-10 hidden md:flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
+                            style="flex: 0 0 auto;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
                         </button>
-                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-secondary-color/70 text-primary-dark rounded px-2 py-1 text-xs hover:bg-secondary-color transition-colors">
-                            ↻
+
+                        <!-- Carousel container -->
+                        <div class="available-furniture-carousel flex-1 relative overflow-hidden">
+                            <!-- Scrolling container -->
+                            <div class="available-furniture flex gap-4 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory"
+                                style="scrollbar-width: none; -ms-overflow-style: none;">
+                                @forelse($availableFurniture as $item)
+                                <div class="furniture-item flex-shrink-0 bg-gray-50 rounded-lg border border-gray-200 p-3 snap-start"
+                                    data-user-furniture-id="{{ $item['user_furniture_id'] }}">
+                                    <img src="{{ asset($item['image']) }}"
+                                        class="w-full h-16 object-contain mx-auto mb-2">
+                                    <p class="text-center text-sm font-medium text-gray-800 truncate">{{ $item['name'] }}</p>
+                                    <button class="w-full mt-2 py-1 text-sm add-item border border-accent hover:bg-primary-700 text-primary-dark hover:border-2 transition-colors"
+                                        data-furniture-id="{{ $item['furniture_id'] }}"
+                                        data-user-furniture-id="{{ $item['user_furniture_id'] }}"
+                                        data-image="{{ asset($item['image']) }}"
+                                        data-name="{{ $item['name'] }}">
+                                        Añadir
+                                    </button>
+                                </div>
+                                @empty
+                                <div class="col-span-full bg-gray-50 rounded-lg border border-gray-200 p-4 text-center w-full">
+                                    <p class="text-gray-500">No furniture available</p>
+                                </div>
+                                @endforelse
+                            </div>
+                        </div>
+
+                        <!-- Next button (right side) -->
+                        <button class="carousel-nav carousel-next bg-white rounded-full p-2 shadow-md z-10 hidden md:flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
+                            style="flex: 0 0 auto;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
                         </button>
                     </div>
+
+
                 </div>
-                @endforeach
             </div>
         </div>
-
-        <!-- Available Furniture -->
-        <div class="lg:col-span-1">
-            <h3 class="font-body font-medium text-gray-700 mb-3">Muebles Disponibles</h3>
-            <div class="available-furniture grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3">
-                @forelse($availableFurniture as $item)
-                <div class="furniture-item bg-gray-50 rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow"
-                    data-user-furniture-id="{{ $item['user_furniture_id'] }}">
-                    <img src="{{ asset($item['image']) }}"
-                        class="w-full h-16 object-contain mx-auto mb-2">
-                    <p class="text-center text-sm font-medium text-gray-800 truncate">{{ $item['name'] }}</p>
-                    <button class="w-full mt-2 py-1 text-sm add-item"
-                        data-furniture-id="{{ $item['furniture_id'] }}"
-                        data-user-furniture-id="{{ $item['user_furniture_id'] }}"
-                        data-image="{{ asset($item['image']) }}"
-                        data-name="{{ $item['name'] }}">
-                        Añadir
-                    </button>
-                </div>
-                @empty
-                <div class="col-span-full bg-gray-50 rounded-lg border border-gray-200 p-4 text-center">
-                    <p class="text-gray-500">No hay muebles disponibles</p>
-                </div>
-                @endforelse
+        <div class="flex justify-between items-center mt-6">
+            <div class="flex gap-3">
+                <!-- <a href="{{ route('dashboard', $room) }}">
+                Cancelar
+            </a> -->
+                <x-primary-button id="save-changes">
+                    Guardar Cambios
+                </x-primary-button>
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection
 
@@ -215,8 +244,8 @@
                         <button class="remove-item absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
                             ×
                         </button>
-                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 text-gray-700 rounded px-2 py-1 text-xs hover:bg-gray-50 transition-colors">
-                            ↻ Rotar
+                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-secondary-color/70 text-primary-dark rounded px-2 py-1 text-xs hover:bg-secondary-color transition-colors">
+                                ↻
                         </button>
                     </div>
                 `;
@@ -347,8 +376,8 @@
                                         <button class="remove-item absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
                                             ×
                                         </button>
-                                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 text-gray-700 rounded px-2 py-1 text-xs hover:bg-gray-50 transition-colors">
-                                            ↻ Rotar
+                                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-secondary-color/70 text-primary-dark rounded px-2 py-1 text-xs hover:bg-secondary-color transition-colors">
+                                         ↻
                                         </button>
                                     </div>
                                 `;
@@ -444,4 +473,67 @@
         });
     });
 </script>
+@endpush
+
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.querySelector('.available-furniture');
+        const prevBtn = document.querySelector('.carousel-prev');
+        const nextBtn = document.querySelector('.carousel-next');
+
+        // Update button visibility based on scroll position
+        function updateNavButtons() {
+            const isAtStart = carousel.scrollLeft <= 10;
+            const isAtEnd = carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth - 10);
+
+            prevBtn.classList.toggle('hidden', isAtStart);
+            nextBtn.classList.toggle('hidden', isAtEnd);
+        }
+
+        // Navigation button event listeners
+        prevBtn.addEventListener('click', () => {
+            carousel.scrollBy({
+                left: -200,
+                behavior: 'smooth'
+            });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            carousel.scrollBy({
+                left: 200,
+                behavior: 'smooth'
+            });
+        });
+
+        // Initialize and update on scroll
+        updateNavButtons();
+        carousel.addEventListener('scroll', updateNavButtons);
+
+        // Handle window resize
+        window.addEventListener('resize', updateNavButtons);
+    });
+</script>
+@endpush
+
+@push('styles')
+<style>
+    /* Hide scrollbar but keep functionality */
+    .available-furniture::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Carousel item styling */
+    .furniture-item {
+        scroll-snap-align: start;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .furniture-item {
+            width: 140px;
+        }
+    }
+</style>
 @endpush
