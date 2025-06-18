@@ -54,19 +54,20 @@
         <!-- Available Furniture -->
         <div class="lg:col-span-1">
             <h3 class="font-body font-medium text-gray-700 mb-3">Muebles Disponibles</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3">
+            <div class="available-furniture grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3">
                 @forelse($availableFurniture as $item)
-                <div class="bg-gray-50 rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow">
+                <div class="furniture-item bg-gray-50 rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow"
+                    data-user-furniture-id="{{ $item['user_furniture_id'] }}">
                     <img src="{{ asset($item['image']) }}"
                         class="w-full h-16 object-contain mx-auto mb-2">
                     <p class="text-center text-sm font-medium text-gray-800 truncate">{{ $item['name'] }}</p>
-                    <x-primary-button class="w-full mt-2 py-1 text-sm add-item"
+                    <button class="w-full mt-2 py-1 text-sm add-item"
                         data-furniture-id="{{ $item['furniture_id'] }}"
                         data-user-furniture-id="{{ $item['user_furniture_id'] }}"
                         data-image="{{ asset($item['image']) }}"
                         data-name="{{ $item['name'] }}">
                         Añadir
-                    </x-primary-button>
+                    </button>
                 </div>
                 @empty
                 <div class="col-span-full bg-gray-50 rounded-lg border border-gray-200 p-4 text-center">
@@ -84,6 +85,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const saveButton = document.getElementById('save-changes');
         const roomEditor = document.getElementById('room-editor');
+        const availableFurnitureContainer = document.querySelector('.available-furniture');
 
         // State management arrays
         let items = @json($furnitureItems);
@@ -105,9 +107,9 @@
 
             saveButton.disabled = true;
             saveButton.innerHTML = `
-            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-            Guardando...
-        `;
+                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                Guardando...
+            `;
 
             // Prepare the data payload for the server
             const data = {
@@ -148,7 +150,10 @@
                     if (result.success) {
                         window.location.href = result.redirect;
                     } else {
-                        showError(result.message || 'Error al guardar los cambios. Por favor, inténtelo de nuevo.');
+                        alert('Error al guardar cambios: ' + (result.message || 'Por favor verifique los datos.'));
+                        console.error('Server errors:', result.errors);
+                        saveButton.disabled = false;
+                        saveButton.textContent = 'Guardar Cambios';
                     }
                 })
                 .catch(error => {
@@ -157,29 +162,29 @@
                 });
 
             function showError(message) {
-                // Create a Bootstrap alert
                 const alertDiv = document.createElement('div');
                 alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3';
                 alertDiv.style.zIndex = '1100';
                 alertDiv.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            `;
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
                 document.body.appendChild(alertDiv);
 
-                // Remove alert after 5 seconds
                 setTimeout(() => {
                     alertDiv.classList.remove('show');
                     setTimeout(() => alertDiv.remove(), 150);
                 }, 5000);
 
-                // Reset save button
                 saveButton.disabled = false;
                 saveButton.innerHTML = `Guardar Cambios`;
             }
         });
 
-        // "Add to Room" buttons for available furniture
+        // Initialize all existing furniture items
+        document.querySelectorAll('#room-editor .furniture-item').forEach(initFurnitureItem);
+
+        // Initialize add buttons
         document.querySelectorAll('.add-item').forEach(button => {
             button.addEventListener('click', function() {
                 const furnitureId = this.dataset.furnitureId;
@@ -201,16 +206,16 @@
                 newItemEl.style.width = '100px';
                 newItemEl.style.zIndex = '1';
                 newItemEl.innerHTML = `
-                <div class="relative">
-                    <img src="${imageSrc}" alt="${itemName}" class="w-full h-auto object-contain shadow-sm rounded" style="border: 2px solid white;">
-                    <button class="remove-item absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
-                        ×
-                    </button>
-                    <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 text-gray-700 rounded px-2 py-1 text-xs hover:bg-gray-50 transition-colors">
-                        ↻ Rotar
-                    </button>
-                </div>
-            `;
+                    <div class="relative">
+                        <img src="${imageSrc}" alt="${itemName}" class="w-full h-auto object-contain shadow-sm rounded" style="border: 2px solid white;">
+                        <button class="remove-item absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
+                            ×
+                        </button>
+                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 text-gray-700 rounded px-2 py-1 text-xs hover:bg-gray-50 transition-colors">
+                            ↻ Rotar
+                        </button>
+                    </div>
+                `;
                 roomEditor.appendChild(newItemEl);
 
                 // Add the new item's data to our state array
@@ -229,15 +234,13 @@
                 // Make the new item interactive
                 initFurnitureItem(newItemEl);
 
-                // Update the button state
-                this.disabled = true;
-                this.textContent = 'Añadido';
-                this.classList.remove('bg-primary-600', 'hover:bg-primary-700');
-                this.classList.add('bg-gray-400', 'cursor-not-allowed');
+                // Hide the item in available furniture
+                const availableItem = document.querySelector(`.furniture-item[data-user-furniture-id="${userFurnitureId}"]`);
+                if (availableItem) {
+                    availableItem.style.display = 'none';
+                }
             });
         });
-
-        // --- CORE FUNCTIONALITY ---
 
         // Initialize furniture item with drag, rotate, and remove functionality
         function initFurnitureItem(item) {
@@ -245,7 +248,6 @@
 
             // Drag start handler
             item.addEventListener('mousedown', function(e) {
-                // Ignore if clicking on buttons
                 if (e.target.classList.contains('remove-item') ||
                     e.target.classList.contains('rotate-btn') ||
                     e.target.tagName === 'svg' ||
@@ -289,19 +291,87 @@
 
                 if (itemIndex !== -1) {
                     const itemData = items[itemIndex];
-
+                    
                     if (!itemData.is_new) {
                         // For existing items, mark for removal
                         removedItems.push(itemData.id);
+                        
+                        // Show it again in available furniture
+                        const existingAvailableItem = document.querySelector(`.furniture-item[data-user-furniture-id="${itemData.user_furniture_id}"]`);
+                        if (existingAvailableItem) {
+                            existingAvailableItem.style.display = 'block';
+                        } else {
+                            // Create new available item if not found
+                            const newAvailableItem = document.createElement('div');
+                            newAvailableItem.className = 'furniture-item bg-gray-50 rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow';
+                            newAvailableItem.dataset.userFurnitureId = itemData.user_furniture_id;
+                            newAvailableItem.innerHTML = `
+                                <img src="${itemData.image}" class="w-full h-16 object-contain mx-auto mb-2">
+                                <p class="text-center text-sm font-medium text-gray-800 truncate">${itemData.name}</p>
+                                <button class="w-full mt-2 py-1 text-sm add-item"
+                                    data-furniture-id="${itemData.furniture_id}"
+                                    data-user-furniture-id="${itemData.user_furniture_id}"
+                                    data-image="${itemData.image}"
+                                    data-name="${itemData.name}">
+                                    Añadir
+                                </button>
+                            `;
+                            availableFurnitureContainer.appendChild(newAvailableItem);
+                            
+                            // Add event listener to the new button
+                            newAvailableItem.querySelector('.add-item').addEventListener('click', function() {
+                                const furnitureId = this.dataset.furnitureId;
+                                const userFurnitureId = this.dataset.userFurnitureId;
+                                const imageSrc = this.dataset.image;
+                                const itemName = this.dataset.name;
+
+                                const roomRect = roomEditor.getBoundingClientRect();
+                                const centerX = snapToGrid(roomRect.width / 2 - 50);
+                                const centerY = snapToGrid(roomRect.height / 2 - 50);
+
+                                const newItemEl = document.createElement('div');
+                                newItemEl.className = 'furniture-item absolute cursor-move transition-transform duration-100';
+                                newItemEl.dataset.itemId = 'new-' + Date.now();
+                                newItemEl.style.left = centerX + 'px';
+                                newItemEl.style.top = centerY + 'px';
+                                newItemEl.style.transform = 'rotate(0deg)';
+                                newItemEl.style.width = '100px';
+                                newItemEl.style.zIndex = '1';
+                                newItemEl.innerHTML = `
+                                    <div class="relative">
+                                        <img src="${imageSrc}" alt="${itemName}" class="w-full h-auto object-contain shadow-sm rounded" style="border: 2px solid white;">
+                                        <button class="remove-item absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
+                                            ×
+                                        </button>
+                                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 text-gray-700 rounded px-2 py-1 text-xs hover:bg-gray-50 transition-colors">
+                                            ↻ Rotar
+                                        </button>
+                                    </div>
+                                `;
+                                roomEditor.appendChild(newItemEl);
+
+                                items.push({
+                                    id: newItemEl.dataset.itemId,
+                                    furniture_id: furnitureId,
+                                    user_furniture_id: userFurnitureId,
+                                    x: centerX,
+                                    y: centerY,
+                                    rotation: 0,
+                                    is_new: true,
+                                    name: itemName,
+                                    image: imageSrc
+                                });
+
+                                initFurnitureItem(newItemEl);
+                                this.closest('.furniture-item').style.display = 'none';
+                            });
+                        }
                     } else {
-                        // For new items, re-enable the add button
-                        const addButtons = document.querySelectorAll(`.add-item[data-user-furniture-id='${itemData.user_furniture_id}']`);
-                        addButtons.forEach(button => {
-                            button.disabled = false;
-                            button.textContent = 'Añadir';
-                            button.classList.remove('bg-gray-400', 'cursor-not-allowed');
-                            button.classList.add('bg-primary-600', 'hover:bg-primary-700');
-                        });
+                        // For new items, just show the available furniture again
+                        const availableItem = document.querySelector(`.furniture-item[data-user-furniture-id="${itemData.user_furniture_id}"]`);
+                        if (availableItem) {
+                            availableItem.style.display = 'block';
+                        }
                     }
 
                     // Remove from items array
@@ -354,9 +424,6 @@
             document.removeEventListener('mousemove', moveItem);
             document.removeEventListener('mouseup', stopDrag);
         }
-
-        // Initialize all existing furniture items
-        document.querySelectorAll('#room-editor .furniture-item').forEach(initFurnitureItem);
 
         // Prevent save while dragging
         document.addEventListener('mousemove', function() {
