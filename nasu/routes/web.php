@@ -82,7 +82,10 @@ Route::middleware('auth')->group(function () {
 });
 
 // routes/web.php
-Route::get('/room/{room}/edit', [RoomController::class, 'edit'])->name('room.edit');
+// In your routes file
+Route::middleware(['auth'])->group(function () {
+    Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('room.edit');
+});
 Route::put('/room/{room}/items', [RoomController::class, 'updateItems'])->name('room.update-items');
 
 

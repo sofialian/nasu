@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RoomItem extends Model
 {
+
+    // In app/Models/RoomItem.php
+    protected $casts = [
+        'furniture_id' => 'integer',
+        'user_furniture_id' => 'integer',
+        'x_position' => 'integer',
+        'y_position' => 'integer',
+        'rotation' => 'integer'
+    ];
     protected $fillable = [
         'room_id',
         'user_furniture_id',
