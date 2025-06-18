@@ -1,16 +1,17 @@
 @extends('layouts.app')
-
+@section('header', 'Editar habitación')
 @section('content')
-<div class="bg-white p-6 rounded-lg shadow max-w-7xl mx-auto">
+<div class="page mt-8 p-6 rounded-lg shadow max-w-7xl mx-auto">
     <!-- Header with Actions -->
+    <div class="flex justify-center items-start mb-6">
+        <x-back-button class="" />
+        <h1 class="flex-1 font-title">@yield('header')</h1>
+    </div>
     <div class="flex justify-between items-center mb-6">
-        <h1 class="uppercase font-title text-xl text-primary-dark">
-            Editar Habitación
-        </h1>
         <div class="flex gap-3">
-            <a href="{{ route('dashboard', $room) }}">
+            <!-- <a href="{{ route('dashboard', $room) }}">
                 Cancelar
-            </a>
+            </a> -->
             <x-primary-button id="save-changes">
                 Guardar Cambios
             </x-primary-button>
@@ -22,8 +23,10 @@
         <div class="lg:col-span-2">
             <div class="room-editor bg-gray-50 rounded-lg border border-gray-200 relative overflow-hidden"
                 id="room-editor"
-                style="height: 400px;
-                        width:400px;
+                style="height: 60vh;
+           width: 100%;      
+           max-width: 60vh; 
+           aspect-ratio: 1;  
                         background-image: linear-gradient(#e5e7eb 1px, transparent 1px),
                                         linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
                         background-size: 20px 20px;">
@@ -40,11 +43,11 @@
                             alt="{{ $item['name'] }}"
                             class="w-full h-auto object-contain shadow-sm rounded"
                             style="border: 2px solid white;">
-                        <button class="remove-item absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
+                        <button class="remove-item absolute -top-2 -right-2 bg-accent text-primary-light rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
                             ×
                         </button>
-                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 text-gray-700 rounded px-2 py-1 text-xs hover:bg-gray-50 transition-colors">
-                            ↻ Rotar
+                        <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-secondary-color/70 text-primary-dark rounded px-2 py-1 text-xs hover:bg-secondary-color transition-colors">
+                            ↻
                         </button>
                     </div>
                 </div>
