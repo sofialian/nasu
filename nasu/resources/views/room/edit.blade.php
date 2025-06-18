@@ -22,7 +22,8 @@
         <div class="lg:col-span-2">
             <div class="room-editor bg-gray-50 rounded-lg border border-gray-200 relative overflow-hidden"
                 id="room-editor"
-                style="height: 500px;
+                style="height: 400px;
+                        width:400px;
                         background-image: linear-gradient(#e5e7eb 1px, transparent 1px),
                                         linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
                         background-size: 20px 20px;">
@@ -291,11 +292,11 @@
 
                 if (itemIndex !== -1) {
                     const itemData = items[itemIndex];
-                    
+
                     if (!itemData.is_new) {
                         // For existing items, mark for removal
                         removedItems.push(itemData.id);
-                        
+
                         // Show it again in available furniture
                         const existingAvailableItem = document.querySelector(`.furniture-item[data-user-furniture-id="${itemData.user_furniture_id}"]`);
                         if (existingAvailableItem) {
@@ -317,7 +318,7 @@
                                 </button>
                             `;
                             availableFurnitureContainer.appendChild(newAvailableItem);
-                            
+
                             // Add event listener to the new button
                             newAvailableItem.querySelector('.add-item').addEventListener('click', function() {
                                 const furnitureId = this.dataset.furnitureId;
@@ -390,6 +391,9 @@
             const roomRect = roomEditor.getBoundingClientRect();
             let x = e.clientX - roomRect.left - offsetX;
             let y = e.clientY - roomRect.top - offsetY;
+
+            const maxX = roomRect.width - draggedItem.offsetWidth;
+            const maxY = roomRect.height - draggedItem.offsetHeight;
 
             // Snap to grid and constrain to room bounds
             x = snapToGrid(Math.max(0, Math.min(x, roomRect.width - draggedItem.offsetWidth)));
