@@ -81,54 +81,54 @@ class RoomController extends Controller
         return redirect()->back()->with('success', 'Item removed successfully');
     }
 
-public function edit(Room $room)
-{
-    // Check if user is authenticated
-    if (!auth()->check()) {
-        return redirect()->route('login');
-    }
+    public function edit(Room $room)
+    {
+        // Check if user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
 
-    // Ensure the room belongs to the current user
-    if ($room->user_id !== auth()->id()) {
-        abort(403);
-    }
+        // Ensure the room belongs to the current user
+        if ($room->user_id !== auth()->id()) {
+            abort(403);
+        }
 
-    // Get furniture already in the room
-    $roomItems = $room->items()->with(['furniture', 'userFurniture'])->get()->map(function($item) {
-        return [
-            'id' => $item->id,
-            'x' => $item->x_position,
-            'y' => $item->y_position,
-            'rotation' => $item->rotation,
-            'name' => $item->furniture->name,
-            'image' => $item->furniture->image_path,
-            'furniture_id' => $item->furniture_id,
-            'user_furniture_id' => $item->user_furniture_id,
-        ];
-    });
-
-    // Get user's furniture NOT in this room
-    $availableFurniture = auth()->user()->ownedFurniture()
-        ->with('furniture')
-        ->whereDoesntHave('roomItems', function($query) use ($room) {
-            $query->where('room_id', $room->id);
-        })
-        ->get()
-        ->map(function($userFurniture) {
+        // Get furniture already in the room
+        $roomItems = $room->items()->with(['furniture', 'userFurniture'])->get()->map(function ($item) {
             return [
-                'furniture_id' => $userFurniture->furniture_id,
-                'user_furniture_id' => $userFurniture->id,
-                'name' => $userFurniture->furniture->name,
-                'image' => $userFurniture->furniture->image_path,
+                'id' => $item->id,
+                'x' => $item->x_position,
+                'y' => $item->y_position,
+                'rotation' => $item->rotation,
+                'name' => $item->furniture->name,
+                'image' => $item->furniture->image_path,
+                'furniture_id' => $item->furniture_id,
+                'user_furniture_id' => $item->user_furniture_id,
             ];
         });
 
-    return view('room.edit', [
-        'room' => $room,
-        'furnitureItems' => $roomItems,
-        'availableFurniture' => $availableFurniture,
-    ]);
-}
+        // Get user's furniture NOT in this room
+        $availableFurniture = auth()->user()->ownedFurniture()
+            ->with('furniture')
+            ->whereDoesntHave('roomItems', function ($query) use ($room) {
+                $query->where('room_id', $room->id);
+            })
+            ->get()
+            ->map(function ($userFurniture) {
+                return [
+                    'furniture_id' => $userFurniture->furniture_id,
+                    'user_furniture_id' => $userFurniture->id,
+                    'name' => $userFurniture->furniture->name,
+                    'image' => $userFurniture->furniture->image_path,
+                ];
+            });
+
+        return view('room.edit', [
+            'room' => $room,
+            'furnitureItems' => $roomItems,
+            'availableFurniture' => $availableFurniture,
+        ]);
+    }
 
     public function updateItems(Request $request, Room $room)
     {

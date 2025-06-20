@@ -25,17 +25,23 @@
                 @auth
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Home') }}
+                        {{ __('Inicio') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link href="#" :active="request()->routeIs('')">
+                    <x-nav-link href="{{ route('room.show', Auth::user()->id) }}" :active="request()->routeIs('room.show')">
                         {{ __('Habitación') }}
                     </x-nav-link>
+
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link href="#" :active="request()->routeIs('')">
+                    <x-nav-link href="{{route('contact')}}" :active="request()->routeIs('contact')">
                         {{ __('Contacto') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="{{route('info')}}" :active="request()->routeIs('info')">
+                        {{ __('Información') }}
                     </x-nav-link>
                 </div>
                 @endauth
@@ -65,7 +71,7 @@
                     </button>
                     <div x-show="dropdownOpen" x-transition class="absolute right-0 mt-2 w-48 bg-primary-light border border-primary-dark shadow-lg z-50">
                         <x-dropdown-link href="{{ route('profile.edit') }}">
-                            {{ __('Profile') }}
+                            {{ __('Perfil') }}
                         </x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -92,14 +98,14 @@
             </button>
         </div>
 
-        <!-- Menu Content -->
+        <!-- Mobile menu Content -->
         <div class="pt-16 px-6 font-title">
             @auth
             <!-- Dashboard Link -->
             <div class="pb-3 space-y-1">
                 <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" class="block px-3 py-2 text-base font-medium">
                     <div class="flex items-center">
-                        <span>{{ __('Home') }}</span>
+                        <span>{{ __('Inicio') }}</span>
                     </div>
                 </x-responsive-nav-link>
             </div>
@@ -127,19 +133,28 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link href="#" :active="request()->routeIs('room.show')" class="block px-3 py-2 text-base font-medium">
+                    <x-responsive-nav-link href="{{ route('room.show', Auth::user()->id) }}" :active="request()->routeIs('room.show')">
                         <div class="flex items-center">
-                            <span>{{ __('Room') }}</span>
+                            <span>{{ __('Habitación') }}</span>
+                        </div>
+                    </x-responsive-nav-link>
+
+                </div>
+
+                <div class="pb-3 space-y-1">
+                    <x-responsive-nav-link href="{{ route('contact') }}" :active="request()->routeIs('contact')" class="block px-3 py-2 text-base font-medium">
+                        <div class="flex items-center">
+                            <span>{{ __('Contacto') }}</span>
                         </div>
                     </x-responsive-nav-link>
                 </div>
 
-                <div class="mt-3 space-y-1">
-                    Sobre nasu
-                </div>
-
-                <div class="mt-3 space-y-1">
-                    Contacto
+                <div class="pb-3 space-y-1">
+                    <x-responsive-nav-link href="{{ route('info') }}" :active="request()->routeIs('info')" class="block px-3 py-2 text-base font-medium">
+                        <div class="flex items-center">
+                            <span>{{ __('Información') }}</span>
+                        </div>
+                    </x-responsive-nav-link>
                 </div>
             </div>
             @else

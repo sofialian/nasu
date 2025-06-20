@@ -12,6 +12,14 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('/info', function () {
+    return view('info');
+})->name('info');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 });
@@ -69,7 +77,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/room/{room}', [RoomController::class, 'show'])->name('room.show');
     Route::post('/room/{room}/items', [RoomController::class, 'placeItem'])->name('room.items.store');
     Route::delete('/items/{item}', [RoomController::class, 'removeItem'])->name('room.items.destroy');
 });
@@ -82,7 +89,6 @@ Route::middleware('auth')->group(function () {
 });
 
 // routes/web.php
-// In your routes file
 Route::middleware(['auth'])->group(function () {
     Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('room.edit');
 });

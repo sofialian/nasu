@@ -6,6 +6,11 @@
         <h1>{{ $room->name }}</h1>
         <a href="{{ route('room.edit', $room) }}" class="btn btn-primary">Edit Room</a>
     </div>
+    <p>ID de la Habitación: {{ $room->id }}</p>
+    <p>ID del Propietario de la Habitación: {{ $room->user_id }}</p>
+    <p>ID del Usuario Logueado: {{ auth()->id() }}</p>
+
+    <a href="{{ route('room.edit', $room) }}" class="btn btn-primary">Edit Room</a>
     <div class="row">
         <!-- Room Display -->
         <div class="col-md-8">

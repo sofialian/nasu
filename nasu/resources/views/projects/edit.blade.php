@@ -3,7 +3,7 @@
 @section('header', 'Editar Proyecto')
 
 @section('content')
-<div class="flex-grow flex items-center justify-center mt-8 flex flex-col container">
+<div class="flex-grow flex items-center justify-center mt-8 flex-col container">
     <div class="w-full max-w-4xl pt-0 text-primary-dark text-base page">
         <div class="uppercase font-title text-xl text-center mb-6">Editar Proyecto</div>
         <form action="{{ route('projects.update', $project) }}" method="POST" class="p-2 md:px-20">
