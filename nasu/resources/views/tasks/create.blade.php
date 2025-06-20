@@ -83,7 +83,8 @@
                                 disabled></x-textarea>
                             <div class="mb-4">
                                 <label for="color_project" class="font-body font-medium">Color</label>
-                                <select id="color_project" name="color_project" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm" disabled>
+                                <select id="color_project" name="color_project" class="block mt-1 w-full
+                                 border-gray-300 rounded-md shadow-sm" onchange="logSelectedColor(this)" disabled>
                                     @foreach($colors as $value => $label)
                                     <option value="{{ $value }}" class="text-{{ $value }}-500">
                                         {{ $label }}
@@ -113,6 +114,18 @@
 </div>
 
 @push('scripts')
+<script>
+function logSelectedColor(selectElement) {
+    const selectedValue = selectElement.value;
+    const selectedText = selectElement.options[selectElement.selectedIndex].text;
+    const selectedClass = selectElement.options[selectElement.selectedIndex].className;
+
+    console.log("Color Seleccionado - Valor:", selectedValue);
+    console.log("Color Seleccionado - Texto:", selectedText);
+    console.log("Color Seleccionado - Clase CSS:", selectedClass);
+    console.log("---"); // Separador para múltiples logs
+}
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const noProjectRadio = document.getElementById('no_project');
