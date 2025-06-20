@@ -46,6 +46,23 @@
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
+            <!-- confirm email -->
+            <div class="relative mt-8">
+                <x-text-input
+                    id="email_confirmation" {{-- Importante: el ID y el name deben ser 'email_confirmation' --}}
+                    class="block w-full"
+                    type="email"
+                    name="email_confirmation" {{-- Importante: el ID y el name deben ser 'email_confirmation' --}}
+                    required
+                    autocomplete="email"
+                    placeholder=" " />
+                <x-input-label
+                    for="email_confirmation"
+                    :value="__('Confirm Email')" {{-- Texto para la etiqueta --}}
+                    class="{{ $labelClasses }}" />
+                <x-input-error :messages="$errors->get('email_confirmation')" class="mt-2" />
+            </div>
+
             <!-- Password -->
             <div class="relative mt-8">
                 <x-text-input

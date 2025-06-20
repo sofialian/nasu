@@ -3,7 +3,7 @@
 @section('header', 'Crear Nueva Tarea')
 
 @section('content')
-<div class="flex-grow flex items-center justify-center mt-8 flex flex-col container">
+<div class="flex-grow items-center justify-center mt-8 flex flex-col container">
     <div class="w-full max-w-4xl pt-0 text-primary-dark text-base page">
         <div class="uppercase font-title text-xl text-center mb-6">Crear Tarea</div>
         <form action="{{ route('tasks.store') }}" method="POST">
@@ -104,7 +104,7 @@
                     {{ __('Cancelar') }}
                 </x-secondary-button>
                 <x-primary-button type="submit" class="w-1/2 md:w-auto">
-                    {{ __('Crear tarea') }}
+                    {{ __('Crear') }}
                 </x-primary-button>
             </div>
     </div>
