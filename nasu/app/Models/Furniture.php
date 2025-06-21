@@ -14,6 +14,7 @@ class Furniture extends Model
         'image_path',
         'width',
         'height',
+        'category',
         'is_purchasable',
         'is_default'
     ];
