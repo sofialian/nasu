@@ -29,7 +29,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link href="{{ route('room.show', Auth::user()->id) }}" :active="request()->routeIs('room.show')">
+                    <x-nav-link href="{{ route('room.show', Auth::user()->roomId()) }}" :active="request()->routeIs('room.show')">
                         {{ __('Habitación') }}
                     </x-nav-link>
 
@@ -132,8 +132,9 @@
                     </form>
                 </div>
 
+
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link href="{{ route('room.show', Auth::user()->id) }}" :active="request()->routeIs('room.show')">
+                    <x-responsive-nav-link href="{{ route('room.show', Auth::user()->roomId()) }}" :active="request()->routeIs('room.show')">
                         <div class="flex items-center">
                             <span>{{ __('Habitación') }}</span>
                         </div>

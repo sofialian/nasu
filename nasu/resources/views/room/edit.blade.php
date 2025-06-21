@@ -8,9 +8,6 @@
         <h1 class="flex-1 font-title">@yield('header')</h1>
     </div>
     <div class="flex flex-col justify-center items-center">
-        <p>ID de la Habitación: {{ $room->id }}</p>
-        <p>ID del Propietario de la Habitación: {{ $room->user_id }}</p>
-        <p>ID del Usuario Logueado: {{ auth()->id() }}</p>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 w-2/3">
             <!-- Room Editor -->
             <div class="lg:col-span-2">

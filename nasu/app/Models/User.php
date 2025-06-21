@@ -75,6 +75,11 @@ class User extends Authenticatable
         return $this->hasOne(Room::class); // 1:1
     }
 
+    public function roomId()
+    {
+        return $this->room?->id;
+    }
+
     // public function furniture()
     // {
     //     return $this->belongsToMany(Furniture::class, 'user_furniture')
