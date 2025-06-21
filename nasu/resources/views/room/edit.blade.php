@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('header', 'Editar habitación')
 @section('content')
-<div class="page mt-8 p-6 rounded-lg shadow max-w-7xl mx-auto">
+<div class="page mt-8 lg:p-6 rounded-lg shadow lg:max-w-7xl lg:mx-auto">
     <!-- Header with Actions -->
     <div class="flex justify-center items-start mb-6">
         <x-back-button class="" />
@@ -128,7 +128,6 @@
         let draggedItem = null;
         let offsetX, offsetY;
         let isDragging = false;
-
 
         // --- UTILITY FUNCTIONS ---
         const snapToGrid = (value) => Math.round(value / 20) * 20;

@@ -120,8 +120,33 @@ class TaskController extends Controller
             abort(403);
         }
 
-        $task->update(['completed' => !$task->completed]);
+        $user = auth()->user();
 
-        return back()->with('success', 'Estado de la tarea actualizado');
+        if (!$task->completed) {
+            // Marca la tarea como completada y guarda la fecha
+            $task->update([
+                'completed' => true,
+                'date_completed' => now(),
+            ]);
+
+            $reward = 10;
+            $balance = $user->balance;
+
+            if ($balance) {
+                $balance->increment('beans', $reward);
+            } else {
+                $user->balance()->create(['beans' => $reward]);
+            }
+
+            return back()->with('success', "¡Tarea completada! Has ganado $reward beans.");
+        } else {
+            // Desmarca la tarea y elimina la fecha
+            $task->update([
+                'completed' => false,
+                'date_completed' => null,
+            ]);
+
+            return back()->with('success', 'Tarea desmarcada como completada.');
+        }
     }
 }

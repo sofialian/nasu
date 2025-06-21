@@ -12,7 +12,9 @@
                         height: 60vh; 
                         width: 60vh;
                         border: 1px solid #ccc;
-                        background-color: #f5f5f5;">
+                        background-color: #f5f5f5;
+                        margin: 0 auto;
+                        overflow: visible;">
                     @foreach($furnitureItems as $item)
                     <div class="furniture-item"
                         style="position: absolute;
