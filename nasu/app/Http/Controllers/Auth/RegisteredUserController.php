@@ -69,8 +69,7 @@ class RegisteredUserController extends Controller
             // 4. Create the user's starter room
             $room = Room::create([
                 'user_id' => $user->id,
-                'name' => 'Mi Primera Habitación',
-                'theme' => 'default',
+                'theme' => 'summer vibes',
                 'layout' => ['items' => []]
             ]);
 
@@ -89,6 +88,7 @@ class RegisteredUserController extends Controller
                 ]);
 
                 // Add to room with default positions
+
                 $roomItem = RoomItem::create([
                     'room_id' => $room->id,
                     'user_furniture_id' => $userFurniture->id,

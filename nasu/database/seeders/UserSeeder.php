@@ -47,7 +47,8 @@ class UserSeeder extends Seeder
                             'y' => 0
                         ];
                     })->toArray()
-                ]
+                ],
+                'theme' => 'retro',
             ]);
 
             // 6. Verify creation
@@ -56,9 +57,29 @@ class UserSeeder extends Seeder
             }
 
             // 7. Add to inventory
-            $user->furniture()->attach($defaultFurniture->pluck('id'), [
-                'is_placed' => true
-            ]);
+            $user->furniture()->attach(
+                $defaultFurniture->pluck('id')->mapWithKeys(function ($id) {
+                    return [$id => ['purchased_at' => now()]];
+                })->toArray()
+            );
+
+            // 8. Add some furniture as placed items in the room
+            foreach ($defaultFurniture as $index => $furniture) {
+                // Obtener el registro pivot user_furniture para este mueble y usuario
+                $userFurniture = $user->ownedFurniture()->where('furniture_id', $furniture->id)->first();
+
+                if ($userFurniture) {
+                    $room->items()->create([
+                        'user_furniture_id' => $userFurniture->id,
+                        'room_id' => $room->id,
+                        'user_furniture_id' => $userFurniture->id,
+                        'x_position' => $furniture->default_x ?? 100,
+                        'y_position' => $furniture->default_y ?? 100,
+                        'rotation' => 0
+                    ]);
+                }
+            }
+
 
             // 8. Output success
             $this->command->info("Test user created with ID: {$user->id}");

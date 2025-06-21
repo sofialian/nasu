@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('room_id')->constrained();
             $table->foreignId('user_furniture_id')->constrained('user_furniture');
-            $table->decimal('x_position', 5, 2)->change(); // 0.00 a 100.00
-            $table->decimal('y_position', 5, 2)->change();
+            $table->decimal('x_position', 5, 2); 
+            $table->decimal('y_position', 5, 2);
             $table->integer('rotation')->default(0);
             $table->timestamps();
         });

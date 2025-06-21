@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('furniture', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); 
-            $table->text('description'); 
-            $table->integer('price'); 
+            $table->string('name');
+            $table->text('description');
+            $table->integer('price');
             $table->string('image_path');
             $table->integer('width')->default(50);
             $table->integer('height')->default(50);
+            $table->string('category')->default('decor');
             $table->boolean('is_purchasable')->default(true);
             $table->boolean('is_default')->default(false);
             $table->timestamps();

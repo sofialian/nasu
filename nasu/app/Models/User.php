@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\UserFurniture;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -48,6 +49,7 @@ class User extends Authenticatable
         ];
     }
 
+
     public function tasks()
     {
         return $this->hasMany(Task::class);
@@ -80,12 +82,12 @@ class User extends Authenticatable
         return $this->room?->id;
     }
 
-    // public function furniture()
-    // {
-    //     return $this->belongsToMany(Furniture::class, 'user_furniture')
-    //         ->withPivot('is_placed')
-    //         ->withTimestamps();
-    // }
+    public function furniture()
+    {
+        return $this->belongsToMany(Furniture::class, 'user_furniture')
+            ->withTimestamps();
+    }
+
 
     public function ownedFurniture()
     {

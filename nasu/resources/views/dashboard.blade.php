@@ -5,6 +5,9 @@
     <!-- Header Section -->
     <div class="flex justify-between items-center">
         <div>coins {{ Auth::user()->balance->beans ?? 0 }}</div>
+        <!-- <p>ID de la Habitación: {{ $room->id }}</p>
+        <p>ID del Propietario de la Habitación: {{ $room->user_id }}</p>
+        <p>ID del Usuario Logueado: {{ auth()->id() }}</p> -->
         <div class="flex space-x-3">
             <a href="{{ route('tasks.create') }}" class="bg-indigo-600 text-primary-light px-3 py-2 hover:bg-indigo-700 transition-colors flex items-center">
                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,7 +51,7 @@
                     </span>
                     @endisset
 
-                    <a href="#"
+                    <a href="{{route('shop.index')}}"
                         class="flex items-center justify-center w-10 h-10 bg-primary-light text-primary-dark hover:text-secondary-color border border-primary-dark hover:border-secondary-color transition-colors"
                         title="Shop">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -63,6 +66,7 @@
         <!-- Room Column -->
         <div class="lg:col-span-1 overflow-hidden w-full">
             <div class="flex justify-between items-center">
+
                 <!-- <h2 class="text-lg font-semibold font-body text-primary-dark">Mi Habitación</h2> -->
                 <!-- <div class="flex space-x-2">
                     @isset($room)
