@@ -15,7 +15,7 @@
 
 <div class="container mx-auto px-4 md:px-40 py-6">
     <div class="flex justify-center items-start mb-6">
-        <x-back-button class="" />
+        <x-back-button onclick="window.location.href='{{ route('dashboard', Auth::user()->id) }}'" />
         <h1 class="flex-1 font-title">@yield('header')</h1>
     </div>
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">

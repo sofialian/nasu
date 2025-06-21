@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="flex-grow flex items-center justify-center flex flex-col bg-primary-light">
+<div class="flex-grow flex items-center justify-center flex-col bg-primary-light">
 
     <!-- Contenido principal centrado -->
     <div class="w-full max-w-md px-4 py-8 text-center">

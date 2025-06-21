@@ -15,7 +15,7 @@
 <div class="container mx-auto px-4 py-6 md:px-20">
 
     <div class="flex justify-center items-start mb-6">
-        <x-back-button class="" />
+        <x-back-button onclick="window.location.href='{{ route('dashboard', Auth::user()->id) }}'" />
         <h1 class="font-title flex-1">@yield('header')</h1>
     </div>
 
@@ -33,7 +33,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach($projects as $project)
         <div class="border-2 border-secondary-color rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-            <div class="p-4 border-b flex items-center justify-between bg-{{ $project->color }}-50">
+            <div class="p-4 border-b flex items-center justify-between bg-{{ $project->color }}-300">
                 <span class="w-3 h-3 rounded-full bg-{{ $project->color }}-500 mr-2"></span>
                 <h3 class="font-semibold text-lg text-{{ $project->color }}-800">{{ $project->project_title }}</h3>
                 <span class="bg-secondary-color text-{{ $project->color }}-800 px-2 py-1 rounded-full text-xs">

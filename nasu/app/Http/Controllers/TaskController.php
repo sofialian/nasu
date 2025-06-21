@@ -61,7 +61,7 @@ class TaskController extends Controller
                     'user_id' => auth()->id(),
                     'project_title' => $request->new_project_name,
                     'description' => $request->project_description,
-                    'color' => 'blue',
+                    'color' => $request->color_project,
                     'completed' => false
                 ]);
 
