@@ -135,8 +135,8 @@ class RoomController extends Controller
         $validated = $request->validate([
             'items' => 'array',
             'items.*.id' => 'required|integer',
-            'items.*.x' => 'required|numeric|between:0,100',
-            'items.*.y' => 'required|numeric|between:0,100',
+            'items.*.x' => 'required|integer',
+            'items.*.y' => 'required|integer',
             'items.*.rotation' => 'required|integer',
             'new_items' => 'array',
             'new_items.*.furniture_id' => 'required|integer',
