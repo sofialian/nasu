@@ -163,9 +163,9 @@ class RoomController extends Controller
                 $room->items()->create([
                     'furniture_id' => $newItem['furniture_id'],
                     'user_furniture_id' => $newItem['user_furniture_id'],
-                    'x_position' => $itemData['x'],  // Changed from x to x_position
-                    'y_position' => $itemData['y'],  // Changed from y to y_position
-                    'rotation' => $itemData['rotation'],
+                    'x_position' => $newItem['x'],  
+                    'y_position' => $newItem['y'],  
+                    'rotation' => $newItem['rotation'],
                 ]);
             }
 
