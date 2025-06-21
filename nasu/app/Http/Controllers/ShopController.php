@@ -20,7 +20,8 @@ class ShopController extends Controller
         return view('shop.index', [
             'categories' => $categories,
             'furniture' => $furniture,
-            'userBeans' => auth()->user()->beans
+            'userBeans' => auth()->user()->balance?->beans,  
+
         ]);
     }
 

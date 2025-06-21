@@ -7,7 +7,7 @@
         <h1 class="text-3xl font-bold">Furniture Shop</h1>
         <div class="flex items-center">
             <span class="mr-2">Your Beans:</span>
-            <span class="text-2xl font-bold text-yellow-600">{{ number_format($userBeans) }}</span>
+            <span class="text-2xl font-bold text-yellow-600">{{ ($userBeans) }}</span>
             <img src="{{ asset('images/bean.png') }}" class="h-8 ml-1" alt="Beans">
         </div>
     </div>
