@@ -4,6 +4,7 @@
 <div class="container mx-auto px-2 sm:px-4 py-8 sm:py-6 mt-8">
     <!-- Header Section -->
     <div class="flex justify-between items-center">
+        <div></div>
         <div class="flex space-x-3">
             <a href="{{ route('tasks.create') }}" class="bg-indigo-600 text-primary-light px-3 py-2 hover:bg-indigo-700 transition-colors flex items-center">
                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
