@@ -6,7 +6,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ChecklistController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\ShopController;
+use App\Http\Controllers\StoreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -97,9 +97,9 @@ Route::put('/room/{room}/items', [RoomController::class, 'updateItems'])->name('
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
-    Route::post('/shop/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
-    Route::get('/inventory', [ShopController::class, 'inventory'])->name('shop.inventory');
+    Route::get('/store', [StoreController::class, 'index'])->name('store.index');
+    Route::post('/store/purchase', [StoreController::class, 'purchase'])->name('store.purchase');
+    Route::get('/inventory', [StoreController::class, 'inventory'])->name('store.inventory');
 });
 
 require __DIR__ . '/auth.php';

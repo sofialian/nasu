@@ -51,13 +51,13 @@
                     </span>
                     @endisset
 
-                    <a href="{{route('shop.index')}}"
+                    <a href="{{route('store.index')}}"
                         class="flex items-center justify-center w-10 h-10 bg-primary-light text-primary-dark hover:text-secondary-color border border-primary-dark hover:border-secondary-color transition-colors"
-                        title="Shop">
+                        title="store">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
                         </svg>
-                        <span class="sr-only">Shop</span>
+                        <span class="sr-only">store</span>
                     </a>
                 </div>
             </div>

@@ -12,8 +12,9 @@ return new class extends Migration
         Schema::create('user_furniture', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('furniture_id')->constrained();
-
+            $table->foreignId('furniture_id')
+                ->constrained()
+                ->onDelete('cascade');
             $table->timestamp('purchased_at')->nullable();
             $table->timestamps();
         });

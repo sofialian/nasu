@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Img;
 use Illuminate\Database\Seeder;
 
-class imgCatalogSeeder extends Seeder
+class FurnitureCatalogSeeder extends Seeder
 {
     public function run()
     {
@@ -49,7 +49,7 @@ class imgCatalogSeeder extends Seeder
             [
                 'name' => 'Planta Decorativa',
                 'description' => 'Ideal para dar vida a tu habitación',
-                'price' => 20,
+                'price' => 100,
                 'image_path' => 'img/plant.png',
                 'width' => 40,
                 'height' => 60,
@@ -60,7 +60,7 @@ class imgCatalogSeeder extends Seeder
             [
                 'name' => 'Alfombra Moderna',
                 'description' => 'Una alfombra elegante y moderna',
-                'price' => 35,
+                'price' => 250,
                 'image_path' => 'img/rug.png',
                 'width' => 100,
                 'height' => 100,
@@ -71,7 +71,7 @@ class imgCatalogSeeder extends Seeder
             [
                 'name' => 'Estantería',
                 'description' => 'Perfecta para libros o decoración',
-                'price' => 45,
+                'price' => 450,
                 'image_path' => 'img/shelf.png',
                 'width' => 80,
                 'height' => 120,
