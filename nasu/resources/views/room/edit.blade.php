@@ -22,9 +22,7 @@
                         background-size: 20px 20px;">
                     @foreach($furnitureItems as $item)
                     @php
-                    $viewImage = $viewImage = $item['views'][0]['image'] ?? $item['image'];
-
-
+                    $viewImage = $item['views'][0]['image'] ?? $item['image'];
                     @endphp
                     <!-- <div class="furniture-item absolute cursor-move transition-transform duration-100"
                         data-item-id="{{ $item['id'] }}"
