@@ -26,13 +26,12 @@
                         style="left: {{ $item['x'] }}px;
                            top: {{ $item['y'] }}px;
                            transform: rotate({{ $item['rotation'] }}deg);
-                           width: 100px;
                            z-index: 1;">
                         <div class="relative">
                             <img src="{{ asset($item['image']) }}"
                                 alt="{{ $item['name'] }}"
                                 class="w-full h-auto object-contain shadow-sm rounded"
-                                style="border: 2px solid white;">
+                                style="border: 2px solid white; transform: scale(2.5)">
                             <button class="remove-item absolute -top-2 -right-2 bg-accent text-primary-light rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
                                 ×
                             </button>

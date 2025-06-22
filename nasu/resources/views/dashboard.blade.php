@@ -84,14 +84,12 @@
 
             <div class="bg-gray-200 p-4 rounded-lg" style="min-height: 60vh; position: relative; overflow: hidden;">
                 @isset($room)
-                <div class="room-display aspect-square w-full max-w-xs mx-auto">
+                <div class="room-display w-full max-w-xs mx-auto">
                     @foreach($room->items as $item)
                     <div class="furniture-item absolute"
                         style="left: {{ $item->x_position }}px;
                                    top: {{ $item->y_position }}px;
-                                   transform: rotate({{ $item->rotation }}deg);
-                                   width: 100px;
-                                   max-width: 100%;">
+                                   transform: rotate({{ $item->rotation }}deg) scale(2.5);">
                         <img src="{{ asset($item->furniture->image_path) }}"
                             alt="{{ $item->furniture->name }}"
                             class="w-full h-auto">
