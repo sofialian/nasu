@@ -21,17 +21,28 @@
                                         linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
                         background-size: 20px 20px;">
                     @foreach($furnitureItems as $item)
-                    <div class="furniture-item absolute cursor-move transition-transform duration-100"
+                    @php
+                    $viewImage = $viewImage = $item['views'][0]['image'] ?? $item['image'];
+
+
+                    @endphp
+                    <!-- <div class="furniture-item absolute cursor-move transition-transform duration-100"
                         data-item-id="{{ $item['id'] }}"
                         style="left: {{ $item['x'] }}px;
-                           top: {{ $item['y'] }}px;
-                           transform: rotate({{ $item['rotation'] }}deg);
-                           z-index: 1;">
+               top: {{ $item['y'] }}px;
+               transform: rotate({{ $item['rotation'] }}deg); z-index: 1;"> -->
+                    <div class="furniture-item absolute cursor-move transition-transform duration-100"
+                        data-item-id="{{ $item['id'] }}"
+                        data-rotation="{{ $item['rotation'] }}"
+                        style="left: {{ $item['x'] }}px;
+            top: {{ $item['y'] }}px;
+            transform: rotate({{ $item['rotation'] }}deg); z-index: 1;">
+
                         <div class="relative">
-                            <img src="{{ asset($item['image']) }}"
+                            <img src="{{ asset($viewImage) }}"
                                 alt="{{ $item['name'] }}"
                                 class="w-full h-auto object-contain shadow-sm rounded"
-                                style="border: 2px solid white; transform: scale(2.5)">
+                                style="border: 2px solid white;">
                             <button class="remove-item absolute -top-2 -right-2 bg-accent text-primary-light rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600 transition-colors">
                                 ×
                             </button>
@@ -40,7 +51,10 @@
                             </button>
                         </div>
                     </div>
+                    <pre>{{ $viewImage }}</pre>
+
                     @endforeach
+
                 </div>
             </div>
 
@@ -93,6 +107,7 @@
                         </button>
                     </div>
 
+                    <div id="feedback" style="color: green; font-weight: bold;"></div>
 
                 </div>
             </div>
@@ -113,6 +128,47 @@
 @endsection
 
 @push('scripts')
+<script>
+    document.querySelectorAll('.rotate-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const container = button.closest('.furniture-item');
+            const itemId = container.dataset.itemId;
+            let rotation = parseInt(container.dataset.rotation || '0', 10);
+
+            // Sumar 90 grados y resetear si llega a 360
+            rotation = (rotation + 90) % 360;
+
+            // Actualizar el dataset
+            container.dataset.rotation = rotation;
+
+
+
+            // Actualizar imagen vía fetch
+            const img = container.querySelector('img');
+            const feedback = document.getElementById('feedback');
+
+            feedback.textContent = 'Cargando imagen rotada...';
+
+            fetch(`/room-item/${itemId}/image/${rotation}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.image_url) {
+                        img.src = data.image_url;
+                        feedback.textContent = '✅ Imagen actualizada correctamente.';
+                    } else {
+                        feedback.textContent = '⚠️ No se encontró una imagen para esta rotación.';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error al cargar imagen rotada:', err);
+                    feedback.textContent = '❌ Error al cargar imagen rotada.';
+                    alert(err);
+                });
+
+        });
+    });
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const saveButton = document.getElementById('save-changes');
@@ -302,19 +358,9 @@
                 e.preventDefault();
             });
 
-            // Rotation handler
-            item.querySelector('.rotate-btn')?.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const currentRotation = parseInt(item.style.transform.match(/rotate\((\d+)deg\)/)?.[1] || 0);
-                const newRotation = currentRotation + 90;
 
-                item.style.transform = `rotate(${newRotation}deg)`;
-
-                const itemIndex = items.findIndex(i => i.id == itemId);
-                if (itemIndex !== -1) {
-                    items[itemIndex].rotation = newRotation;
-                }
-            });
+            //Rotate handler
+            
 
             // Removal handler
             item.querySelector('.remove-item')?.addEventListener('click', function(e) {

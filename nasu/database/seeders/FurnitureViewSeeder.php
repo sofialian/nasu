@@ -11,7 +11,7 @@ class FurnitureViewSeeder extends Seeder
     {
         DB::table('furniture_views')->insert([
             [
-                'furniture_id' => 1,
+                'furniture_id' => 3,
                 'view' => 'front',
                 'image_path' => 'furniture/front-basic-chair.png',
                 'width' => 48,
@@ -20,7 +20,7 @@ class FurnitureViewSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'furniture_id' => 1,
+                'furniture_id' => 3,
                 'view' => 'left',
                 'image_path' => 'furniture/left-basic-chair.png',
                 'width' => 40,
@@ -29,7 +29,7 @@ class FurnitureViewSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'furniture_id' => 1,
+                'furniture_id' => 3,
                 'view' => 'right',
                 'image_path' => 'furniture/right-basic-chair.png',
                 'width' => 40,
@@ -38,7 +38,7 @@ class FurnitureViewSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'furniture_id' => 1,
+                'furniture_id' => 3,
                 'view' => 'back',
                 'image_path' => 'furniture/back-basic-chair.png',
                 'width' => 40,

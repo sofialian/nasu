@@ -94,18 +94,33 @@ class RoomController extends Controller
         }
 
         // Get furniture already in the room
-        $roomItems = $room->items()->with(['furniture', 'userFurniture'])->get()->map(function ($item) {
+        $roomItems = $room->items()->with(['userFurniture.furniture'])->get()->map(function ($item) {
+            $furniture = $item->userFurniture->furniture;
+            $currentView = $item->view ?? 'front';
+
+            // Cargar manualmente las vistas del mueble
+            $views = $furniture->views()
+                ->where('view', $currentView)
+                ->get()
+                ->map(fn($view) => ['image' => asset($view->image_path)])
+                ->values()
+                ->toArray();
+
             return [
                 'id' => $item->id,
                 'x' => $item->x_position,
                 'y' => $item->y_position,
                 'rotation' => $item->rotation,
-                'name' => $item->furniture->name,
-                'image' => $item->furniture->image_path,
-                'furniture_id' => $item->furniture_id,
+                'name' => $furniture->name,
+                'image' => asset($furniture->image_path),
+                'furniture_id' => $furniture->id,
                 'user_furniture_id' => $item->user_furniture_id,
+                'current_view' => $currentView,
+                'views' => $views,
             ];
         });
+
+        // dd($roomItems);
 
         // Get user's furniture NOT in this room
         $availableFurniture = auth()->user()->ownedFurniture()
@@ -163,8 +178,8 @@ class RoomController extends Controller
                 $room->items()->create([
                     'furniture_id' => $newItem['furniture_id'],
                     'user_furniture_id' => $newItem['user_furniture_id'],
-                    'x_position' => $newItem['x'],  
-                    'y_position' => $newItem['y'],  
+                    'x_position' => $newItem['x'],
+                    'y_position' => $newItem['y'],
                     'rotation' => $newItem['rotation'],
                 ]);
             }

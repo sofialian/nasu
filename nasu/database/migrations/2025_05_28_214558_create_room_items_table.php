@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('x_position');
             $table->integer('y_position');
             $table->integer('rotation')->default(0);
+            $table->enum('view', ['front', 'back', 'left', 'right']);
             $table->timestamps();
         });
     }

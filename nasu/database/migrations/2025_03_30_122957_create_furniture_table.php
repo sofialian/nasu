@@ -16,17 +16,16 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->integer('price');
-            $table->string('image_path');
+            $table->enum('current_view', ['front', 'back', 'left', 'right'])->default('front');
             $table->integer('width')->default(50);
             $table->integer('height')->default(50);
             $table->string('category')->default('decor');
             $table->boolean('is_purchasable')->default(true);
             $table->boolean('is_default')->default(false);
-
             // Nuevas columnas para sprites
-            $table->integer('sprite_columns')->default(4); // número de frames horizontales
-            $table->integer('sprite_width')->nullable();   // ancho de cada frame
-            $table->integer('sprite_height')->nullable();  // alto de cada frame
+            $table->integer('sprite_columns')->default(4); 
+            $table->integer('sprite_width')->nullable();  
+            $table->integer('sprite_height')->nullable();  
 
             $table->timestamps();
         });

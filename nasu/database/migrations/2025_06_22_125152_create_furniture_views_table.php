@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('furniture_views', function (Blueprint $table) {
             $table->id();
             $table->foreignId('furniture_id')->constrained()->onDelete('cascade');
-            $table->string('view'); // Ej: 'front', 'left', 'right', etc.
+            $table->enum('view', ['front', 'back', 'left', 'right']);
             $table->string('image_path');
             $table->integer('width');
             $table->integer('height');

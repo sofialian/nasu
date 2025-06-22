@@ -86,16 +86,27 @@
                 @isset($room)
                 <div class="room-display w-full max-w-xs mx-auto">
                     @foreach($room->items as $item)
-                    <div class="furniture-item absolute"
-                        style="left: {{ $item->x_position }}px;
-                                   top: {{ $item->y_position }}px;
-                                   transform: rotate({{ $item->rotation }}deg) scale(2.5);">
+                    @php
+                    $currentView = $item->view ?? 'front'; // valor por defecto
+                    $views = $item->furniture->views ?? collect();
+                    $viewImage = $views->firstWhere('view', $currentView);
+                    @endphp
+
+                    <div class="furniture-container">
+                        @if($viewImage)
+                        <img src="{{ asset($viewImage->image_path) }}"
+                            alt="{{ $item->furniture->name }} - {{ $currentView }}"
+                            class=""
+                            ">
+                        @else
                         <img src="{{ asset($item->furniture->image_path) }}"
                             alt="{{ $item->furniture->name }}"
-                            class="w-full h-auto">
-                        <!-- <div class="text-center text-xs mt-1 truncate">{{ $item->furniture->name }}</div> -->
+                            class="">
+                        @endif
                     </div>
                     @endforeach
+
+
                 </div>
                 <div class="mt-4 text-sm text-gray-600">
                     {{ $room->items->count() }} muebles colocados
