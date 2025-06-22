@@ -1,21 +1,20 @@
 @extends('layouts.app')
 @section('header', 'Editar habitación')
 @section('content')
-<div class="page mt-8 lg:p-6 rounded-lg shadow lg:max-w-7xl lg:mx-auto">
+<div class="page mt-8 lg:p-6 rounded-lg shadow lg:mx-auto">
     <!-- Header with Actions -->
     <div class="flex justify-center items-start mb-6">
         <x-back-button class="" />
         <h1 class="flex-1 font-title">@yield('header')</h1>
     </div>
     <div class="flex flex-col justify-center items-center">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 w-2/3">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:70vh">
             <!-- Room Editor -->
             <div class="lg:col-span-2">
                 <div class="room-editor bg-gray-50 rounded-lg border border-gray-200 relative overflow-hidden"
                     id="room-editor"
                     style="height: 60vh;
-           width: 100%;      
-           max-width: 60vh; 
+           width: 60vh;       
            aspect-ratio: 1;  
                         background-image: linear-gradient(#e5e7eb 1px, transparent 1px),
                                         linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
@@ -49,7 +48,7 @@
             <div class="lg:col-span-1">
                 <h3 class="font-body font-medium text-gray-700 mb-3">Muebles Disponibles</h3>
                 <div class="available-furniture-container">
-                    <div class="available-furniture-container mb-6 flex items-center gap-4">
+                    <div class="available-furniture-container mb-6 flex items-center gap-4 max-w-60">
                         <!-- Previous button (left side) -->
                         <button class="carousel-nav carousel-prev bg-white rounded-full p-2 shadow-md z-10 hidden md:flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
                             style="flex: 0 0 auto;">

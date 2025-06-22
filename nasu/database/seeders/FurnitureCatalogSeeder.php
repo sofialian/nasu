@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Img;
+use App\Models\furniture;
 use Illuminate\Database\Seeder;
 
 class FurnitureCatalogSeeder extends Seeder
@@ -15,29 +15,30 @@ class FurnitureCatalogSeeder extends Seeder
                 'name' => 'Cama Simple',
                 'description' => 'Una cama básica para descansar',
                 'price' => 0,
-                'image_path' => 'img/basic-bed.png',
+                'image_path' => 'furniture/basic-bed.png',
                 'width' => 80,
                 'height' => 120,
                 'is_purchasable' => false,
                 'is_default' => true,
-                'category' => 'bed'
+                'category' => 'bed',
+                'sprite_columns' => 1
             ],
             [
                 'name' => 'Escritorio Básico',
                 'description' => 'Un escritorio para trabajar',
                 'price' => 0,
-                'image_path' => 'img/basic-desk.png',
+                'image_path' => 'furniture/basic-desk.png',
                 'width' => 100,
                 'height' => 60,
                 'is_purchasable' => false,
                 'is_default' => true,
-                'category' => 'table'
+                'category' => 'table',
             ],
             [
                 'name' => 'Silla Inicial',
                 'description' => 'Tu primera silla',
                 'price' => 0,
-                'image_path' => 'img/basic-chair.png',
+                'image_path' => 'furniture/basic-chair-sprite.png',
                 'width' => 50,
                 'height' => 50,
                 'is_purchasable' => false,
@@ -50,7 +51,7 @@ class FurnitureCatalogSeeder extends Seeder
                 'name' => 'Planta Decorativa',
                 'description' => 'Ideal para dar vida a tu habitación',
                 'price' => 100,
-                'image_path' => 'img/plant.png',
+                'image_path' => 'furniture/plant.png',
                 'width' => 40,
                 'height' => 60,
                 'is_purchasable' => true,
@@ -61,28 +62,29 @@ class FurnitureCatalogSeeder extends Seeder
                 'name' => 'Alfombra Moderna',
                 'description' => 'Una alfombra elegante y moderna',
                 'price' => 250,
-                'image_path' => 'img/rug.png',
+                'image_path' => 'furniture/rug.png',
                 'width' => 100,
                 'height' => 100,
                 'is_purchasable' => true,
                 'is_default' => false,
-                'category' => 'floor'
+                'category' => 'floor',
+                'sprite_columns' => 1
             ],
             [
                 'name' => 'Estantería',
                 'description' => 'Perfecta para libros o decoración',
                 'price' => 450,
-                'image_path' => 'img/shelf.png',
+                'image_path' => 'furniture/shelf.png',
                 'width' => 80,
                 'height' => 120,
                 'is_purchasable' => true,
                 'is_default' => false,
-                'category' => 'shelving'
+                'category' => 'shelving',
             ],
         ];
 
         foreach ($shopItems as $item) {
-            Img::firstOrCreate(
+            furniture::firstOrCreate(
                 ['name' => $item['name']],
                 $item
             );

@@ -22,6 +22,12 @@ return new class extends Migration
             $table->string('category')->default('decor');
             $table->boolean('is_purchasable')->default(true);
             $table->boolean('is_default')->default(false);
+
+            // Nuevas columnas para sprites
+            $table->integer('sprite_columns')->default(4); // número de frames horizontales
+            $table->integer('sprite_width')->nullable();   // ancho de cada frame
+            $table->integer('sprite_height')->nullable();  // alto de cada frame
+
             $table->timestamps();
         });
     }

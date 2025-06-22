@@ -23,4 +23,22 @@ class Furniture extends Model
     {
         return $this->hasMany(UserFurniture::class);
     }
+
+    public function views()
+    {
+        return $this->hasMany(FurnitureView::class);
+    }
+
+    public function viewForRotation($rotation)
+    {
+        $view = match ((int)$rotation % 360) {
+            0 => 'front',
+            90 => 'right',
+            180 => 'back',
+            270 => 'left',
+            default => 'front', // fallback
+        };
+
+        return $this->views->firstWhere('view', $view);
+    }
 }
