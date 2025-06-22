@@ -95,7 +95,7 @@
                         <img src="{{ asset($item->furniture->image_path) }}"
                             alt="{{ $item->furniture->name }}"
                             class="w-full h-auto">
-                        <div class="text-center text-xs mt-1 truncate">{{ $item->furniture->name }}</div>
+                        <!-- <div class="text-center text-xs mt-1 truncate">{{ $item->furniture->name }}</div> -->
                     </div>
                     @endforeach
                 </div>

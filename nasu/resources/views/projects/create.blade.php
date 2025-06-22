@@ -3,7 +3,7 @@
 @section('header', 'Crear Nuevo Proyecto')
 
 @section('content')
-<div class="flex-grow flex items-center justify-center mt-8 flex flex-col container">
+<div class="flex-grow items-center justify-center mt-8 flex flex-col container">
     <div class="w-full max-w-4xl text-primary-dark text-base page">
         <div class="uppercase font-title text-xl text-center mb-6">Crear Proyecto</div>
         <form action="{{ route('projects.store') }}" method="POST" class="p-6 md:px-20">
@@ -44,7 +44,7 @@
                     required
                 >
                     @foreach($colors as $value => $label)
-                        <option value="{{ $value }}">{{ $label }}</option>
+                        <option value="{{ $value }}" class="text-{{ $value }}-500">{{ $label }}</option>
                     @endforeach
                 </select>
             </div>

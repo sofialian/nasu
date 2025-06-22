@@ -44,10 +44,11 @@
                     name="color"
                     class="block w-full peer">
                     @foreach($colors as $value => $label)
-                    <option value="{{ $value }}" class="text-{{ $value }}-500">
+                    <option value="{{ $value }}" class="text-{{ $value }}-500" {{ $project->color === $value ? 'selected' : '' }}>
                         {{ $label }}
                     </option>
                     @endforeach
+
                 </x-select-input>
             </div>
 
