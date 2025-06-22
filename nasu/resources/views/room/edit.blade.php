@@ -35,8 +35,8 @@
                         data-item-id="{{ $item['id'] }}"
                         data-rotation="{{ $item['rotation'] }}"
                         style="left: {{ $item['x'] }}px;
-            top: {{ $item['y'] }}px;
-            transform: rotate({{ $item['rotation'] }}deg); z-index: 1;">
+                                    top: {{ $item['y'] }}px;
+                                    transform: rotate({{ $item['rotation'] }}deg); z-index: 1;">
 
                         <div class="relative">
                             <img src="{{ asset($viewImage) }}"
@@ -128,47 +128,6 @@
 @endsection
 
 @push('scripts')
-<script>
-    document.querySelectorAll('.rotate-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            const container = button.closest('.furniture-item');
-            const itemId = container.dataset.itemId;
-            let rotation = parseInt(container.dataset.rotation || '0', 10);
-
-            // Sumar 90 grados y resetear si llega a 360
-            rotation = (rotation + 90) % 360;
-
-            // Actualizar el dataset
-            container.dataset.rotation = rotation;
-
-
-
-            // Actualizar imagen vía fetch
-            const img = container.querySelector('img');
-            const feedback = document.getElementById('feedback');
-
-            feedback.textContent = 'Cargando imagen rotada...';
-
-            fetch(`/room-item/${itemId}/image/${rotation}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.image_url) {
-                        img.src = data.image_url;
-                        feedback.textContent = '✅ Imagen actualizada correctamente.';
-                    } else {
-                        feedback.textContent = '⚠️ No se encontró una imagen para esta rotación.';
-                    }
-                })
-                .catch(err => {
-                    console.error('Error al cargar imagen rotada:', err);
-                    feedback.textContent = '❌ Error al cargar imagen rotada.';
-                    alert(err);
-                });
-
-        });
-    });
-</script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const saveButton = document.getElementById('save-changes');
@@ -300,7 +259,7 @@
                             ×
                         </button>
                         <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-secondary-color/70 text-primary-dark rounded px-2 py-1 text-xs hover:bg-secondary-color transition-colors">
-                                ↻
+                            ↻
                         </button>
                     </div>
                 `;
@@ -358,9 +317,46 @@
                 e.preventDefault();
             });
 
+            // Rotation handler
+            item.querySelector('.rotate-btn')?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const container = this.closest('.furniture-item');
+                const itemId = container.dataset.itemId;
+                let rotation = parseInt(container.dataset.rotation || '0', 10);
 
-            //Rotate handler
-            
+                // Add 90 degrees and reset at 360
+                rotation = (rotation + 90) % 360;
+
+                // Update the dataset and style
+                container.dataset.rotation = rotation;
+
+                // Update the state
+                const itemIndex = items.findIndex(i => i.id == itemId);
+                if (itemIndex !== -1) {
+                    items[itemIndex].rotation = rotation;
+                }
+
+                // Update image via fetch
+                const img = container.querySelector('img');
+                const feedback = document.getElementById('feedback');
+
+                feedback.textContent = 'Cargando imagen rotada...';
+
+                fetch(`/room-item/${itemId}/image/${rotation}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.image_url) {
+                            img.src = data.image_url;
+                            feedback.textContent = '✅ Imagen actualizada correctamente.';
+                        } else {
+                            feedback.textContent = '⚠️ No se encontró una imagen para esta rotación.';
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error al cargar imagen rotada:', err);
+                        feedback.textContent = '❌ Error al cargar imagen rotada.';
+                    });
+            });
 
             // Removal handler
             item.querySelector('.remove-item')?.addEventListener('click', function(e) {
@@ -422,7 +418,7 @@
                                             ×
                                         </button>
                                         <button class="rotate-btn absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-secondary-color/70 text-primary-dark rounded px-2 py-1 text-xs hover:bg-secondary-color transition-colors">
-                                         ↻
+                                            ↻
                                         </button>
                                     </div>
                                 `;
@@ -518,10 +514,7 @@
         });
     });
 </script>
-@endpush
 
-
-@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const carousel = document.querySelector('.available-furniture');

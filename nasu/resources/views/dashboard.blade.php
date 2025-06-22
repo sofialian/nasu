@@ -87,22 +87,20 @@
                 <div class="room-display w-full max-w-xs mx-auto">
                     @foreach($room->items as $item)
                     @php
-                    $currentView = $item->view ?? 'front'; // valor por defecto
+                    $currentView = $item->view ?? 'front';
                     $views = $item->furniture->views ?? collect();
                     $viewImage = $views->firstWhere('view', $currentView);
+                    $imageSrc = $viewImage ? asset($viewImage->image_path) : asset($item->furniture->image_path);
                     @endphp
 
-                    <div class="furniture-container">
-                        @if($viewImage)
-                        <img src="{{ asset($viewImage->image_path) }}"
+                    <div
+                        class="furniture-container absolute"
+                        data-item-id="{{ $item->id }}"
+                        data-rotation="{{ $item->rotation ?? 'front' }}"
+                        style="left: {{ $item->x ?? 0 }}px; top: {{ $item->y ?? 0 }}px;">
+                        <img src="{{ $imageSrc }}"
                             alt="{{ $item->furniture->name }} - {{ $currentView }}"
-                            class=""
-                            ">
-                        @else
-                        <img src="{{ asset($item->furniture->image_path) }}"
-                            alt="{{ $item->furniture->name }}"
-                            class="">
-                        @endif
+                            draggable="false">
                     </div>
                     @endforeach
 
