@@ -97,7 +97,9 @@
                         class="furniture-container absolute"
                         data-item-id="{{ $item->id }}"
                         data-rotation="{{ $item->rotation ?? 'front' }}"
-                        style="left: {{ $item->x ?? 0 }}px; top: {{ $item->y ?? 0 }}px;">
+                        style="left: {{ $item->x_position }}px;
+                                   top: {{ $item->y_position }}px;
+                                   max-width: 100%;">
                         <img src="{{ $imageSrc }}"
                             alt="{{ $item->furniture->name }} - {{ $currentView }}"
                             draggable="false">

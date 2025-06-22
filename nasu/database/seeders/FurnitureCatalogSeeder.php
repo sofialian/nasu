@@ -12,10 +12,10 @@ class FurnitureCatalogSeeder extends Seeder
         $shopItems = [
             // Default items (free, assigned on registration)
             [
+                'id' => 1,
                 'name' => 'Cama Simple',
                 'description' => 'Una cama básica para descansar',
                 'price' => 0,
-
                 'width' => 80,
                 'height' => 60,
                 'is_purchasable' => false,
@@ -24,6 +24,7 @@ class FurnitureCatalogSeeder extends Seeder
                 'sprite_columns' => 1
             ],
             [
+                'id' => 2,
                 'name' => 'Escritorio Básico',
                 'description' => 'Un escritorio para trabajar',
                 'price' => 0,
@@ -34,6 +35,7 @@ class FurnitureCatalogSeeder extends Seeder
                 'category' => 'table',
             ],
             [
+                'id' => 3,
                 'name' => 'Silla Inicial',
                 'description' => 'Tu primera silla',
                 'price' => 0,
@@ -46,6 +48,7 @@ class FurnitureCatalogSeeder extends Seeder
 
             // Purchasable items
             [
+                'id' => 4,
                 'name' => 'Planta Decorativa',
                 'description' => 'Ideal para dar vida a tu habitación',
                 'price' => 100,
@@ -56,6 +59,7 @@ class FurnitureCatalogSeeder extends Seeder
                 'category' => 'decor'
             ],
             [
+                'id' => 5,
                 'name' => 'Alfombra Moderna',
                 'description' => 'Una alfombra elegante y moderna',
                 'price' => 250,
@@ -67,6 +71,7 @@ class FurnitureCatalogSeeder extends Seeder
                 'sprite_columns' => 1
             ],
             [
+                'id' => 6,
                 'name' => 'Estantería',
                 'description' => 'Perfecta para libros o decoración',
                 'price' => 450,
@@ -80,7 +85,9 @@ class FurnitureCatalogSeeder extends Seeder
 
         foreach ($shopItems as $item) {
             furniture::firstOrCreate(
-                ['name' => $item['name']],
+                ['id' => 3,
+                    'id' => 3,'name' => $item[
+                    'name']],
                 $item
             );
         }

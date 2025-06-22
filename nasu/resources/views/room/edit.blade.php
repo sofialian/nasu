@@ -36,7 +36,7 @@
                         data-rotation="{{ $item['rotation'] }}"
                         style="left: {{ $item['x'] }}px;
                                     top: {{ $item['y'] }}px;
-                                    transform: rotate({{ $item['rotation'] }}deg); z-index: 1;">
+                                     z-index: 1;">
 
                         <div class="relative">
                             <img src="{{ asset($viewImage) }}"

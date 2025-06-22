@@ -64,15 +64,18 @@
                     @foreach ($items as $item)
                     @php
                     $owned = in_array($item->id, $ownedFurnitureIds);
+                    $viewImage = $item->views->firstWhere('view', 'front');
+                     $path = $item->views->pluck('image_path')->first();
                     @endphp
 
                     <div class="border rounded border-gray-400 p-4 text-center 
                             {{ $owned ? 'opacity-50' : '' }}"
                         data-category="{{ Str::slug($category) }}">
-                        <img src="{{ asset($item->image_path) }}" class="mx-auto w-24 h-24 mb-2" alt="{{ $item->name }}">
+                        <img src="{{ asset($path) }}" class="mx-auto max-h-24 mb-2" alt="{{ $item->name }}">
                         <h3 class="font-semibold font-body">{{ $item->name }}</h3>
                         <p class="text-sm text-gray-600">{{ $item->description }}</p>
                         <p class="my-2 font-bold">{{ $item->price }} beans</p>
+
 
                         @if ($owned)
                         <span class="text-green-600 font-semibold">Owned</span>
