@@ -25,7 +25,7 @@
         <div class="flex items-center">
             <!-- <span class="mr-2 font-body font-normal">Your Beans:</span> -->
             <span class="text-2xl font-body font-semibold text-yellow-600">{{ ($userBeans) }}</span>
-            <img src="{{ asset('images/bean.png') }}" class="h-8 ml-1" alt="Beans">
+            <img src="{{ asset('image/beans.png') }}" class="h-10 ml-1" alt="Beans">
         </div>
     </div>
 
