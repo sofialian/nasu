@@ -32,7 +32,11 @@
                     <x-nav-link href="{{ route('room.show', Auth::user()->roomId()) }}" :active="request()->routeIs('room.show')">
                         {{ __('Habitación') }}
                     </x-nav-link>
-
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="{{ route('store.index') }}" :active="request()->routeIs('store.index')">
+                        {{ __('Tienda') }}
+                    </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link href="{{route('contact')}}" :active="request()->routeIs('contact')">
@@ -139,7 +143,14 @@
                             <span>{{ __('Habitación') }}</span>
                         </div>
                     </x-responsive-nav-link>
+                </div>
 
+                <div class="pb-3 space-y-1">
+                    <x-responsive-nav-link href="{{ route('store.index') }}" :active="request()->routeIs('store.index')" class="block px-3 py-2 text-base font-medium">
+                        <div class="flex items-center">
+                            <span>{{ __('Tienda') }}</span>
+                        </div>
+                    </x-responsive-nav-link>
                 </div>
 
                 <div class="pb-3 space-y-1">

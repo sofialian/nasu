@@ -51,7 +51,7 @@
                             </button>
                         </div>
                     </div>
-                    <pre>{{ $viewImage }}</pre>
+                    <!-- <pre>{{ $viewImage }}</pre> -->
 
                     @endforeach
 

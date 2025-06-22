@@ -10,6 +10,27 @@ class FurnitureViewSeeder extends Seeder
     public function run(): void
     {
         DB::table('furniture_views')->insert([
+               [
+                'furniture_id' => 1,
+                'view' => 'front',
+                'image_path' => 'furniture/cama-simple-front.png',
+                'width' => 48,
+                'height' => 48,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
+               [
+                'furniture_id' => 2,
+                'view' => 'front',
+                'image_path' => 'furniture/front-basic-desk.png',
+                'width' => 48,
+                'height' => 48,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
             [
                 'furniture_id' => 3,
                 'view' => 'front',
@@ -42,6 +63,43 @@ class FurnitureViewSeeder extends Seeder
                 'view' => 'back',
                 'image_path' => 'furniture/back-basic-chair.png',
                 'width' => 40,
+                'height' => 48,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+               [
+                'furniture_id' => 4,
+                'view' => 'front',
+                'image_path' => 'furniture/front-plant.png',
+                'width' => 48,
+                'height' => 48,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+                [
+                'furniture_id' => 4,
+                'view' => 'left',
+                'image_path' => 'furniture/left-plant.png',
+                'width' => 48,
+                'height' => 48,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+                [
+                'furniture_id' => 4,
+                'view' => 'right',
+                'image_path' => 'furniture/right-plant.png',
+                'width' => 48,
+                'height' => 48,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+                [
+                'furniture_id' => 4,
+                'view' => 'back',
+                'image_path' => 'furniture/back-plant.png',
+                'width' => 48,
                 'height' => 48,
                 'created_at' => now(),
                 'updated_at' => now(),
